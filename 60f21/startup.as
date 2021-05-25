@@ -9,10 +9,10 @@
 	; Compiler options:
 	;
 	; -otest_ft62f21x_sleep.cof -mtest_ft62f21x_sleep.map --summary=default \
-	; --output=default test_ft62f21x_sleep.p1 --chip=16F684 -P \
-	; --runtime=default --opt=default -D__DEBUG=1 -g --asmlist \
-	; --errformat=Error   [%n] %f; %l.%c %s --msgformat=Advisory[%n] %s \
-	; --warnformat=Warning [%n] %f; %l.%c %s
+	; --output=default test_ft62f21x_sleep.p1 ft_62f21x_pwm.p1 \
+	; ft_62f21x_ir.p1 --chip=16F684 -P --runtime=default --opt=default \
+	; -D__DEBUG=1 -g --asmlist --errformat=Error   [%n] %f; %l.%c %s \
+	; --msgformat=Advisory[%n] %s --warnformat=Warning [%n] %f; %l.%c %s
 	;
 
 
@@ -55,7 +55,11 @@ intlevel5:
 	psect	reset_vec
 reset_vec:
 	; No powerup routine
-	; No interrupt routine
+	global start
+
+; jump to start
+	goto	start & 0x7FF | (reset_vec & not 0x7FF)
+
 
 
 	psect	init

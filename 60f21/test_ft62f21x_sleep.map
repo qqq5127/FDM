@@ -2,12 +2,12 @@ HI-TECH Software C Compiler
 
 Linker command line:
 
---edf=d:\ide_wai\fmdide\data\dat\en_msgs.txt -cs -h+test_ft62f21x_sleep.sym \
-  -z -Q16F684 -ol.obj -Mtest_ft62f21x_sleep.map -E1 -ACONST=00h-0FFhx4 \
-  -ACODE=00h-03FFh -ASTRCODE=00h-03FFh -AENTRY=00h-0FFhx4 \
-  -ASTRING=00h-0FFhx4 -ABANK0=040h-06Fh -ARAM=040h-06Fh -AABS1=040h-07Fh \
-  -ACOMMON=070h-07Fh -ASFR0=00h-03Fh -ASFR1=080h-0EFh \
-  -preset_vec=00h,intentry,init,end_init -ppowerup=CODE -pfunctab=CODE \
+--edf=c:\program files (x86)\fmd\fmdide\data\dat\en_msgs.txt -cs \
+  -h+test_ft62f21x_sleep.sym -z -Q16F684 -ol.obj -Mtest_ft62f21x_sleep.map \
+  -E1 -ACONST=00h-0FFhx4 -ACODE=00h-03FFh -ASTRCODE=00h-03FFh \
+  -AENTRY=00h-0FFhx4 -ASTRING=00h-0FFhx4 -ABANK0=040h-06Fh -ARAM=040h-06Fh \
+  -AABS1=040h-07Fh -ACOMMON=070h-07Fh -ASFR0=00h-03Fh -ASFR1=080h-0EFh \
+  -preset_vec=00h,intentry=04h,init,end_init -ppowerup=CODE -pfunctab=CODE \
   -ACONFIG=02007h-02007h -pconfig=CONFIG -DCONFIG=2 -AIDLOC=02000h-02003h \
   -pidloc=IDLOC -DIDLOC=2 -AEEDATA=00h-07Fh/02100h -peeprom_data=EEDATA \
   -DEEDATA=2 -DCODE=2 -DSTRCODE=2 -DSTRING=2 -DCONST=2 -DENTRY=2 -k \
@@ -20,27 +20,45 @@ Machine type is 16F684
 
 
                 Name                               Link     Load   Length Selector   Space Scale
-startup.obj     end_init                              0        0        1        0       0
+startup.obj     end_init                              C        C        1        8       0
+                reset_vec                             0        0        1        0       0
 test_ft62f21x_sleep.obj
-                text57                              3C2      3C2        E      784       0
-                text56                              3B9      3B9        9      772       0
-                text55                              3D0      3D0       10      7A0       0
-                text54                              3E0      3E0       10      7C0       0
-                maintext                            3F0      3F0       10      7E0       0
-                cstackCOMMON                         70       70        8       70       1
-                cinit                               3B7      3B7        2      76E       0
+                intentry                              4        4        8        8       0
+                text138                               D        D       4B        8       0
+                text137                              9C       9C        E        8       0
+                text136                              EF       EF        8        8       0
+                text135                              D6       D6        9        8       0
+                text134                              E7       E7        8        8       0
+                text133                              CD       CD        9        8       0
+                text132                              DF       DF        8        8       0
+                text131                              C4       C4        9        8       0
+                text130                              80       80       1C        8       0
+                text129                              58       58       28        8       0
+                maintext                             B7       B7        D        8       0
+                cstackCOMMON                         79       79        3       70       1
+                dataCOMMON                           7C       7C        1       70       1
+                bssCOMMON                            70       70        9       70       1
+                cinit                                AA       AA        D        8       0
 
 TOTAL           Name                               Link     Load   Length     Space
         CLASS   CONST          
 
         CLASS   CODE           
-                end_init                              0        0        1         0
-                text57                              3C2      3C2        E         0
-                text56                              3B9      3B9        9         0
-                text55                              3D0      3D0       10         0
-                text54                              3E0      3E0       10         0
-                maintext                            3F0      3F0       10         0
-                cinit                               3B7      3B7        2         0
+                end_init                              C        C        1         0
+                intentry                              4        4        8         0
+                reset_vec                             0        0        1         0
+                text138                               D        D       4B         0
+                text137                              9C       9C        E         0
+                text136                              EF       EF        8         0
+                text135                              D6       D6        9         0
+                text134                              E7       E7        8         0
+                text133                              CD       CD        9         0
+                text132                              DF       DF        8         0
+                text131                              C4       C4        9         0
+                text130                              80       80       1C         0
+                text129                              58       58       28         0
+                maintext                             B7       B7        D         0
+                cinit                                AA       AA        D         0
 
         CLASS   STRCODE        
 
@@ -56,7 +74,9 @@ TOTAL           Name                               Link     Load   Length     Sp
                 abs_s1                               7E       7E        2         1
 
         CLASS   COMMON         
-                cstackCOMMON                         70       70        8         1
+                cstackCOMMON                         79       79        3         1
+                dataCOMMON                           7C       7C        1         1
+                bssCOMMON                            70       70        9         1
 
         CLASS   SFR0           
 
@@ -75,172 +95,281 @@ TOTAL           Name                               Link     Load   Length     Sp
 SEGMENTS        Name                           Load    Length   Top    Selector   Space  Class     Delta
 
                 reset_vec                      000000  000001  000001         0       0  CODE        2
-                cstackCOMMON                   000070  000008  000078        70       1  COMMON      1
-                cinit                          0003B7  000002  0003B9       76E       0  CODE        2
-                text56                         0003B9  000009  0003C2       772       0  CODE        2
-                text57                         0003C2  00000E  0003D0       784       0  CODE        2
-                text55                         0003D0  000010  0003E0       7A0       0  CODE        2
-                text54                         0003E0  000010  0003F0       7C0       0  CODE        2
-                maintext                       0003F0  000010  000400       7E0       0  CODE        2
+                intentry                       000004  0000F3  0000F7         8       0  CODE        2
+                bssCOMMON                      000070  00000D  00007D        70       1  COMMON      1
 
 
 UNUSED ADDRESS RANGES
 
         Name                Unused          Largest block    Delta
         BANK0            040-06F            30           1
-        CODE             001-3B6           3B6           2
-        COMMON           078-07D             6           1
+        CODE             001-003             3           2
+                         0F7-3FF           309
+        COMMON           07D-07D             1           1
         CONFIG           2007-2007             1           2
-        CONST            001-3B6           100           2
+        CONST            001-003             3           2
+                         0F7-3FF           100
         EEDATA           2100-217F            80           2
-        ENTRY            001-3B6           100           2
+        ENTRY            001-003             3           2
+                         0F7-3FF           100
         IDLOC            2000-2003             4           2
         RAM              040-06F            30           1
         SFR0             000-03F            40           1
         SFR1             080-0EF            70           1
-        STRCODE          001-3B6           3B6           2
-        STRING           001-3B6           100           2
+        STRCODE          001-003             3           2
+                         0F7-3FF           309
+        STRING           001-003             3           2
+                         0F7-3FF           100
 
                                   Symbol Table
 
-??_DelayMs              cstackCOMMON 072
-??_DelayS               cstackCOMMON 075
-??_DelayUs              cstackCOMMON 070
-??_POWER_INITIAL        cstackCOMMON 070
-??_main                 cstackCOMMON 078
-?_DelayMs               cstackCOMMON 070
-?_DelayS                cstackCOMMON 070
-?_DelayUs               cstackCOMMON 070
-?_POWER_INITIAL         cstackCOMMON 070
-?_main                  cstackCOMMON 070
-DelayMs@Time            cstackCOMMON 072
-DelayMs@a               cstackCOMMON 073
-DelayMs@b               cstackCOMMON 074
-DelayS@Time             cstackCOMMON 075
-DelayS@a                cstackCOMMON 076
-DelayS@b                cstackCOMMON 077
-DelayUs@Time            cstackCOMMON 070
-DelayUs@a               cstackCOMMON 071
-_DelayMs                text55       3D0
-_DelayS                 text54       3E0
-_DelayUs                text56       3B9
-_INTCON                 (abs)        00B
-_MSCON                  (abs)        01B
-_OPTION                 (abs)        081
-_OSCCON                 (abs)        08F
-_PORTA                  (abs)        005
-_POWER_INITIAL          text57       3C2
-_RA3                    (abs)        02B
-_RA4                    (abs)        02C
-_TRISA                  (abs)        085
-_WPUA                   (abs)        095
-__Habs1                 abs1         000
-__Hbank0                bank0        000
-__Hbank1                bank1        000
-__Hcinit                cinit        000
-__Hclrtext              clrtext      000
-__Hcode                 code         000
-__Hcommon               common       000
-__Hconfig               config       000
-__HcstackCOMMON         cstackCOMMON 000
-__Heeprom_data          eeprom_data  000
-__Hend_init             end_init     001
-__Hfunctab              functab      000
-__Hidloc                idloc        000
-__Hinit                 init         000
-__Hintentry             intentry     000
-__Hmaintext             maintext     000
-__Hpa_nodes             pa_nodes     000
-__Hpowerup              powerup      000
-__Hram                  ram          000
-__Hreset_vec            reset_vec    000
-__Hsfr0                 sfr0         000
-__Hsfr1                 sfr1         000
-__Hstrings              strings      000
-__Htext                 text         000
-__Labs1                 abs1         000
-__Lbank0                bank0        000
-__Lbank1                bank1        000
-__Lcinit                cinit        000
-__Lclrtext              clrtext      000
-__Lcode                 code         000
-__Lcommon               common       000
-__Lconfig               config       000
-__LcstackCOMMON         cstackCOMMON 000
-__Leeprom_data          eeprom_data  000
-__Lend_init             end_init     000
-__Lfunctab              functab      000
-__Lidloc                idloc        000
-__Linit                 init         000
-__Lintentry             intentry     000
-__Lmaintext             maintext     000
-__Lpa_nodes             pa_nodes     000
-__Lpowerup              powerup      000
-__Lram                  ram          000
-__Lreset_vec            reset_vec    000
-__Lsfr0                 sfr0         000
-__Lsfr1                 sfr1         000
-__Lstrings              strings      000
-__Ltext                 text         000
-__S0                    (abs)        400
-__S1                    (abs)        078
-__S2                    (abs)        000
-__end_of_DelayMs        text55       3E0
-__end_of_DelayS         text54       3F0
-__end_of_DelayUs        text56       3C2
-__end_of_POWER_INITIAL  text57       3D0
-__end_of_main           maintext     400
-__pcstackCOMMON         cstackCOMMON 070
-__pmaintext             maintext     3F0
-__ptext53               text53       000
-__ptext54               text54       3E0
-__ptext55               text55       3D0
-__ptext56               text56       3B9
-__ptext57               text57       3C2
-__ptext58               text58       000
-__size_of_DelayMs       (abs)        000
-__size_of_DelayS        (abs)        000
-__size_of_DelayUs       (abs)        000
-__size_of_POWER_INITIAL (abs)        000
-__size_of_main          (abs)        000
-_exit                   init         000
-_main                   maintext     3F0
-btemp                   (abs)        07E
-end_of_initialization   cinit        3B7
-intlevel0               functab      000
-intlevel1               functab      000
-intlevel2               functab      000
-intlevel3               functab      000
-intlevel4               functab      000
-intlevel5               functab      000
-l1630                                   
-l1632                                   
-l1634                                   
-l1636                                   
-l1638                                   
-l1640                                   
-l1642                                   
-l1644                                   
-l1648                                   
-l1658                                   
-l1660                                   
-l1666                                   
-l1676                                   
-l1678                                   
-l1684                                   
-l1686                                   
-l1688                                   
-l1690                                   
-l1692                                   
-l1696                                   
-l1698                                   
-l1700                                   
-l1702                                   
-l677                                    
-l683                                    
-l691                                    
-l699                                    
-reset_vec               reset_vec    000
-start                   init         000
-start_initialization    cinit        3B7
-wtemp0                  (abs)        07E
+??_ISR                             cstackCOMMON 079
+??_PA3_Level_Change_INITIAL        cstackCOMMON 07C
+??_POWER_INITIAL                   cstackCOMMON 07C
+??_PWM1_BLUE                       cstackCOMMON 07C
+??_PWM1_GREEN                      cstackCOMMON 07C
+??_PWM1_INITIAL                    cstackCOMMON 07C
+??_PWM1_RATE_CHANGE                cstackCOMMON 07C
+??_PWM1_RED                        cstackCOMMON 07C
+??_PWM1_WHITE                      cstackCOMMON 07C
+??_TIMER0_INITIAL                  cstackCOMMON 07C
+??_main                            cstackCOMMON 07C
+?_ISR                              cstackCOMMON 079
+?_PA3_Level_Change_INITIAL         cstackCOMMON 079
+?_POWER_INITIAL                    cstackCOMMON 079
+?_PWM1_BLUE                        cstackCOMMON 079
+?_PWM1_GREEN                       cstackCOMMON 079
+?_PWM1_INITIAL                     cstackCOMMON 079
+?_PWM1_RATE_CHANGE                 cstackCOMMON 079
+?_PWM1_RED                         cstackCOMMON 079
+?_PWM1_WHITE                       cstackCOMMON 079
+?_TIMER0_INITIAL                   cstackCOMMON 079
+?_main                             cstackCOMMON 079
+_GIE                               (abs)        05F
+_INTCON                            (abs)        00B
+_IOCA3                             (abs)        4B3
+_IRDataTimer                       bssCOMMON    070
+_IRbitNum                          bssCOMMON    074
+_IRbitTime                         bssCOMMON    075
+_ISR                               text138      00D
+_MSCON                             (abs)        01B
+_OPTION                            (abs)        081
+_OSCCON                            (abs)        08F
+_P1ADTH                            (abs)        014
+_P1ADTL                            (abs)        00E
+_P1AUX                             (abs)        01E
+_P1BR1                             (abs)        019
+_P1CON                             (abs)        016
+_P1OE                              (abs)        090
+_P1POL                             (abs)        099
+_PA3_Level_Change_INITIAL          text135      0D6
+_PAIE                              (abs)        05B
+_PAIF                              (abs)        058
+_PEIE                              (abs)        05E
+_PORTA                             (abs)        005
+_POWER_INITIAL                     text137      09C
+_PR2H                              (abs)        092
+_PR2L                              (abs)        091
+_PWM1_BLUE                         text134      0E7
+_PWM1_GREEN                        text132      0DF
+_PWM1_INITIAL                      text130      080
+_PWM1_RATE_CHANGE                  text129      058
+_PWM1_RED                          text133      0CD
+_PWM1_WHITE                        text131      0C4
+_RA3                               (abs)        02B
+_T0IE                              (abs)        05D
+_T0IF                              (abs)        05A
+_T2CON0                            (abs)        012
+_T2CON1                            (abs)        09E
+_TIMER0_INITIAL                    text136      0EF
+_TMR0                              (abs)        001
+_TMR2H                             (abs)        013
+_TMR2IE                            (abs)        461
+_TMR2IF                            (abs)        061
+_TMR2L                             (abs)        011
+_TMR2ON                            (abs)        092
+_TRISA                             (abs)        085
+_TRISA3                            (abs)        42B
+_WPUA                              (abs)        095
+__Habs1                            abs1         000
+__Hbank0                           bank0        000
+__Hbank1                           bank1        000
+__HbssCOMMON                       bssCOMMON    000
+__Hcinit                           cinit        000
+__Hclrtext                         clrtext      000
+__Hcode                            code         000
+__Hcommon                          common       000
+__Hconfig                          config       000
+__HcstackCOMMON                    cstackCOMMON 000
+__HdataCOMMON                      dataCOMMON   000
+__Heeprom_data                     eeprom_data  000
+__Hend_init                        end_init     00D
+__Hfunctab                         functab      000
+__HidataCOMMON                     idataCOMMON  000
+__Hidloc                           idloc        000
+__Hinit                            init         00C
+__Hintentry                        intentry     00C
+__Hmaintext                        maintext     000
+__Hpa_nodes                        pa_nodes     000
+__Hpowerup                         powerup      000
+__Hram                             ram          000
+__Hreset_vec                       reset_vec    001
+__Hsfr0                            sfr0         000
+__Hsfr1                            sfr1         000
+__Hstrings                         strings      000
+__Htext                            text         000
+__Labs1                            abs1         000
+__Lbank0                           bank0        000
+__Lbank1                           bank1        000
+__LbssCOMMON                       bssCOMMON    000
+__Lcinit                           cinit        000
+__Lclrtext                         clrtext      000
+__Lcode                            code         000
+__Lcommon                          common       000
+__Lconfig                          config       000
+__LcstackCOMMON                    cstackCOMMON 000
+__LdataCOMMON                      dataCOMMON   000
+__Leeprom_data                     eeprom_data  000
+__Lend_init                        end_init     00C
+__Lfunctab                         functab      000
+__LidataCOMMON                     idataCOMMON  000
+__Lidloc                           idloc        000
+__Linit                            init         00C
+__Lintentry                        intentry     004
+__Lmaintext                        maintext     000
+__Lpa_nodes                        pa_nodes     000
+__Lpowerup                         powerup      000
+__Lram                             ram          000
+__Lreset_vec                       reset_vec    000
+__Lsfr0                            sfr0         000
+__Lsfr1                            sfr1         000
+__Lstrings                         strings      000
+__Ltext                            text         000
+__S0                               (abs)        0F7
+__S1                               (abs)        07D
+__S2                               (abs)        000
+__end_of_ISR                       text138      058
+__end_of_PA3_Level_Change_INITIAL  text135      0DF
+__end_of_POWER_INITIAL             text137      0AA
+__end_of_PWM1_BLUE                 text134      0EF
+__end_of_PWM1_GREEN                text132      0E7
+__end_of_PWM1_INITIAL              text130      09C
+__end_of_PWM1_RATE_CHANGE          text129      080
+__end_of_PWM1_RED                  text133      0D6
+__end_of_PWM1_WHITE                text131      0CD
+__end_of_TIMER0_INITIAL            text136      0F7
+__end_of_main                      maintext     0C4
+__pbssCOMMON                       bssCOMMON    070
+__pcstackCOMMON                    cstackCOMMON 079
+__pdataCOMMON                      dataCOMMON   07C
+__pidataCOMMON                     idataCOMMON  000
+__pintentry                        intentry     004
+__pmaintext                        maintext     0B7
+__ptext129                         text129      058
+__ptext130                         text130      080
+__ptext131                         text131      0C4
+__ptext132                         text132      0DF
+__ptext133                         text133      0CD
+__ptext134                         text134      0E7
+__ptext135                         text135      0D6
+__ptext136                         text136      0EF
+__ptext137                         text137      09C
+__ptext138                         text138      00D
+__ptext139                         text139      000
+__size_of_ISR                      (abs)        000
+__size_of_PA3_Level_Change_INITIAL (abs)        000
+__size_of_POWER_INITIAL            (abs)        000
+__size_of_PWM1_BLUE                (abs)        000
+__size_of_PWM1_GREEN               (abs)        000
+__size_of_PWM1_INITIAL             (abs)        000
+__size_of_PWM1_RATE_CHANGE         (abs)        000
+__size_of_PWM1_RED                 (abs)        000
+__size_of_PWM1_WHITE               (abs)        000
+__size_of_TIMER0_INITIAL           (abs)        000
+__size_of_main                     (abs)        000
+_bitdata                           dataCOMMON   07C
+_exit                              init         00C
+_main                              maintext     0B7
+_pwm_colour_value                  bssCOMMON    076
+_pwm_rate_value                    bssCOMMON    077
+_time_15ms_cnt                     bssCOMMON    078
+btemp                              (abs)        07E
+end_of_initialization              cinit        0B5
+i1l3016                                            
+i1l3022                                            
+i1l3030                                            
+i1l3032                                            
+i1l3034                                            
+i1l3038                                            
+i1l3046                                            
+i1l3048                                            
+i1l3052                                            
+i1l3062                                            
+i1l3064                                            
+i1l3068                                            
+i1l3074                                            
+interrupt_function                 intentry     004
+intlevel0                          functab      000
+intlevel1                          functab      000
+intlevel2                          functab      000
+intlevel3                          functab      000
+intlevel4                          functab      000
+intlevel5                          functab      000
+l1390                                              
+l1393                                              
+l1396                                              
+l1399                                              
+l1402                                              
+l2088                                              
+l2091                                              
+l3076                                              
+l3078                                              
+l3080                                              
+l3082                                              
+l3084                                              
+l3086                                              
+l3088                                              
+l3090                                              
+l3092                                              
+l3094                                              
+l3096                                              
+l3098                                              
+l3100                                              
+l3102                                              
+l3104                                              
+l3106                                              
+l3108                                              
+l3110                                              
+l3112                                              
+l3114                                              
+l3116                                              
+l3118                                              
+l3120                                              
+l3122                                              
+l3124                                              
+l3126                                              
+l3128                                              
+l3130                                              
+l3132                                              
+l3134                                              
+l3136                                              
+l3138                                              
+l3140                                              
+l3142                                              
+l3144                                              
+l3146                                              
+l3148                                              
+l3152                                              
+l3154                                              
+l3156                                              
+l3162                                              
+l3178                                              
+l3182                                              
+l3186                                              
+l3188                                              
+l696                                               
+reset_vec                          reset_vec    000
+saved_w                            (abs)        07E
+start                              init         00C
+start_initialization               cinit        0AA
+wtemp0                             (abs)        07E

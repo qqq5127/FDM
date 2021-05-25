@@ -823,34 +823,23 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _SFR9E `Vuc  1 e@158 ]
 "925 c:\program files (x86)\fmd\fmdide\data\include\DEVICE.h
 [v _SFR9F `Vuc  1 e@159 ]
-"24 TEST_FT62F21X_SLEEP.C
-[v _time_15ms_cnt `uc  1 e ]
-"15 FT_62F21X_IR.h
-[v _IRbitTime `uc  0 e ]
-"19 FT_62F21X_IR.h
-[v _ReadAPin `uc  0 e ]
-"16 FT_62F21X_IR.h
-[v _IRDataTimer `uc  -> 0 `x e ]
-"14 FT_62F21X_IR.h
-[v _IRbitNum `uc  0 e ]
-"17 FT_62F21X_IR.h
-[v _bitdata `uc  0 e ]
-"18 FT_62F21X_IR.h
-[v _ReceiveFinish `uc  0 e ]
-"28 c:\program files (x86)\fmd\fmdide\data\include\SYSCFG.h
-[v __nop `(v  0 ef ]
-[p i __nop ]
-[p mainexit ]
-"11 FT_62F21X_IR.h
-[v _TIMER0_INITIAL `(v  0 ef ]
-"12 FT_62F21X_IR.h
-[v _PA3_Level_Change_INITIAL `(v  0 ef ]
-"13 FT_62F21X_pwm.h
-[v _PWM1_INITIAL `(v  0 ef ]
-"10 FT_62F21X_pwm.h
-[v _pwm_rate_value `uc  0 e ]
-"18 FT_62F21X_pwm.h
-[v _PWM1_RATE_CHANGE `(v  0 ef ]
+"4 FT_62F21x_IR.c
+[v _IRbitNum `uc  1 e ]
+"5 FT_62F21x_IR.c
+[v _IRbitTime `uc  1 e ]
+"6 FT_62F21x_IR.c
+[v _IRDataTimer `uc  -> 4 `i e ]
+"7 FT_62F21x_IR.c
+[v _bitdata `uc  1 e ]
+"8 FT_62F21x_IR.c
+[v _ReceiveFinish `uc  1 e ]
+"9 FT_62F21x_IR.c
+[v _ReadAPin `uc  1 e ]
+"10 FT_62F21x_IR.c
+[v _rdata1 `uc  1 e ]
+"10 FT_62F21x_IR.c
+[v _rdata2 `uc  1 e ]
+[; ;FT_62F21X_IR.h: 4: ;
 [; ;DEVICE.h: 6: volatile unsigned char INDF @ 0x000;
 [; ;DEVICE.h: 10: volatile unsigned char TMR0 @ 0x001;
 [; ;DEVICE.h: 14: volatile unsigned char PCL @ 0x002;
@@ -1551,21 +1540,6 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;eeprom_routines.h: 43: extern void eecpymem(volatile unsigned char *to, eeprom unsigned char *from, unsigned char size);
 [; ;eeprom_routines.h: 44: extern void memcpyee(eeprom unsigned char *to, const unsigned char *from, unsigned char size);
 [; ;SYSCFG.h: 154: extern void _delay(unsigned long);
-[; ;TEST_FT62F21X_SLEEP.C: 18: ;
-[; ;TEST_FT62F21X_SLEEP.C: 19: ;
-[; ;FT_62F21X_pwm.h: 4: ;
-[; ;FT_62F21X_pwm.h: 5: ;
-[; ;FT_62F21X_pwm.h: 6: ;
-[; ;FT_62F21X_pwm.h: 9: extern unsigned char ft_user_pwm_mode;
-[; ;FT_62F21X_pwm.h: 10: extern unsigned char pwm_rate_value;
-[; ;FT_62F21X_pwm.h: 13: extern void PWM1_INITIAL(void);
-[; ;FT_62F21X_pwm.h: 14: extern void PWM1_RED(void);
-[; ;FT_62F21X_pwm.h: 15: extern void PWM1_GREEN(void);
-[; ;FT_62F21X_pwm.h: 16: extern void PWM1_BLUE(void);
-[; ;FT_62F21X_pwm.h: 17: extern void PWM1_WHITE(void);
-[; ;FT_62F21X_pwm.h: 18: extern void PWM1_RATE_CHANGE(void);
-[; ;TEST_FT62F21X_SLEEP.C: 20: ;
-[; ;FT_62F21X_IR.h: 4: ;
 [; ;FT_62F21X_IR.h: 5: ;
 [; ;FT_62F21X_IR.h: 6: ;
 [; ;FT_62F21X_IR.h: 10: extern void IR_ISR(void);
@@ -1578,427 +1552,77 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;FT_62F21X_IR.h: 18: extern unsigned char ReceiveFinish;
 [; ;FT_62F21X_IR.h: 19: extern unsigned char ReadAPin;
 [; ;FT_62F21X_IR.h: 20: extern unsigned char rdata1,rdata2;
-[; ;TEST_FT62F21X_SLEEP.C: 21: ;
-[; ;TEST_FT62F21X_SLEEP.C: 22: ;
-"24 TEST_FT62F21X_SLEEP.C
-[i _time_15ms_cnt
+[; ;FT_62F21x_IR.c: 1: ;
+"4 FT_62F21x_IR.c
+[i _IRbitNum
 -> -> 0 `i `uc
 ]
-[; ;TEST_FT62F21X_SLEEP.C: 24: unsigned char time_15ms_cnt = 0;
-"34
-[v F923 `(v  1 tf ]
-[v _ISR `IF923  1 e ]
+[; ;FT_62F21x_IR.c: 4: unsigned char IRbitNum = 0;
+"5
+[i _IRbitTime
+-> -> 0 `i `uc
+]
+[; ;FT_62F21x_IR.c: 5: unsigned char IRbitTime = 0;
+[; ;FT_62F21x_IR.c: 6: unsigned char IRDataTimer[4];
+"7
+[i _bitdata
+-> -> 1 `i `uc
+]
+[; ;FT_62F21x_IR.c: 7: unsigned char bitdata=0x01;
+"8
+[i _ReceiveFinish
+-> -> 0 `i `uc
+]
+[; ;FT_62F21x_IR.c: 8: unsigned char ReceiveFinish = 0;
+"9
+[i _ReadAPin
+-> -> 0 `i `uc
+]
+[; ;FT_62F21x_IR.c: 9: unsigned char ReadAPin = 0;
+[; ;FT_62F21x_IR.c: 10: unsigned char rdata1,rdata2;
+"19
+[v _TIMER0_INITIAL `(v  1 ef ]
 {
-[; ;TEST_FT62F21X_SLEEP.C: 33: void interrupt ISR(void)
-[; ;TEST_FT62F21X_SLEEP.C: 34: {
-[e :U _ISR ]
+[; ;FT_62F21x_IR.c: 18: void TIMER0_INITIAL (void)
+[; ;FT_62F21x_IR.c: 19: {
+[e :U _TIMER0_INITIAL ]
 [f ]
-[; ;TEST_FT62F21X_SLEEP.C: 37: if(TMR2IE && TMR2IF)
-"37
-[e $ ! && _TMR2IE _TMR2IF 87  ]
-[; ;TEST_FT62F21X_SLEEP.C: 38: {
-"38
-{
-[; ;TEST_FT62F21X_SLEEP.C: 39: TMR2IF = 0;
-"39
-[e = _TMR2IF -> -> 0 `i `b ]
-[; ;TEST_FT62F21X_SLEEP.C: 40: time_15ms_cnt++;
-"40
-[e ++ _time_15ms_cnt -> -> 1 `i `uc ]
-"42
-}
-[e :U 87 ]
-[; ;TEST_FT62F21X_SLEEP.C: 42: }
-[; ;TEST_FT62F21X_SLEEP.C: 46: if(T0IE && T0IF)
-"46
-[e $ ! && _T0IE _T0IF 88  ]
-[; ;TEST_FT62F21X_SLEEP.C: 47: {
-"47
-{
-[; ;TEST_FT62F21X_SLEEP.C: 48: TMR0 = 140;
-"48
+[; ;FT_62F21x_IR.c: 20: OPTION = 0B00000011;
+"20
+[e = _OPTION -> -> 3 `i `uc ]
+[; ;FT_62F21x_IR.c: 27: TMR0 = 140;
+"27
 [e = _TMR0 -> -> 140 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 50: T0IF = 0;
-"50
+[; ;FT_62F21x_IR.c: 28: T0IF = 0;
+"28
 [e = _T0IF -> -> 0 `i `b ]
-[; ;TEST_FT62F21X_SLEEP.C: 51: IRbitTime++;
-"51
-[e ++ _IRbitTime -> -> 1 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 52: if(IRbitTime > 50)
-"52
-[e $ ! > -> _IRbitTime `i -> 50 `i 89  ]
-[; ;TEST_FT62F21X_SLEEP.C: 53: {
-"53
-{
-[; ;TEST_FT62F21X_SLEEP.C: 54: T0IE = 0;
-"54
-[e = _T0IE -> -> 0 `i `b ]
-[; ;TEST_FT62F21X_SLEEP.C: 55: IRbitTime = 0;
-"55
-[e = _IRbitTime -> -> 0 `i `uc ]
-"56
-}
-[e :U 89 ]
-"57
-}
-[e :U 88 ]
-[; ;TEST_FT62F21X_SLEEP.C: 56: }
-[; ;TEST_FT62F21X_SLEEP.C: 57: }
-[; ;TEST_FT62F21X_SLEEP.C: 60: if(PAIE && PAIF)
-"60
-[e $ ! && _PAIE _PAIF 90  ]
-[; ;TEST_FT62F21X_SLEEP.C: 61: {
-"61
-{
-[; ;TEST_FT62F21X_SLEEP.C: 62: ReadAPin = PORTA;
-"62
-[e = _ReadAPin _PORTA ]
-[; ;TEST_FT62F21X_SLEEP.C: 63: PAIF = 0;
-"63
-[e = _PAIF -> -> 0 `i `b ]
-[; ;TEST_FT62F21X_SLEEP.C: 64: if(RA3 == 0)
-"64
-[e $ ! == -> _RA3 `i -> 0 `i 91  ]
-[; ;TEST_FT62F21X_SLEEP.C: 65: {
-"65
-{
-[; ;TEST_FT62F21X_SLEEP.C: 66: T0IE = 1;
-"66
-[e = _T0IE -> -> 1 `i `b ]
-[; ;TEST_FT62F21X_SLEEP.C: 67: if(IRbitTime > 21)
-"67
-[e $ ! > -> _IRbitTime `i -> 21 `i 92  ]
-[; ;TEST_FT62F21X_SLEEP.C: 68: {
-"68
-{
-[; ;TEST_FT62F21X_SLEEP.C: 69: IRDataTimer[0] = 0;
-"69
-[e = *U + &U _IRDataTimer * -> -> -> 0 `i `ui `ux -> -> # *U &U _IRDataTimer `ui `ux -> -> 0 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 70: IRDataTimer[1] = 0;
-"70
-[e = *U + &U _IRDataTimer * -> -> -> 1 `i `ui `ux -> -> # *U &U _IRDataTimer `ui `ux -> -> 0 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 71: IRDataTimer[2] = 0;
-"71
-[e = *U + &U _IRDataTimer * -> -> -> 2 `i `ui `ux -> -> # *U &U _IRDataTimer `ui `ux -> -> 0 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 72: IRDataTimer[3] = 0;
-"72
-[e = *U + &U _IRDataTimer * -> -> -> 3 `i `ui `ux -> -> # *U &U _IRDataTimer `ui `ux -> -> 0 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 73: IRbitNum = 0;
-"73
-[e = _IRbitNum -> -> 0 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 74: bitdata = 0x00;
-"74
-[e = _bitdata -> -> 0 `i `uc ]
-"75
-}
-[; ;TEST_FT62F21X_SLEEP.C: 75: }
-[e $U 93  ]
-"76
-[e :U 92 ]
-[; ;TEST_FT62F21X_SLEEP.C: 76: else if(IRbitTime > 3)
-[e $ ! > -> _IRbitTime `i -> 3 `i 94  ]
-[; ;TEST_FT62F21X_SLEEP.C: 77: {
-"77
-{
-[; ;TEST_FT62F21X_SLEEP.C: 78: IRDataTimer[IRbitNum-1] |= bitdata;
-"78
-[e =| *U + &U _IRDataTimer * -> -> - -> _IRbitNum `i -> 1 `i `ui `ux -> -> # *U &U _IRDataTimer `ui `ux _bitdata ]
-"79
-}
-[e :U 94 ]
-"80
-[e :U 93 ]
-[; ;TEST_FT62F21X_SLEEP.C: 79: }
-[; ;TEST_FT62F21X_SLEEP.C: 80: IRbitTime = 0;
-[e = _IRbitTime -> -> 0 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 81: bitdata<<=1;
-"81
-[e =<< _bitdata -> 1 `i ]
-[; ;TEST_FT62F21X_SLEEP.C: 82: if(bitdata == 0)
-"82
-[e $ ! == -> _bitdata `i -> 0 `i 95  ]
-[; ;TEST_FT62F21X_SLEEP.C: 83: {
-"83
-{
-[; ;TEST_FT62F21X_SLEEP.C: 84: bitdata = 0x01;
-"84
-[e = _bitdata -> -> 1 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 85: IRbitNum++;
-"85
-[e ++ _IRbitNum -> -> 1 `i `uc ]
-"86
-}
-[e :U 95 ]
-[; ;TEST_FT62F21X_SLEEP.C: 86: }
-[; ;TEST_FT62F21X_SLEEP.C: 87: if(IRbitNum > 4)
-"87
-[e $ ! > -> _IRbitNum `i -> 4 `i 96  ]
-[; ;TEST_FT62F21X_SLEEP.C: 88: {
-"88
-{
-[; ;TEST_FT62F21X_SLEEP.C: 89: IRbitNum = 0;
-"89
-[e = _IRbitNum -> -> 0 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 90: T0IE = 0;
-"90
-[e = _T0IE -> -> 0 `i `b ]
-[; ;TEST_FT62F21X_SLEEP.C: 91: ReceiveFinish = 1;
-"91
-[e = _ReceiveFinish -> -> 1 `i `uc ]
-"92
-}
-[e :U 96 ]
-"94
-}
-[e :U 91 ]
-"95
-}
-[e :U 90 ]
-[; ;TEST_FT62F21X_SLEEP.C: 92: }
-[; ;TEST_FT62F21X_SLEEP.C: 94: }
-[; ;TEST_FT62F21X_SLEEP.C: 95: }
-[; ;TEST_FT62F21X_SLEEP.C: 96: }
-"96
+[; ;FT_62F21x_IR.c: 29: }
+"29
 [e :UE 86 ]
 }
-"105
-[v _POWER_INITIAL `(v  1 ef ]
+"37
+[v _PA3_Level_Change_INITIAL `(v  1 ef ]
 {
-[; ;TEST_FT62F21X_SLEEP.C: 104: void POWER_INITIAL (void)
-[; ;TEST_FT62F21X_SLEEP.C: 105: {
-[e :U _POWER_INITIAL ]
+[; ;FT_62F21x_IR.c: 36: void PA3_Level_Change_INITIAL(void)
+[; ;FT_62F21x_IR.c: 37: {
+[e :U _PA3_Level_Change_INITIAL ]
 [f ]
-[; ;TEST_FT62F21X_SLEEP.C: 106: OSCCON = 0X00|0X70|0X00;
-"106
-[e = _OSCCON -> | | -> 0 `i -> 112 `i -> 0 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 109: INTCON = 0;
-"109
-[e = _INTCON -> -> 0 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 111: PORTA = 0B00000000;
-"111
-[e = _PORTA -> -> 0 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 112: TRISA = 0B00000000;
-"112
-[e = _TRISA -> -> 0 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 113: WPUA = 0B00000000;
-"113
-[e = _WPUA -> -> 0 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 115: OPTION = 0B00001000;
-"115
-[e = _OPTION -> -> 8 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 117: MSCON = 0B00000000;
-"117
-[e = _MSCON -> -> 0 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 118: }
-"118
-[e :UE 97 ]
-}
-"126
-[v _DelayUs `(v  1 ef1`uc ]
-{
-[; ;TEST_FT62F21X_SLEEP.C: 125: void DelayUs(unsigned char Time)
-[; ;TEST_FT62F21X_SLEEP.C: 126: {
-[e :U _DelayUs ]
-[v _Time `uc  1 r1 ]
-[f ]
-"127
-[v _a `uc  1 a ]
-[; ;TEST_FT62F21X_SLEEP.C: 127: unsigned char a;
-[; ;TEST_FT62F21X_SLEEP.C: 128: for(a=0;a<Time;a++)
-"128
-{
-[e = _a -> -> 0 `i `uc ]
-[e $U 102  ]
-"129
-[e :U 99 ]
-[; ;TEST_FT62F21X_SLEEP.C: 129: {
-{
-[; ;TEST_FT62F21X_SLEEP.C: 130: _nop();
-"130
-[e ( __nop ..  ]
-"131
-}
-"128
-[e ++ _a -> -> 1 `i `uc ]
-[e :U 102 ]
-[e $ < -> _a `i -> _Time `i 99  ]
-[e :U 100 ]
-"131
-}
-[; ;TEST_FT62F21X_SLEEP.C: 131: }
-[; ;TEST_FT62F21X_SLEEP.C: 132: }
-"132
-[e :UE 98 ]
-}
-"140
-[v _DelayMs `(v  1 ef1`uc ]
-{
-[; ;TEST_FT62F21X_SLEEP.C: 139: void DelayMs(unsigned char Time)
-[; ;TEST_FT62F21X_SLEEP.C: 140: {
-[e :U _DelayMs ]
-[v _Time `uc  1 r1 ]
-[f ]
-"141
-[v _a `uc  1 a ]
-[v _b `uc  1 a ]
-[; ;TEST_FT62F21X_SLEEP.C: 141: unsigned char a,b;
-[; ;TEST_FT62F21X_SLEEP.C: 142: for(a=0;a<Time;a++)
-"142
-{
-[e = _a -> -> 0 `i `uc ]
-[e $U 107  ]
-"143
-[e :U 104 ]
-[; ;TEST_FT62F21X_SLEEP.C: 143: {
-{
-[; ;TEST_FT62F21X_SLEEP.C: 144: for(b=0;b<5;b++)
-"144
-{
-[e = _b -> -> 0 `i `uc ]
-[e $ < -> _b `i -> 5 `i 108  ]
-[e $U 109  ]
-"145
-[e :U 108 ]
-[; ;TEST_FT62F21X_SLEEP.C: 145: {
-{
-[; ;TEST_FT62F21X_SLEEP.C: 146: DelayUs(98);
-"146
-[e ( _DelayUs (1 -> -> 98 `i `uc ]
-"147
-}
-"144
-[e ++ _b -> -> 1 `i `uc ]
-[e $ < -> _b `i -> 5 `i 108  ]
-[e :U 109 ]
-"147
-}
-"148
-}
-"142
-[e ++ _a -> -> 1 `i `uc ]
-[e :U 107 ]
-[e $ < -> _a `i -> _Time `i 104  ]
-[e :U 105 ]
-"148
-}
-[; ;TEST_FT62F21X_SLEEP.C: 147: }
-[; ;TEST_FT62F21X_SLEEP.C: 148: }
-[; ;TEST_FT62F21X_SLEEP.C: 149: }
-"149
-[e :UE 103 ]
-}
-"157
-[v _DelayS `(v  1 ef1`uc ]
-{
-[; ;TEST_FT62F21X_SLEEP.C: 156: void DelayS(unsigned char Time)
-[; ;TEST_FT62F21X_SLEEP.C: 157: {
-[e :U _DelayS ]
-[v _Time `uc  1 r1 ]
-[f ]
-"158
-[v _a `uc  1 a ]
-[v _b `uc  1 a ]
-[; ;TEST_FT62F21X_SLEEP.C: 158: unsigned char a,b;
-[; ;TEST_FT62F21X_SLEEP.C: 159: for(a=0;a<Time;a++)
-"159
-{
-[e = _a -> -> 0 `i `uc ]
-[e $U 115  ]
-"160
-[e :U 112 ]
-[; ;TEST_FT62F21X_SLEEP.C: 160: {
-{
-[; ;TEST_FT62F21X_SLEEP.C: 161: for(b=0;b<10;b++)
-"161
-{
-[e = _b -> -> 0 `i `uc ]
-[e $ < -> _b `i -> 10 `i 116  ]
-[e $U 117  ]
-"162
-[e :U 116 ]
-[; ;TEST_FT62F21X_SLEEP.C: 162: {
-{
-[; ;TEST_FT62F21X_SLEEP.C: 163: DelayMs(100);
-"163
-[e ( _DelayMs (1 -> -> 100 `i `uc ]
-"164
-}
-"161
-[e ++ _b -> -> 1 `i `uc ]
-[e $ < -> _b `i -> 10 `i 116  ]
-[e :U 117 ]
-"164
-}
-"165
-}
-"159
-[e ++ _a -> -> 1 `i `uc ]
-[e :U 115 ]
-[e $ < -> _a `i -> _Time `i 112  ]
-[e :U 113 ]
-"165
-}
-[; ;TEST_FT62F21X_SLEEP.C: 164: }
-[; ;TEST_FT62F21X_SLEEP.C: 165: }
-[; ;TEST_FT62F21X_SLEEP.C: 166: }
-"166
-[e :UE 111 ]
-}
-"174
-[v _main `(v  1 ef ]
-{
-[; ;TEST_FT62F21X_SLEEP.C: 173: void main(void)
-[; ;TEST_FT62F21X_SLEEP.C: 174: {
-[e :U _main ]
-[f ]
-[; ;TEST_FT62F21X_SLEEP.C: 175: POWER_INITIAL();
-"175
-[e ( _POWER_INITIAL ..  ]
-[; ;TEST_FT62F21X_SLEEP.C: 176: TIMER0_INITIAL();
-"176
-[e ( _TIMER0_INITIAL ..  ]
-[; ;TEST_FT62F21X_SLEEP.C: 177: PA3_Level_Change_INITIAL();
-"177
-[e ( _PA3_Level_Change_INITIAL ..  ]
-[; ;TEST_FT62F21X_SLEEP.C: 178: PWM1_INITIAL();
-"178
-[e ( _PWM1_INITIAL ..  ]
-[; ;TEST_FT62F21X_SLEEP.C: 180: while(1)
-"180
-[e :U 121 ]
-[; ;TEST_FT62F21X_SLEEP.C: 181: {
-"181
-{
-[; ;TEST_FT62F21X_SLEEP.C: 182: asm("clrwdt");
-"182
-[; clrwdt ;#
-[; ;TEST_FT62F21X_SLEEP.C: 183: if(time_15ms_cnt > 15)
-"183
-[e $ ! > -> _time_15ms_cnt `i -> 15 `i 123  ]
-[; ;TEST_FT62F21X_SLEEP.C: 184: {
-"184
-{
-[; ;TEST_FT62F21X_SLEEP.C: 185: time_15ms_cnt = 0;
-"185
-[e = _time_15ms_cnt -> -> 0 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 186: pwm_rate_value++;
-"186
-[e ++ _pwm_rate_value -> -> 1 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 187: PWM1_RATE_CHANGE();
-"187
-[e ( _PWM1_RATE_CHANGE ..  ]
-"188
-}
-[e :U 123 ]
-"189
-}
-[e :U 120 ]
-"180
-[e $U 121  ]
-[e :U 122 ]
-[; ;TEST_FT62F21X_SLEEP.C: 188: }
-[; ;TEST_FT62F21X_SLEEP.C: 189: }
-[; ;TEST_FT62F21X_SLEEP.C: 190: }
-"190
-[e :UE 119 ]
+[; ;FT_62F21x_IR.c: 38: TRISA3 =1;
+"38
+[e = _TRISA3 -> -> 1 `i `b ]
+[; ;FT_62F21x_IR.c: 39: ReadAPin = PORTA;
+"39
+[e = _ReadAPin _PORTA ]
+[; ;FT_62F21x_IR.c: 40: PAIF =0;
+"40
+[e = _PAIF -> -> 0 `i `b ]
+[; ;FT_62F21x_IR.c: 41: IOCA3 =1;
+"41
+[e = _IOCA3 -> -> 1 `i `b ]
+[; ;FT_62F21x_IR.c: 42: PAIE =1;
+"42
+[e = _PAIE -> -> 1 `i `b ]
+[; ;FT_62F21x_IR.c: 43: }
+"43
+[e :UE 87 ]
 }

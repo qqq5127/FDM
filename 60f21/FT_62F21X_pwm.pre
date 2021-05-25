@@ -1,5 +1,8 @@
 
-# 1 "TEST_FT62F21X_SLEEP.C"
+# 1 "FT_62F21X_pwm.c"
+
+# 4 "FT_62F21X_pwm.h"
+;
 
 # 6 "c:\program files (x86)\fmd\fmdide\data\include\DEVICE.h"
 volatile unsigned char INDF @ 0x000;
@@ -937,16 +940,7 @@ extern void memcpyee(eeprom unsigned char *to, const unsigned char *from, unsign
 #pragma inline(_delay)
 extern void _delay(unsigned long);
 
-# 18 "TEST_FT62F21X_SLEEP.C"
-;
-
-# 19
-;
-
-# 4 "FT_62F21X_pwm.h"
-;
-
-# 5
+# 5 "FT_62F21X_pwm.h"
 ;
 
 # 6
@@ -964,175 +958,138 @@ extern void PWM1_BLUE(void);
 extern void PWM1_WHITE(void);
 extern void PWM1_RATE_CHANGE(void);
 
-# 20 "TEST_FT62F21X_SLEEP.C"
+# 1 "FT_62F21X_pwm.c"
 ;
 
-# 4 "FT_62F21X_IR.h"
-;
+unsigned char ft_user_pwm_mode = 0;
+unsigned char pwm_rate_value = 0;
+unsigned char pwm_colour_value = 0;
 
-# 5
-;
-
-# 6
-;
-
-
-
-extern void IR_ISR(void);
-extern void TIMER0_INITIAL (void);
-void PA3_Level_Change_INITIAL(void);
-
-extern unsigned char IRbitNum;
-extern unsigned char IRbitTime;
-extern unsigned char IRDataTimer[4];
-extern unsigned char bitdata;
-extern unsigned char ReceiveFinish;
-extern unsigned char ReadAPin;
-extern unsigned char rdata1,rdata2;
-
-# 21 "TEST_FT62F21X_SLEEP.C"
-;
-
-# 22
-;
-
-unsigned char time_15ms_cnt = 0;
-
-# 33
-void interrupt ISR(void)
+# 13
+void PWM1_INITIAL(void)
 {
+T2CON0=0B00000001;
+
+# 21
+T2CON1=0B00000000;
 
 
-if(TMR2IE && TMR2IF)
-{
-TMR2IF = 0;
-time_15ms_cnt++;
+
+
+TMR2H=0;
+TMR2L=100;
+
+PR2H=0;
+PR2L=100;
+P1ADTH=0;
+
+
+P1POL=0B00000000;
+
+# 41
+P1CON=0B00000000;
+
+# 48
+P1AUX=0B00000000;
+
+# 59
+PWM1_BLUE();
+
+
+TMR2IF=0;
+TMR2IE=1;
+TMR2ON=1;
+PEIE=1;
+GIE=1;
 
 }
 
 
-
-if(T0IE && T0IF)
+void PWM1_RED(void)
 {
-TMR0 = 140;
+P1ADTL=0;
 
-T0IF = 0;
-IRbitTime++;
-if(IRbitTime > 50)
+P1OE=0B10000000;
+
+# 83
+P1BR1=0B00001000;
+
+
+
+
+}
+
+void PWM1_GREEN(void)
 {
-T0IE = 0;
-IRbitTime = 0;
-}
-}
+P1ADTL=0;
+
+P1OE=0B00100000;
+
+# 102
+P1BR1=0B00000000;
 
 
-if(PAIE && PAIF)
+
+
+}
+
+void PWM1_BLUE(void)
 {
-ReadAPin = PORTA;
-PAIF = 0;
-if(RA3 == 0)
-{
-T0IE = 1;
-if(IRbitTime > 21)
-{
-IRDataTimer[0] = 0;
-IRDataTimer[1] = 0;
-IRDataTimer[2] = 0;
-IRDataTimer[3] = 0;
-IRbitNum = 0;
-bitdata = 0x00;
-}
-else if(IRbitTime > 3)
-{
-IRDataTimer[IRbitNum-1] |= bitdata;
-}
-IRbitTime = 0;
-bitdata<<=1;
-if(bitdata == 0)
-{
-bitdata = 0x01;
-IRbitNum++;
-}
-if(IRbitNum > 4)
-{
-IRbitNum = 0;
-T0IE = 0;
-ReceiveFinish = 1;
-}
+P1ADTL=0;
 
-}
-}
-}
+P1OE=0B10000000;
 
-# 104
-void POWER_INITIAL (void)
-{
-OSCCON = 0X00|0X70|0X00;
+# 121
+P1BR1=0B00000000;
 
 
-INTCON = 0;
 
-PORTA = 0B00000000;
-TRISA = 0B00000000;
-WPUA = 0B00000000;
-
-OPTION = 0B00001000;
-
-MSCON = 0B00000000;
 }
 
-# 125
-void DelayUs(unsigned char Time)
+void PWM1_WHITE(void)
 {
-unsigned char a;
-for(a=0;a<Time;a++)
-{
-_nop();
-}
-}
+P1ADTL=0;
+
+P1OE=0B00100000;
 
 # 139
-void DelayMs(unsigned char Time)
-{
-unsigned char a,b;
-for(a=0;a<Time;a++)
-{
-for(b=0;b<5;b++)
-{
-DelayUs(98);
+P1BR1=0B00000100;
+
+
+
 }
+
+void PWM1_RATE_CHANGE(void)
+{
+if(pwm_rate_value >= 200)
+{
+pwm_rate_value = 0;
+pwm_colour_value++;
+pwm_colour_value = pwm_colour_value%4;
+if(pwm_colour_value == 0)
+{
+PWM1_RED();
+}
+else if(pwm_colour_value == 1)
+{
+PWM1_GREEN();
+}
+else if(pwm_colour_value == 2)
+{
+PWM1_BLUE();
+}
+else if(pwm_colour_value == 3)
+{
+PWM1_WHITE();
+}
+}
+if(pwm_rate_value <=100)
+{
+P1ADTL = pwm_rate_value;
+}
+else
+{
+P1ADTL = 200 - pwm_rate_value;
 }
 }
 
-# 156
-void DelayS(unsigned char Time)
-{
-unsigned char a,b;
-for(a=0;a<Time;a++)
-{
-for(b=0;b<10;b++)
-{
-DelayMs(100);
-}
-}
-}
-
-# 173
-void main(void)
-{
-POWER_INITIAL();
-TIMER0_INITIAL();
-PA3_Level_Change_INITIAL();
-PWM1_INITIAL();
-
-while(1)
-{
-asm("clrwdt");
-if(time_15ms_cnt > 15)
-{
-time_15ms_cnt = 0;
-pwm_rate_value++;
-PWM1_RATE_CHANGE();
-}
-}
-}

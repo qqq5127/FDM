@@ -1,7 +1,7 @@
 
 
 HI-TECH Software PIC Macro Assembler V9.83 build 10920 
-                                                                                                           Thu Jun 18 13:12:36 2020
+                                                                                                           Tue May 25 17:24:25 2021
 
 
      1                           
@@ -15,10 +15,10 @@ HI-TECH Software PIC Macro Assembler V9.83 build 10920
      9                           	; Compiler options:
     10                           	;
     11                           	; -otest_ft62f21x_sleep.cof -mtest_ft62f21x_sleep.map --summary=default \
-    12                           	; --output=default test_ft62f21x_sleep.p1 --chip=16F684 -P \
-    13                           	; --runtime=default --opt=default -D__DEBUG=1 -g --asmlist \
-    14                           	; --errformat=Error   [%n] %f; %l.%c %s --msgformat=Advisory[%n] %s \
-    15                           	; --warnformat=Warning [%n] %f; %l.%c %s
+    12                           	; --output=default test_ft62f21x_sleep.p1 ft_62f21x_pwm.p1 \
+    13                           	; ft_62f21x_ir.p1 --chip=16F684 -P --runtime=default --opt=default \
+    14                           	; -D__DEBUG=1 -g --asmlist --errformat=Error   [%n] %f; %l.%c %s \
+    15                           	; --msgformat=Advisory[%n] %s --warnformat=Warning [%n] %f; %l.%c %s
     16                           	;
     17                           
     18                           
@@ -61,20 +61,24 @@ HI-TECH Software PIC Macro Assembler V9.83 build 10920
     55                           	psect	reset_vec
     56  0000                     reset_vec:
     57                           	; No powerup routine
-    58                           	; No interrupt routine
+    58                           	global start
     59                           
-    60                           
-    61                           	psect	init
-    62  0000                     start
-    63  0000                     _exit
-    64                           	psect	end_init
-    65                           	global start_initialization
-    66  0000  2BB7               	ljmp start_initialization	;jump to C runtime clear & initialization
+    60                           ; jump to start
+    61  0000  280C               	goto	start & 0x7FF | (reset_vec & not 0x7FF)
+    62                           
+    63                           
+    64                           
+    65                           	psect	init
+    66  000C                     start
+    67  000C                     _exit
+    68                           	psect	end_init
+    69                           	global start_initialization
+    70  000C  28AA               	ljmp start_initialization	;jump to C runtime clear & initialization
 
 
 HI-TECH Software PICC Macro Assembler V9.83 build 10920 
-Symbol Table                                                                                               Thu Jun 18 13:12:36 2020
+Symbol Table                                                                                               Tue May 25 17:24:25 2021
 
-               _main 03F0                 _exit 0000                 start 0000  start_initialization 03B7  
+               _main 00B7                 _exit 000C                 start 000C  start_initialization 00AA  
            intlevel0 0000             intlevel1 0000             intlevel2 0000             intlevel3 0000  
            intlevel4 0000             intlevel5 0000             reset_vec 0000  

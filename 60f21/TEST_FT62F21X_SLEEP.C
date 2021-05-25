@@ -17,25 +17,84 @@
 //*********************************************************
 #include	"SYSCFG.h";
 #include 	"FT62F21X.h";
-//*********************************************************
-#define OSC_16M		0X70
-#define OSC_8M		0X60
-#define OSC_4M		0X50
-#define OSC_2M		0X40
-#define OSC_1M		0X30
-#define OSC_500K	0X20
-#define OSC_250K	0X10
-#define OSC_32K		0X00
+#include 	"FT_62F21X_pwm.h";
+#include 	"FT_62F21X_IR.h";
+#include 	"FT_USER_CONFIG.h";
 
-#define WDT_256K	0X80
-#define WDT_32K		0X00
-//**********************************************************
-//***********************宏定义*****************************
-#define  unchar     unsigned char 
-#define  unint      	unsigned int
-#define  unlong     unsigned long
-#define  led1			RA4
-#define  led2			RA3
+unchar time_15ms_cnt = 0;
+
+
+ /*-------------------------------------------------
+  *  函数名：中断处理程序
+  *  功能：	 定时器2中断
+  *  输入：	 无
+  *  输出：	 无
+  --------------------------------------------------*/
+ void interrupt ISR(void)			 //PIC_HI-TECH使用
+ { 
+	
+   //定时器2的中断处理**********************
+	 if(TMR2IE && TMR2IF)			 //100us中断一次 
+	 {
+		 TMR2IF = 0;
+		 time_15ms_cnt++;
+		 //DemoPortOut = ~DemoPortOut; //翻转电平
+	 } 
+
+	//IR 中断检测
+	 //定时器0的中断处理**********************
+	   if(T0IE && T0IF) 				   //104us
+	   {
+		   TMR0 = 140;				   //注意:对TMR0重新赋值TMR0在两个周期内不变化
+			
+		   T0IF = 0;
+		   IRbitTime++;
+		   if(IRbitTime > 50)
+		   {
+			   T0IE = 0;
+			   IRbitTime = 0;
+		   }
+	   } 
+	   
+	   //PA电平变化中断**********************
+	   if(PAIE && PAIF) 	   
+	   {
+		   ReadAPin = PORTA;		   //读取PORTA数据清PAIF标志
+		   PAIF = 0; 
+		   if(IRRIO == 0)
+		   {
+			   T0IE = 1;
+			   if(IRbitTime > 21)
+			   {
+				   IRDataTimer[0] = 0;
+				   IRDataTimer[1] = 0;
+				   IRDataTimer[2] = 0;
+				   IRDataTimer[3] = 0;
+				   IRbitNum = 0;
+				   bitdata = 0x00;
+			   }
+			   else if(IRbitTime > 3)
+			   {
+				   IRDataTimer[IRbitNum-1] |= bitdata;
+			   }
+			   IRbitTime = 0;
+			   bitdata<<=1;
+			   if(bitdata == 0)
+			   {
+				   bitdata = 0x01;
+				   IRbitNum++;
+			   }
+			   if(IRbitNum > 4)
+			   {
+				   IRbitNum = 0;
+				   T0IE = 0;  
+				   ReceiveFinish = 1;	   
+			   }
+	 
+		   }
+	   }
+ }
+
  /*-------------------------------------------------
  *	函数名：POWER_INITIAL
  *	功能：  上电系统初始化
@@ -114,18 +173,18 @@ void DelayS(unsigned char Time)
 void main(void)
 {
 	POWER_INITIAL();		//系统初始化
-	led1 = 1;
-    led2 = 1;
-    DelayS(4);
-    led1 = 0;
-    led2 = 0;
+	TIMER0_INITIAL();	
+	PA3_Level_Change_INITIAL();
+	PWM1_INITIAL();
 
     while(1)
 	{
     	CLRWDT();  		    //清看门狗
-		NOP();
-     	SLEEP(); 
-		NOP();
-        led1 =~led1;
+		if(time_15ms_cnt > 15)
+		{
+			time_15ms_cnt = 0;
+			pwm_rate_value++;
+			PWM1_RATE_CHANGE();
+		}
 	}
 }

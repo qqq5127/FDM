@@ -1,537 +1,1302 @@
 
 
 HI-TECH Software PIC PRO Macro Assembler V9.83 build 10920 
-                                                                                               Thu Jun 18 13:12:36 2020
+                                                                                               Tue May 25 17:24:25 2021
 
 HI-TECH Software Omniscient Code Generator (PRO mode) build 10920
      1                           	processor	16F684
      2                           	opt	pw 120
      3                           	opt	pm
-     4                           	psect	text53,local,class=CODE,delta=2
+     4                           	psect	idataCOMMON,global,class=CODE,delta=2
      5                           	psect	cinit,global,class=CODE,delta=2
-     6                           	psect	cstackCOMMON,global,class=COMMON,space=1,delta=1
-     7                           	psect	maintext,global,class=CODE,delta=2
-     8                           	psect	text54,local,class=CODE,delta=2
-     9                           	psect	text55,local,class=CODE,delta=2
-    10                           	psect	text56,local,class=CODE,delta=2
-    11                           	psect	text57,local,class=CODE,delta=2
-    12                           	psect	text58,local,class=CODE,delta=2
-    13                           	psect	pa_nodes,global,class=CODE,delta=2
-    14                           	dabs	1,0x7E,2
-    15  000A                     
-    16                           	psect	text53
-    17  0000                     __ptext53:	
-    18  000B                     _INTCON	set	11
-    19  001B                     _MSCON	set	27
-    20  0005                     _PORTA	set	5
-    21  002B                     _RA3	set	43
-    22  002C                     _RA4	set	44
-    23  0081                     _OPTION	set	129
-    24  008F                     _OSCCON	set	143
-    25  0085                     _TRISA	set	133
-    26  0095                     _WPUA	set	149
-    27                           
-    28                           	psect	cinit
-    29  03B7                     start_initialization:	
-    30  03B7                     end_of_initialization:	
-    31                           ;End of C runtime variable initialization code
-    32                           
-    33  03B7  0183               	clrf	3
-    34  03B8  2BF0               	ljmp	_main	;jump to C main() function
-    35                           
-    36                           	psect	cstackCOMMON
-    37  0070                     __pcstackCOMMON:	
-    38  0070                     ?_POWER_INITIAL:	
-    39  0070                     ??_POWER_INITIAL:	
-    40                           ; 0 bytes @ 0x0
-    41                           
-    42  0070                     ?_DelayUs:	
-    43                           ; 0 bytes @ 0x0
-    44                           
-    45  0070                     ??_DelayUs:	
-    46                           ; 0 bytes @ 0x0
-    47                           
-    48  0070                     ?_DelayMs:	
-    49                           ; 0 bytes @ 0x0
-    50                           
-    51  0070                     ?_DelayS:	
-    52                           ; 0 bytes @ 0x0
-    53                           
-    54  0070                     ?_main:	
-    55                           ; 0 bytes @ 0x0
-    56                           
-    57  0070                     DelayUs@Time:	
-    58                           ; 0 bytes @ 0x0
-    59                           
+     6                           	psect	bssCOMMON,global,class=COMMON,space=1,delta=1
+     7                           	psect	dataCOMMON,global,class=COMMON,space=1,delta=1
+     8                           	psect	cstackCOMMON,global,class=COMMON,space=1,delta=1
+     9                           	psect	maintext,global,class=CODE,delta=2
+    10                           	psect	text129,local,class=CODE,delta=2
+    11                           	psect	text130,local,class=CODE,delta=2
+    12                           	psect	text131,local,class=CODE,delta=2
+    13                           	psect	text132,local,class=CODE,delta=2
+    14                           	psect	text133,local,class=CODE,delta=2
+    15                           	psect	text134,local,class=CODE,delta=2
+    16                           	psect	text135,local,class=CODE,delta=2
+    17                           	psect	text136,local,class=CODE,delta=2
+    18                           	psect	text137,local,class=CODE,delta=2
+    19                           	psect	text138,local,class=CODE,delta=2
+    20                           	psect	intentry,global,class=CODE,delta=2
+    21                           	psect	text139,local,class=CODE,delta=2
+    22                           	psect	pa_nodes,global,class=CODE,delta=2
+    23                           	dabs	1,0x7E,2
+    24  000A                     
+    25                           	psect	idataCOMMON
+    26  0000                     __pidataCOMMON:	
+    27  000B                     _INTCON	set	11
+    28  001B                     _MSCON	set	27
+    29  0014                     _P1ADTH	set	20
+    30  000E                     _P1ADTL	set	14
+    31  001E                     _P1AUX	set	30
+    32  0019                     _P1BR1	set	25
+    33  0016                     _P1CON	set	22
+    34  0005                     _PORTA	set	5
+    35  0012                     _T2CON0	set	18
+    36  0001                     _TMR0	set	1
+    37  0013                     _TMR2H	set	19
+    38  0011                     _TMR2L	set	17
+    39  005F                     _GIE	set	95
+    40  005B                     _PAIE	set	91
+    41  0058                     _PAIF	set	88
+    42  005E                     _PEIE	set	94
+    43  002B                     _RA3	set	43
+    44  005D                     _T0IE	set	93
+    45  005A                     _T0IF	set	90
+    46  0061                     _TMR2IF	set	97
+    47  0092                     _TMR2ON	set	146
+    48  0081                     _OPTION	set	129
+    49  008F                     _OSCCON	set	143
+    50  0090                     _P1OE	set	144
+    51  0099                     _P1POL	set	153
+    52  0092                     _PR2H	set	146
+    53  0091                     _PR2L	set	145
+    54  009E                     _T2CON1	set	158
+    55  0085                     _TRISA	set	133
+    56  0095                     _WPUA	set	149
+    57  04B3                     _IOCA3	set	1203
+    58  0461                     _TMR2IE	set	1121
+    59  042B                     _TRISA3	set	1067
     60                           
-    61                           ; 1 bytes @ 0x0
-    62  0070                     	ds	1
-    63  0071                     DelayUs@a:	
+    61                           	psect	cinit
+    62  00AA                     start_initialization:	
+    63  00AA  3001               	movlw	1
     64                           
-    65                           ; 1 bytes @ 0x1
-    66  0071                     	ds	1
-    67  0072                     ??_DelayMs:	
-    68  0072                     DelayMs@Time:	
-    69                           ; 0 bytes @ 0x2
-    70                           
-    71                           
-    72                           ; 1 bytes @ 0x2
-    73  0072                     	ds	1
-    74  0073                     DelayMs@a:	
+    65                           ; Clear objects allocated to COMMON
+    66  00AB  01F0               	clrf	__pbssCOMMON& (0+127)
+    67  00AC  01F1               	clrf	(__pbssCOMMON+1)& (0+127)
+    68  00AD  01F2               	clrf	(__pbssCOMMON+2)& (0+127)
+    69  00AE  01F3               	clrf	(__pbssCOMMON+3)& (0+127)
+    70  00AF  01F4               	clrf	(__pbssCOMMON+4)& (0+127)
+    71  00B0  01F5               	clrf	(__pbssCOMMON+5)& (0+127)
+    72  00B1  01F6               	clrf	(__pbssCOMMON+6)& (0+127)
+    73  00B2  01F7               	clrf	(__pbssCOMMON+7)& (0+127)
+    74  00B3  01F8               	clrf	(__pbssCOMMON+8)& (0+127)
     75                           
-    76                           ; 1 bytes @ 0x3
-    77  0073                     	ds	1
-    78  0074                     DelayMs@b:	
-    79                           
-    80                           ; 1 bytes @ 0x4
-    81  0074                     	ds	1
-    82  0075                     ??_DelayS:	
-    83  0075                     DelayS@Time:	
-    84                           ; 0 bytes @ 0x5
-    85                           
-    86                           
-    87                           ; 1 bytes @ 0x5
-    88  0075                     	ds	1
-    89  0076                     DelayS@a:	
-    90                           
-    91                           ; 1 bytes @ 0x6
-    92  0076                     	ds	1
-    93  0077                     DelayS@b:	
-    94                           
-    95                           ; 1 bytes @ 0x7
-    96  0077                     	ds	1
-    97  0078                     ??_main:	
+    76                           ;initializer for _bitdata
+    77  00B4  00FC               	movwf	__pdataCOMMON& (0+127)
+    78  00B5                     end_of_initialization:	
+    79                           ;End of C runtime variable initialization code
+    80                           
+    81  00B5  0183               	clrf	3
+    82  00B6  28B7               	ljmp	_main	;jump to C main() function
+    83                           
+    84                           	psect	bssCOMMON
+    85  0070                     __pbssCOMMON:	
+    86  0070                     _IRDataTimer:	
+    87  0070                     	ds	4
+    88  0074                     _IRbitNum:	
+    89  0074                     	ds	1
+    90  0075                     _IRbitTime:	
+    91  0075                     	ds	1
+    92  0076                     _pwm_colour_value:	
+    93  0076                     	ds	1
+    94  0077                     _pwm_rate_value:	
+    95  0077                     	ds	1
+    96  0078                     _time_15ms_cnt:	
+    97  0078                     	ds	1
     98                           
-    99                           	psect	maintext
-   100  03F0                     __pmaintext:	
-   101                           ; 0 bytes @ 0x8
-   102 ;;Data sizes: Strings 0, constant 0, data 0, bss 0, persistent 0 stack 0
-   103 ;;Auto spaces:   Size  Autos    Used
-   104 ;; COMMON          14      8       8
-   105 ;; BANK0           48      0       0
-   106 ;;
-   107 ;; Pointer list with targets:
-   108 ;;
-   109 ;; Critical Paths under _main in COMMON
-   110 ;;
-   111 ;;   _main->_DelayS
-   112 ;;   _DelayS->_DelayMs
-   113 ;;   _DelayMs->_DelayUs
-   114 ;;
-   115 ;; Critical Paths under _main in BANK0
-   116 ;;
-   117 ;;   None.
-   118 ;;
-   119 ;;Main: autosize = 0, tempsize = 0, incstack = 0, save=0
-   120 ;;
-   121 ;;
-   122 ;;Call Graph Tables:
-   123 ;;
-   124 ;; ---------------------------------------------------------------------------------
-   125 ;; (Depth) Function   	        Calls       Base Space   Used Autos Params    Refs
-   126 ;; ---------------------------------------------------------------------------------
-   127 ;; (0) _main                                                 0     0      0     150
-   128 ;;                      _POWER_INITIAL
-   129 ;;                             _DelayS
-   130 ;; ---------------------------------------------------------------------------------
-   131 ;; (1) _DelayS                                               3     3      0     150
-   132 ;;                                              5 COMMON     3     3      0
-   133 ;;                            _DelayMs
-   134 ;; ---------------------------------------------------------------------------------
-   135 ;; (2) _DelayMs                                              3     3      0      90
-   136 ;;                                              2 COMMON     3     3      0
-   137 ;;                            _DelayUs
-   138 ;; ---------------------------------------------------------------------------------
-   139 ;; (3) _DelayUs                                              2     2      0      30
-   140 ;;                                              0 COMMON     2     2      0
-   141 ;; ---------------------------------------------------------------------------------
-   142 ;; (1) _POWER_INITIAL                                        0     0      0       0
-   143 ;; ---------------------------------------------------------------------------------
-   144 ;; Estimated maximum stack depth 3
-   145 ;; ---------------------------------------------------------------------------------
-   146 ;; Call Graph Graphs:
-   147 ;; _main (ROOT)
-   148 ;;   _POWER_INITIAL
-   149 ;;   _DelayS
-   150 ;;     _DelayMs
-   151 ;;       _DelayUs
-   152 ;;
-   153 ;; Address spaces:
-   154 ;;Name               Size   Autos  Total    Cost      Usage
-   155 ;;BITCOMMON            E      0       0       0        0.0%
-   156 ;;EEDATA              80      0       0       0        0.0%
-   157 ;;NULL                 0      0       0       0        0.0%
-   158 ;;CODE                 0      0       0       0        0.0%
-   159 ;;COMMON               E      8       8       1       57.1%
-   160 ;;BITSFR0              0      0       0       1        0.0%
-   161 ;;SFR0                 0      0       0       1        0.0%
-   162 ;;BITSFR1              0      0       0       2        0.0%
-   163 ;;SFR1                 0      0       0       2        0.0%
-   164 ;;STACK                0      0       3       2        0.0%
-   165 ;;DATA                 0      0       0       3        0.0%
-   166 ;;BITBANK0            30      0       0       4        0.0%
-   167 ;;BANK0               30      0       0       5        0.0%
-   168 ;;ABS                  0      0       0       6        0.0%
-   169                           
+    99                           	psect	dataCOMMON
+   100  007C                     __pdataCOMMON:	
+   101  007C                     _bitdata:	
+   102  007C                     	ds	1
+   103                           
+   104                           	psect	cstackCOMMON
+   105  0079                     __pcstackCOMMON:	
+   106  0079                     ?_TIMER0_INITIAL:	
+   107  0079                     ?_PA3_Level_Change_INITIAL:	
+   108                           ; 0 bytes @ 0x0
+   109                           
+   110  0079                     ?_PWM1_INITIAL:	
+   111                           ; 0 bytes @ 0x0
+   112                           
+   113  0079                     ?_PWM1_RATE_CHANGE:	
+   114                           ; 0 bytes @ 0x0
+   115                           
+   116  0079                     ?_PWM1_BLUE:	
+   117                           ; 0 bytes @ 0x0
+   118                           
+   119  0079                     ?_ISR:	
+   120                           ; 0 bytes @ 0x0
+   121                           
+   122  0079                     ??_ISR:	
+   123                           ; 0 bytes @ 0x0
+   124                           
+   125  0079                     ?_POWER_INITIAL:	
+   126                           ; 0 bytes @ 0x0
+   127                           
+   128  0079                     ?_main:	
+   129                           ; 0 bytes @ 0x0
+   130                           
+   131  0079                     ?_PWM1_RED:	
+   132                           ; 0 bytes @ 0x0
+   133                           
+   134  0079                     ?_PWM1_GREEN:	
+   135                           ; 0 bytes @ 0x0
+   136                           
+   137  0079                     ?_PWM1_WHITE:	
+   138                           ; 0 bytes @ 0x0
+   139                           
+   140                           
+   141                           ; 0 bytes @ 0x0
+   142  0079                     	ds	3
+   143  007C                     ??_TIMER0_INITIAL:	
+   144  007C                     ??_PA3_Level_Change_INITIAL:	
+   145                           ; 0 bytes @ 0x3
+   146                           
+   147  007C                     ??_PWM1_INITIAL:	
+   148                           ; 0 bytes @ 0x3
+   149                           
+   150  007C                     ??_PWM1_RATE_CHANGE:	
+   151                           ; 0 bytes @ 0x3
+   152                           
+   153  007C                     ??_PWM1_BLUE:	
+   154                           ; 0 bytes @ 0x3
+   155                           
+   156  007C                     ??_POWER_INITIAL:	
+   157                           ; 0 bytes @ 0x3
+   158                           
+   159  007C                     ??_main:	
+   160                           ; 0 bytes @ 0x3
+   161                           
+   162  007C                     ??_PWM1_RED:	
+   163                           ; 0 bytes @ 0x3
+   164                           
+   165  007C                     ??_PWM1_GREEN:	
+   166                           ; 0 bytes @ 0x3
+   167                           
+   168  007C                     ??_PWM1_WHITE:	
+   169                           ; 0 bytes @ 0x3
    170                           
-   171 ;; *************** function _main *****************
-   172 ;; Defined at:
-   173 ;;		line 115 in file "TEST_FT62F21X_SLEEP.C"
-   174 ;; Parameters:    Size  Location     Type
-   175 ;;		None
-   176 ;; Auto vars:     Size  Location     Type
-   177 ;;		None
-   178 ;; Return value:  Size  Location     Type
-   179 ;;		None               void
-   180 ;; Registers used:
-   181 ;;		wreg, status,2, status,0, pclath, cstack
-   182 ;; Tracked objects:
-   183 ;;		On entry : 17F/0
-   184 ;;		On exit  : 20/0
-   185 ;;		Unchanged: 0/0
-   186 ;; Data sizes:     COMMON   BANK0
-   187 ;;      Params:         0       0
-   188 ;;      Locals:         0       0
-   189 ;;      Temps:          0       0
-   190 ;;      Totals:         0       0
-   191 ;;Total ram usage:        0 bytes
-   192 ;; Hardware stack levels required when called:    3
-   193 ;; This function calls:
-   194 ;;		_POWER_INITIAL
-   195 ;;		_DelayS
-   196 ;; This function is called by:
-   197 ;;		Startup code after reset
-   198 ;; This function uses a non-reentrant model
+   171                           
+   172                           	psect	maintext
+   173  00B7                     __pmaintext:	
+   174                           ; 0 bytes @ 0x3
+   175 ;;Data sizes: Strings 0, constant 0, data 1, bss 9, persistent 0 stack 0
+   176 ;;Auto spaces:   Size  Autos    Used
+   177 ;; COMMON          14      3      13
+   178 ;; BANK0           48      0       0
+   179 ;;
+   180 ;; Pointer list with targets:
+   181 ;;
+   182 ;; Critical Paths under _main in COMMON
+   183 ;;
+   184 ;;   None.
+   185 ;;
+   186 ;; Critical Paths under _ISR in COMMON
+   187 ;;
+   188 ;;   None.
+   189 ;;
+   190 ;; Critical Paths under _main in BANK0
+   191 ;;
+   192 ;;   None.
+   193 ;;
+   194 ;; Critical Paths under _ISR in BANK0
+   195 ;;
+   196 ;;   None.
+   197 ;;
+   198 ;;Main: autosize = 0, tempsize = 0, incstack = 0, save=0
    199 ;;
-   200  03F0                     _main:	
-   201                           
-   202                           ;TEST_FT62F21X_SLEEP.C: 116: POWER_INITIAL();
-   203                           
-   204                           ; Regs used in _main: [wreg+status,2+status,0+pclath+cstack]
-   205  03F0  23C2               	fcall	_POWER_INITIAL
-   206  03F1  3004               	movlw	4
-   207                           
-   208                           ;TEST_FT62F21X_SLEEP.C: 117: RA4 = 1;
-   209  03F2  1605               	bsf	5,4
-   210  03F3  1585               	bsf	5,3
-   211                           
-   212                           ;TEST_FT62F21X_SLEEP.C: 119: DelayS(4);
-   213  03F4  23E0               	fcall	_DelayS
-   214                           
-   215                           ;TEST_FT62F21X_SLEEP.C: 120: RA4 = 0;
-   216  03F5  1283               	bcf	3,5	;RP0=0, select bank0
-   217  03F6  1205               	bcf	5,4
-   218                           
-   219                           ;TEST_FT62F21X_SLEEP.C: 121: RA3 = 0;
-   220  03F7  1185               	bcf	5,3
-   221  03F8                     l1694:	
-   222  03F8  0064               	clrwdt	;#
-   223                           
-   224                           ;TEST_FT62F21X_SLEEP.C: 126: _nop();
-   225  03F9  0000               	nop
-   226  03FA  0063               	sleep	;#
-   227                           
-   228                           ;TEST_FT62F21X_SLEEP.C: 128: _nop();
-   229  03FB  0000               	nop
-   230                           
-   231                           ;TEST_FT62F21X_SLEEP.C: 129: RA4 =~RA4;
-   232  03FC  3010               	movlw	16
-   233  03FD  1283               	bcf	3,5	;RP0=0, select bank0
-   234  03FE  0685               	xorwf	5,f
-   235  03FF  2BF8               	goto	l1694
-   236  0400                     __end_of_main:	
-   237                           
-   238                           	psect	text54
-   239  03E0                     __ptext54:	
-   240 ;; =============== function _main ends ============
-   241                           
-   242                           
-   243 ;; *************** function _DelayS *****************
-   244 ;; Defined at:
-   245 ;;		line 98 in file "TEST_FT62F21X_SLEEP.C"
-   246 ;; Parameters:    Size  Location     Type
-   247 ;;  Time            1    wreg     unsigned char 
-   248 ;; Auto vars:     Size  Location     Type
-   249 ;;  Time            1    5[COMMON] unsigned char 
-   250 ;;  b               1    7[COMMON] unsigned char 
-   251 ;;  a               1    6[COMMON] unsigned char 
-   252 ;; Return value:  Size  Location     Type
-   253 ;;		None               void
-   254 ;; Registers used:
-   255 ;;		wreg, status,2, status,0, pclath, cstack
-   256 ;; Tracked objects:
-   257 ;;		On entry : 17F/0
-   258 ;;		On exit  : 0/0
-   259 ;;		Unchanged: 0/0
-   260 ;; Data sizes:     COMMON   BANK0
-   261 ;;      Params:         0       0
-   262 ;;      Locals:         3       0
-   263 ;;      Temps:          0       0
-   264 ;;      Totals:         3       0
-   265 ;;Total ram usage:        3 bytes
-   266 ;; Hardware stack levels used:    1
-   267 ;; Hardware stack levels required when called:    2
-   268 ;; This function calls:
-   269 ;;		_DelayMs
-   270 ;; This function is called by:
-   271 ;;		_main
-   272 ;; This function uses a non-reentrant model
-   273 ;;
-   274  03E0                     _DelayS:	
-   275                           
-   276                           ; Regs used in _DelayS: [wreg+status,2+status,0+pclath+cstack]
-   277                           ;DelayS@Time stored from wreg
-   278  03E0  00F5               	movwf	DelayS@Time
-   279                           
-   280                           ;TEST_FT62F21X_SLEEP.C: 99: unsigned char a,b;
-   281                           ;TEST_FT62F21X_SLEEP.C: 100: for(a=0;a<Time;a++)
-   282  03E1  01F6               	clrf	DelayS@a
-   283  03E2                     l1682:	
-   284  03E2  0875               	movf	DelayS@Time,w
-   285  03E3  0276               	subwf	DelayS@a,w
-   286  03E4  1803               	btfsc	3,0
-   287  03E5  0008               	return
-   288                           
-   289                           ;TEST_FT62F21X_SLEEP.C: 101: {
-   290                           ;TEST_FT62F21X_SLEEP.C: 102: for(b=0;b<10;b++)
-   291  03E6  01F7               	clrf	DelayS@b
-   292  03E7                     l1674:	
-   293                           
-   294                           ;TEST_FT62F21X_SLEEP.C: 103: {
-   295                           ;TEST_FT62F21X_SLEEP.C: 104: DelayMs(100);
-   296  03E7  3064               	movlw	100
-   297  03E8  23D0               	fcall	_DelayMs
-   298  03E9  300A               	movlw	10
-   299  03EA  0AF7               	incf	DelayS@b,f
-   300  03EB  0277               	subwf	DelayS@b,w
-   301  03EC  1C03               	skipc
-   302  03ED  2BE7               	goto	l1674
-   303  03EE  0AF6               	incf	DelayS@a,f
-   304  03EF  2BE2               	goto	l1682
-   305  03F0                     __end_of_DelayS:	
-   306                           
-   307                           	psect	text55
-   308  03D0                     __ptext55:	
-   309 ;; =============== function _DelayS ends ============
-   310                           
+   200 ;;
+   201 ;;Call Graph Tables:
+   202 ;;
+   203 ;; ---------------------------------------------------------------------------------
+   204 ;; (Depth) Function   	        Calls       Base Space   Used Autos Params    Refs
+   205 ;; ---------------------------------------------------------------------------------
+   206 ;; (0) _main                                                 0     0      0       0
+   207 ;;                      _POWER_INITIAL
+   208 ;;                     _TIMER0_INITIAL
+   209 ;;           _PA3_Level_Change_INITIAL
+   210 ;;                       _PWM1_INITIAL
+   211 ;;                   _PWM1_RATE_CHANGE
+   212 ;; ---------------------------------------------------------------------------------
+   213 ;; (1) _PWM1_RATE_CHANGE                                     0     0      0       0
+   214 ;;                           _PWM1_RED
+   215 ;;                         _PWM1_GREEN
+   216 ;;                          _PWM1_BLUE
+   217 ;;                         _PWM1_WHITE
+   218 ;; ---------------------------------------------------------------------------------
+   219 ;; (1) _PWM1_INITIAL                                         0     0      0       0
+   220 ;;                          _PWM1_BLUE
+   221 ;; ---------------------------------------------------------------------------------
+   222 ;; (2) _PWM1_WHITE                                           0     0      0       0
+   223 ;; ---------------------------------------------------------------------------------
+   224 ;; (2) _PWM1_GREEN                                           0     0      0       0
+   225 ;; ---------------------------------------------------------------------------------
+   226 ;; (2) _PWM1_RED                                             0     0      0       0
+   227 ;; ---------------------------------------------------------------------------------
+   228 ;; (2) _PWM1_BLUE                                            0     0      0       0
+   229 ;; ---------------------------------------------------------------------------------
+   230 ;; (1) _PA3_Level_Change_INITIAL                             0     0      0       0
+   231 ;; ---------------------------------------------------------------------------------
+   232 ;; (1) _TIMER0_INITIAL                                       0     0      0       0
+   233 ;; ---------------------------------------------------------------------------------
+   234 ;; (1) _POWER_INITIAL                                        0     0      0       0
+   235 ;; ---------------------------------------------------------------------------------
+   236 ;; Estimated maximum stack depth 2
+   237 ;; ---------------------------------------------------------------------------------
+   238 ;; (Depth) Function   	        Calls       Base Space   Used Autos Params    Refs
+   239 ;; ---------------------------------------------------------------------------------
+   240 ;; (3) _ISR                                                  3     3      0       0
+   241 ;;                                              0 COMMON     3     3      0
+   242 ;; ---------------------------------------------------------------------------------
+   243 ;; Estimated maximum stack depth 3
+   244 ;; ---------------------------------------------------------------------------------
+   245 ;; Call Graph Graphs:
+   246 ;; _main (ROOT)
+   247 ;;   _POWER_INITIAL
+   248 ;;   _TIMER0_INITIAL
+   249 ;;   _PA3_Level_Change_INITIAL
+   250 ;;   _PWM1_INITIAL
+   251 ;;     _PWM1_BLUE
+   252 ;;   _PWM1_RATE_CHANGE
+   253 ;;     _PWM1_RED
+   254 ;;     _PWM1_GREEN
+   255 ;;     _PWM1_BLUE
+   256 ;;     _PWM1_WHITE
+   257 ;;
+   258 ;; _ISR (ROOT)
+   259 ;;
+   260 ;; Address spaces:
+   261 ;;Name               Size   Autos  Total    Cost      Usage
+   262 ;;SFR1                 0      0       0       2        0.0%
+   263 ;;BITSFR1              0      0       0       2        0.0%
+   264 ;;CODE                 0      0       0       0        0.0%
+   265 ;;DATA                 0      0       F       3        0.0%
+   266 ;;ABS                  0      0       D       6        0.0%
+   267 ;;NULL                 0      0       0       0        0.0%
+   268 ;;STACK                0      0       2       2        0.0%
+   269 ;;BANK0               30      0       0       5        0.0%
+   270 ;;BITBANK0            30      0       0       4        0.0%
+   271 ;;SFR0                 0      0       0       1        0.0%
+   272 ;;BITSFR0              0      0       0       1        0.0%
+   273 ;;COMMON               E      3       D       1       92.9%
+   274 ;;BITCOMMON            E      0       0       0        0.0%
+   275 ;;EEDATA              80      0       0       0        0.0%
+   276                           
+   277                           
+   278 ;; *************** function _main *****************
+   279 ;; Defined at:
+   280 ;;		line 174 in file "TEST_FT62F21X_SLEEP.C"
+   281 ;; Parameters:    Size  Location     Type
+   282 ;;		None
+   283 ;; Auto vars:     Size  Location     Type
+   284 ;;		None
+   285 ;; Return value:  Size  Location     Type
+   286 ;;		None               void
+   287 ;; Registers used:
+   288 ;;		wreg, status,2, status,0, pclath, cstack
+   289 ;; Tracked objects:
+   290 ;;		On entry : 17F/0
+   291 ;;		On exit  : 20/0
+   292 ;;		Unchanged: FFE00/0
+   293 ;; Data sizes:     COMMON   BANK0
+   294 ;;      Params:         0       0
+   295 ;;      Locals:         0       0
+   296 ;;      Temps:          0       0
+   297 ;;      Totals:         0       0
+   298 ;;Total ram usage:        0 bytes
+   299 ;; Hardware stack levels required when called:    3
+   300 ;; This function calls:
+   301 ;;		_POWER_INITIAL
+   302 ;;		_TIMER0_INITIAL
+   303 ;;		_PA3_Level_Change_INITIAL
+   304 ;;		_PWM1_INITIAL
+   305 ;;		_PWM1_RATE_CHANGE
+   306 ;; This function is called by:
+   307 ;;		Startup code after reset
+   308 ;; This function uses a non-reentrant model
+   309 ;;
+   310  00B7                     _main:	
    311                           
-   312 ;; *************** function _DelayMs *****************
-   313 ;; Defined at:
-   314 ;;		line 81 in file "TEST_FT62F21X_SLEEP.C"
-   315 ;; Parameters:    Size  Location     Type
-   316 ;;  Time            1    wreg     unsigned char 
-   317 ;; Auto vars:     Size  Location     Type
-   318 ;;  Time            1    2[COMMON] unsigned char 
-   319 ;;  b               1    4[COMMON] unsigned char 
-   320 ;;  a               1    3[COMMON] unsigned char 
-   321 ;; Return value:  Size  Location     Type
-   322 ;;		None               void
-   323 ;; Registers used:
-   324 ;;		wreg, status,2, status,0, pclath, cstack
-   325 ;; Tracked objects:
-   326 ;;		On entry : 0/0
-   327 ;;		On exit  : 0/0
-   328 ;;		Unchanged: 0/0
-   329 ;; Data sizes:     COMMON   BANK0
-   330 ;;      Params:         0       0
-   331 ;;      Locals:         3       0
-   332 ;;      Temps:          0       0
-   333 ;;      Totals:         3       0
-   334 ;;Total ram usage:        3 bytes
-   335 ;; Hardware stack levels used:    1
-   336 ;; Hardware stack levels required when called:    1
-   337 ;; This function calls:
-   338 ;;		_DelayUs
-   339 ;; This function is called by:
-   340 ;;		_DelayS
-   341 ;; This function uses a non-reentrant model
-   342 ;;
-   343  03D0                     _DelayMs:	
-   344                           
-   345                           ; Regs used in _DelayMs: [wreg+status,2+status,0+pclath+cstack]
-   346                           ;DelayMs@Time stored from wreg
-   347  03D0  00F2               	movwf	DelayMs@Time
-   348                           
-   349                           ;TEST_FT62F21X_SLEEP.C: 82: unsigned char a,b;
-   350                           ;TEST_FT62F21X_SLEEP.C: 83: for(a=0;a<Time;a++)
-   351  03D1  01F3               	clrf	DelayMs@a
-   352  03D2                     l1664:	
-   353  03D2  0872               	movf	DelayMs@Time,w
-   354  03D3  0273               	subwf	DelayMs@a,w
-   355  03D4  1803               	btfsc	3,0
-   356  03D5  0008               	return
-   357                           
-   358                           ;TEST_FT62F21X_SLEEP.C: 84: {
-   359                           ;TEST_FT62F21X_SLEEP.C: 85: for(b=0;b<5;b++)
-   360  03D6  01F4               	clrf	DelayMs@b
-   361  03D7                     l1656:	
-   362                           
-   363                           ;TEST_FT62F21X_SLEEP.C: 86: {
-   364                           ;TEST_FT62F21X_SLEEP.C: 87: DelayUs(98);
-   365  03D7  3062               	movlw	98
-   366  03D8  23B9               	fcall	_DelayUs
-   367  03D9  3005               	movlw	5
-   368  03DA  0AF4               	incf	DelayMs@b,f
-   369  03DB  0274               	subwf	DelayMs@b,w
-   370  03DC  1C03               	skipc
-   371  03DD  2BD7               	goto	l1656
-   372  03DE  0AF3               	incf	DelayMs@a,f
-   373  03DF  2BD2               	goto	l1664
-   374  03E0                     __end_of_DelayMs:	
-   375                           
-   376                           	psect	text56
-   377  03B9                     __ptext56:	
-   378 ;; =============== function _DelayMs ends ============
-   379                           
-   380                           
-   381 ;; *************** function _DelayUs *****************
-   382 ;; Defined at:
-   383 ;;		line 67 in file "TEST_FT62F21X_SLEEP.C"
-   384 ;; Parameters:    Size  Location     Type
-   385 ;;  Time            1    wreg     unsigned char 
-   386 ;; Auto vars:     Size  Location     Type
-   387 ;;  Time            1    0[COMMON] unsigned char 
-   388 ;;  a               1    1[COMMON] unsigned char 
-   389 ;; Return value:  Size  Location     Type
-   390 ;;		None               void
-   391 ;; Registers used:
-   392 ;;		wreg, status,2, status,0
-   393 ;; Tracked objects:
-   394 ;;		On entry : 0/0
-   395 ;;		On exit  : 0/0
-   396 ;;		Unchanged: 0/0
-   397 ;; Data sizes:     COMMON   BANK0
-   398 ;;      Params:         0       0
-   399 ;;      Locals:         2       0
-   400 ;;      Temps:          0       0
-   401 ;;      Totals:         2       0
-   402 ;;Total ram usage:        2 bytes
-   403 ;; Hardware stack levels used:    1
-   404 ;; This function calls:
-   405 ;;		Nothing
-   406 ;; This function is called by:
-   407 ;;		_DelayMs
-   408 ;; This function uses a non-reentrant model
-   409 ;;
-   410  03B9                     _DelayUs:	
-   411                           
-   412                           ; Regs used in _DelayUs: [wreg+status,2+status,0]
-   413                           ;DelayUs@Time stored from wreg
-   414  03B9  00F0               	movwf	DelayUs@Time
-   415                           
-   416                           ;TEST_FT62F21X_SLEEP.C: 68: unsigned char a;
-   417                           ;TEST_FT62F21X_SLEEP.C: 69: for(a=0;a<Time;a++)
-   418  03BA  01F1               	clrf	DelayUs@a
-   419  03BB                     l1646:	
-   420  03BB  0870               	movf	DelayUs@Time,w
-   421  03BC  0271               	subwf	DelayUs@a,w
-   422  03BD  1803               	btfsc	3,0
-   423  03BE  0008               	return
+   312                           ;TEST_FT62F21X_SLEEP.C: 175: POWER_INITIAL();
+   313                           
+   314                           ; Regs used in _main: [wreg+status,2+status,0+pclath+cstack]
+   315  00B7  209C               	fcall	_POWER_INITIAL
+   316                           
+   317                           ;TEST_FT62F21X_SLEEP.C: 176: TIMER0_INITIAL();
+   318  00B8  20EF               	fcall	_TIMER0_INITIAL
+   319                           
+   320                           ;TEST_FT62F21X_SLEEP.C: 177: PA3_Level_Change_INITIAL();
+   321  00B9  20D6               	fcall	_PA3_Level_Change_INITIAL
+   322                           
+   323                           ;TEST_FT62F21X_SLEEP.C: 178: PWM1_INITIAL();
+   324  00BA  2080               	fcall	_PWM1_INITIAL
+   325  00BB                     l3180:	
+   326  00BB  0064               	clrwdt	;#
+   327                           
+   328                           ;TEST_FT62F21X_SLEEP.C: 183: if(time_15ms_cnt > 15)
+   329  00BC  3010               	movlw	16
+   330  00BD  0278               	subwf	_time_15ms_cnt,w
+   331  00BE  1C03               	skipc
+   332  00BF  28BB               	goto	l3180
+   333                           
+   334                           ;TEST_FT62F21X_SLEEP.C: 184: {
+   335                           ;TEST_FT62F21X_SLEEP.C: 185: time_15ms_cnt = 0;
+   336  00C0  01F8               	clrf	_time_15ms_cnt
+   337                           
+   338                           ;TEST_FT62F21X_SLEEP.C: 186: pwm_rate_value++;
+   339  00C1  0AF7               	incf	_pwm_rate_value,f
+   340                           
+   341                           ;TEST_FT62F21X_SLEEP.C: 187: PWM1_RATE_CHANGE();
+   342  00C2  2058               	fcall	_PWM1_RATE_CHANGE
+   343  00C3  28BB               	goto	l3180
+   344  00C4                     __end_of_main:	
+   345                           
+   346                           	psect	text129
+   347  0058                     __ptext129:	
+   348 ;; =============== function _main ends ============
+   349                           
+   350                           
+   351 ;; *************** function _PWM1_RATE_CHANGE *****************
+   352 ;; Defined at:
+   353 ;;		line 146 in file "FT_62F21X_pwm.c"
+   354 ;; Parameters:    Size  Location     Type
+   355 ;;		None
+   356 ;; Auto vars:     Size  Location     Type
+   357 ;;		None
+   358 ;; Return value:  Size  Location     Type
+   359 ;;		None               void
+   360 ;; Registers used:
+   361 ;;		wreg, status,2, status,0, pclath, cstack
+   362 ;; Tracked objects:
+   363 ;;		On entry : 0/0
+   364 ;;		On exit  : 20/0
+   365 ;;		Unchanged: FFFDF/0
+   366 ;; Data sizes:     COMMON   BANK0
+   367 ;;      Params:         0       0
+   368 ;;      Locals:         0       0
+   369 ;;      Temps:          0       0
+   370 ;;      Totals:         0       0
+   371 ;;Total ram usage:        0 bytes
+   372 ;; Hardware stack levels used:    1
+   373 ;; Hardware stack levels required when called:    2
+   374 ;; This function calls:
+   375 ;;		_PWM1_RED
+   376 ;;		_PWM1_GREEN
+   377 ;;		_PWM1_BLUE
+   378 ;;		_PWM1_WHITE
+   379 ;; This function is called by:
+   380 ;;		_main
+   381 ;; This function uses a non-reentrant model
+   382 ;;
+   383  0058                     _PWM1_RATE_CHANGE:	
+   384                           
+   385                           ;FT_62F21X_pwm.c: 147: if(pwm_rate_value >= 200)
+   386                           
+   387                           ; Regs used in _PWM1_RATE_CHANGE: [wreg+status,2+status,0+pclath+cstack]
+   388  0058  30C8               	movlw	200
+   389  0059  0277               	subwf	_pwm_rate_value,w
+   390  005A  1C03               	skipc
+   391  005B  2874               	goto	l3172
+   392  005C  3003               	movlw	3
+   393                           
+   394                           ;FT_62F21X_pwm.c: 148: {
+   395                           ;FT_62F21X_pwm.c: 149: pwm_rate_value = 0;
+   396  005D  01F7               	clrf	_pwm_rate_value
+   397                           
+   398                           ;FT_62F21X_pwm.c: 150: pwm_colour_value++;
+   399  005E  0AF6               	incf	_pwm_colour_value,f
+   400                           
+   401                           ;FT_62F21X_pwm.c: 151: pwm_colour_value = pwm_colour_value%4;
+   402  005F  05F6               	andwf	_pwm_colour_value,f
+   403                           
+   404                           ;FT_62F21X_pwm.c: 152: if(pwm_colour_value == 0)
+   405  0060  08F6               	movf	_pwm_colour_value,f
+   406  0061  1D03               	skipz
+   407  0062  2865               	goto	l3160
+   408                           
+   409                           ;FT_62F21X_pwm.c: 153: {
+   410                           ;FT_62F21X_pwm.c: 154: PWM1_RED();
+   411  0063  20CD               	fcall	_PWM1_RED
+   412                           
+   413                           ;FT_62F21X_pwm.c: 155: }
+   414  0064  2874               	goto	l3172
+   415  0065                     l3160:	
+   416                           
+   417                           ;FT_62F21X_pwm.c: 156: else if(pwm_colour_value == 1)
+   418  0065  0B76               	decfsz	_pwm_colour_value,w
+   419  0066  2869               	goto	l3164
+   420                           
+   421                           ;FT_62F21X_pwm.c: 157: {
+   422                           ;FT_62F21X_pwm.c: 158: PWM1_GREEN();
+   423  0067  20DF               	fcall	_PWM1_GREEN
    424                           
-   425                           ;TEST_FT62F21X_SLEEP.C: 70: {
-   426                           ;TEST_FT62F21X_SLEEP.C: 71: _nop();
-   427  03BF  0000               	nop
-   428  03C0  0AF1               	incf	DelayUs@a,f
-   429  03C1  2BBB               	goto	l1646
-   430  03C2                     __end_of_DelayUs:	
-   431                           
-   432                           	psect	text57
-   433  03C2                     __ptext57:	
-   434 ;; =============== function _DelayUs ends ============
-   435                           
-   436                           
-   437 ;; *************** function _POWER_INITIAL *****************
-   438 ;; Defined at:
-   439 ;;		line 46 in file "TEST_FT62F21X_SLEEP.C"
-   440 ;; Parameters:    Size  Location     Type
-   441 ;;		None
-   442 ;; Auto vars:     Size  Location     Type
-   443 ;;		None
-   444 ;; Return value:  Size  Location     Type
-   445 ;;		None               void
-   446 ;; Registers used:
-   447 ;;		wreg, status,2
-   448 ;; Tracked objects:
-   449 ;;		On entry : 17F/0
-   450 ;;		On exit  : 17F/0
-   451 ;;		Unchanged: FFE80/0
-   452 ;; Data sizes:     COMMON   BANK0
-   453 ;;      Params:         0       0
-   454 ;;      Locals:         0       0
-   455 ;;      Temps:          0       0
-   456 ;;      Totals:         0       0
-   457 ;;Total ram usage:        0 bytes
-   458 ;; Hardware stack levels used:    1
-   459 ;; This function calls:
-   460 ;;		Nothing
-   461 ;; This function is called by:
-   462 ;;		_main
-   463 ;; This function uses a non-reentrant model
-   464 ;;
-   465  03C2                     _POWER_INITIAL:	
-   466                           
-   467                           ;TEST_FT62F21X_SLEEP.C: 47: OSCCON = 0X00|0X70|0X00;
-   468                           
-   469                           ; Regs used in _POWER_INITIAL: [wreg+status,2]
-   470  03C2  3070               	movlw	112
-   471  03C3  1683               	bsf	3,5	;RP0=1, select bank1
-   472  03C4  008F               	movwf	15	;volatile
-   473                           
-   474                           ;TEST_FT62F21X_SLEEP.C: 50: INTCON = 0;
-   475  03C5  018B               	clrf	11	;volatile
-   476                           
-   477                           ;TEST_FT62F21X_SLEEP.C: 52: PORTA = 0B00000000;
-   478  03C6  1283               	bcf	3,5	;RP0=0, select bank0
-   479  03C7  0185               	clrf	5	;volatile
+   425                           ;FT_62F21X_pwm.c: 159: }
+   426  0068  2874               	goto	l3172
+   427  0069                     l3164:	
+   428                           
+   429                           ;FT_62F21X_pwm.c: 160: else if(pwm_colour_value == 2)
+   430  0069  0876               	movf	_pwm_colour_value,w
+   431  006A  3A02               	xorlw	2
+   432  006B  1D03               	skipz
+   433  006C  286F               	goto	l3168
+   434                           
+   435                           ;FT_62F21X_pwm.c: 161: {
+   436                           ;FT_62F21X_pwm.c: 162: PWM1_BLUE();
+   437  006D  20E7               	fcall	_PWM1_BLUE
+   438                           
+   439                           ;FT_62F21X_pwm.c: 163: }
+   440  006E  2874               	goto	l3172
+   441  006F                     l3168:	
+   442                           
+   443                           ;FT_62F21X_pwm.c: 164: else if(pwm_colour_value == 3)
+   444  006F  0876               	movf	_pwm_colour_value,w
+   445  0070  3A03               	xorlw	3
+   446  0071  1D03               	skipz
+   447  0072  2874               	goto	l3172
+   448                           
+   449                           ;FT_62F21X_pwm.c: 165: {
+   450                           ;FT_62F21X_pwm.c: 166: PWM1_WHITE();
+   451  0073  20C4               	fcall	_PWM1_WHITE
+   452  0074                     l3172:	
+   453                           
+   454                           ;FT_62F21X_pwm.c: 167: }
+   455                           ;FT_62F21X_pwm.c: 168: }
+   456                           ;FT_62F21X_pwm.c: 169: if(pwm_rate_value <=100)
+   457  0074  3065               	movlw	101
+   458  0075  0277               	subwf	_pwm_rate_value,w
+   459                           
+   460                           ;FT_62F21X_pwm.c: 170: {
+   461                           ;FT_62F21X_pwm.c: 171: P1ADTL = pwm_rate_value;
+   462  0076  0877               	movf	_pwm_rate_value,w
+   463  0077  1803               	skipnc
+   464  0078  287C               	goto	L1
+   465  0079  1283               	bcf	3,5	;RP0=0, select bank0
+   466  007A  008E               	movwf	14	;volatile
+   467                           
+   468                           ;FT_62F21X_pwm.c: 172: }
+   469  007B  0008               	return
+   470  007C                     L1:	
+   471                           ;FT_62F21X_pwm.c: 173: else
+   472                           ;FT_62F21X_pwm.c: 174: {
+   473                           ;FT_62F21X_pwm.c: 175: P1ADTL = 200 - pwm_rate_value;
+   474                           
+   475  007C  3CC8               	sublw	200
+   476  007D  1283               	bcf	3,5	;RP0=0, select bank0
+   477  007E  008E               	movwf	14	;volatile
+   478  007F  0008               	return
+   479  0080                     __end_of_PWM1_RATE_CHANGE:	
    480                           
-   481                           ;TEST_FT62F21X_SLEEP.C: 53: TRISA = 0B00000000;
-   482  03C8  1683               	bsf	3,5	;RP0=1, select bank1
-   483  03C9  0185               	clrf	5	;volatile
+   481                           	psect	text130
+   482  0080                     __ptext130:	
+   483 ;; =============== function _PWM1_RATE_CHANGE ends ============
    484                           
-   485                           ;TEST_FT62F21X_SLEEP.C: 54: WPUA = 0B00000000;
-   486  03CA  0195               	clrf	21	;volatile
-   487                           
-   488                           ;TEST_FT62F21X_SLEEP.C: 56: OPTION = 0B00001000;
-   489  03CB  3008               	movlw	8
-   490  03CC  0081               	movwf	1	;volatile
-   491                           
-   492                           ;TEST_FT62F21X_SLEEP.C: 58: MSCON = 0B00000000;
-   493  03CD  1283               	bcf	3,5	;RP0=0, select bank0
-   494  03CE  019B               	clrf	27	;volatile
-   495  03CF  0008               	return
-   496  03D0                     __end_of_POWER_INITIAL:	
-   497                           
-   498                           	psect	text58
-   499  0000                     __ptext58:	
-   500 ;; =============== function _POWER_INITIAL ends ============
-   501                           
-   502  007E                     btemp	set	126	;btemp
-   503  007E                     wtemp0	set	126
+   485                           
+   486 ;; *************** function _PWM1_INITIAL *****************
+   487 ;; Defined at:
+   488 ;;		line 14 in file "FT_62F21X_pwm.c"
+   489 ;; Parameters:    Size  Location     Type
+   490 ;;		None
+   491 ;; Auto vars:     Size  Location     Type
+   492 ;;		None
+   493 ;; Return value:  Size  Location     Type
+   494 ;;		None               void
+   495 ;; Registers used:
+   496 ;;		wreg, status,2, status,0, pclath, cstack
+   497 ;; Tracked objects:
+   498 ;;		On entry : 17F/20
+   499 ;;		On exit  : 17F/0
+   500 ;;		Unchanged: FFE80/0
+   501 ;; Data sizes:     COMMON   BANK0
+   502 ;;      Params:         0       0
+   503 ;;      Locals:         0       0
+   504 ;;      Temps:          0       0
+   505 ;;      Totals:         0       0
+   506 ;;Total ram usage:        0 bytes
+   507 ;; Hardware stack levels used:    1
+   508 ;; Hardware stack levels required when called:    2
+   509 ;; This function calls:
+   510 ;;		_PWM1_BLUE
+   511 ;; This function is called by:
+   512 ;;		_main
+   513 ;; This function uses a non-reentrant model
+   514 ;;
+   515  0080                     _PWM1_INITIAL:	
+   516                           
+   517                           ;FT_62F21X_pwm.c: 15: T2CON0=0B00000001;
+   518                           
+   519                           ; Regs used in _PWM1_INITIAL: [wreg+status,2+status,0+pclath+cstack]
+   520  0080  3001               	movlw	1
+   521  0081  1283               	bcf	3,5	;RP0=0, select bank0
+   522  0082  0092               	movwf	18	;volatile
+   523                           
+   524                           ;FT_62F21X_pwm.c: 21: T2CON1=0B00000000;
+   525  0083  1683               	bsf	3,5	;RP0=1, select bank1
+   526  0084  019E               	clrf	30	;volatile
+   527                           
+   528                           ;FT_62F21X_pwm.c: 26: TMR2H=0;
+   529  0085  1283               	bcf	3,5	;RP0=0, select bank0
+   530  0086  0193               	clrf	19	;volatile
+   531                           
+   532                           ;FT_62F21X_pwm.c: 27: TMR2L=100;
+   533  0087  3064               	movlw	100
+   534  0088  0091               	movwf	17	;volatile
+   535                           
+   536                           ;FT_62F21X_pwm.c: 29: PR2H=0;
+   537  0089  1683               	bsf	3,5	;RP0=1, select bank1
+   538  008A  0192               	clrf	18	;volatile
+   539                           
+   540                           ;FT_62F21X_pwm.c: 30: PR2L=100;
+   541  008B  0091               	movwf	17	;volatile
+   542                           
+   543                           ;FT_62F21X_pwm.c: 31: P1ADTH=0;
+   544  008C  1283               	bcf	3,5	;RP0=0, select bank0
+   545  008D  0194               	clrf	20	;volatile
+   546                           
+   547                           ;FT_62F21X_pwm.c: 34: P1POL=0B00000000;
+   548  008E  1683               	bsf	3,5	;RP0=1, select bank1
+   549  008F  0199               	clrf	25	;volatile
+   550                           
+   551                           ;FT_62F21X_pwm.c: 41: P1CON=0B00000000;
+   552  0090  1283               	bcf	3,5	;RP0=0, select bank0
+   553  0091  0196               	clrf	22	;volatile
+   554                           
+   555                           ;FT_62F21X_pwm.c: 48: P1AUX=0B00000000;
+   556  0092  019E               	clrf	30	;volatile
+   557                           
+   558                           ;FT_62F21X_pwm.c: 59: PWM1_BLUE();
+   559  0093  20E7               	fcall	_PWM1_BLUE
+   560                           
+   561                           ;FT_62F21X_pwm.c: 62: TMR2IF=0;
+   562  0094  108C               	bcf	12,1
+   563                           
+   564                           ;FT_62F21X_pwm.c: 63: TMR2IE=1;
+   565  0095  1683               	bsf	3,5	;RP0=1, select bank1
+   566  0096  148C               	bsf	12,1
+   567                           
+   568                           ;FT_62F21X_pwm.c: 64: TMR2ON=1;
+   569  0097  1283               	bcf	3,5	;RP0=0, select bank0
+   570  0098  1512               	bsf	18,2
+   571                           
+   572                           ;FT_62F21X_pwm.c: 65: PEIE=1;
+   573  0099  170B               	bsf	11,6
+   574                           
+   575                           ;FT_62F21X_pwm.c: 66: GIE=1;
+   576  009A  178B               	bsf	11,7
+   577  009B  0008               	return
+   578  009C                     __end_of_PWM1_INITIAL:	
+   579                           
+   580                           	psect	text131
+   581  00C4                     __ptext131:	
+   582 ;; =============== function _PWM1_INITIAL ends ============
+   583                           
+   584                           
+   585 ;; *************** function _PWM1_WHITE *****************
+   586 ;; Defined at:
+   587 ;;		line 128 in file "FT_62F21X_pwm.c"
+   588 ;; Parameters:    Size  Location     Type
+   589 ;;		None
+   590 ;; Auto vars:     Size  Location     Type
+   591 ;;		None
+   592 ;; Return value:  Size  Location     Type
+   593 ;;		None               void
+   594 ;; Registers used:
+   595 ;;		wreg, status,2
+   596 ;; Tracked objects:
+   597 ;;		On entry : 0/0
+   598 ;;		On exit  : 20/0
+   599 ;;		Unchanged: FFFDF/0
+   600 ;; Data sizes:     COMMON   BANK0
+   601 ;;      Params:         0       0
+   602 ;;      Locals:         0       0
+   603 ;;      Temps:          0       0
+   604 ;;      Totals:         0       0
+   605 ;;Total ram usage:        0 bytes
+   606 ;; Hardware stack levels used:    1
+   607 ;; Hardware stack levels required when called:    1
+   608 ;; This function calls:
+   609 ;;		Nothing
+   610 ;; This function is called by:
+   611 ;;		_PWM1_RATE_CHANGE
+   612 ;; This function uses a non-reentrant model
+   613 ;;
+   614  00C4                     _PWM1_WHITE:	
+   615                           
+   616                           ;FT_62F21X_pwm.c: 129: P1ADTL=0;
+   617                           
+   618                           ; Regs used in _PWM1_WHITE: [wreg+status,2]
+   619  00C4  1283               	bcf	3,5	;RP0=0, select bank0
+   620  00C5  018E               	clrf	14	;volatile
+   621                           
+   622                           ;FT_62F21X_pwm.c: 131: P1OE=0B00100000;
+   623  00C6  3020               	movlw	32
+   624  00C7  1683               	bsf	3,5	;RP0=1, select bank1
+   625  00C8  0090               	movwf	16	;volatile
+   626                           
+   627                           ;FT_62F21X_pwm.c: 139: P1BR1=0B00000100;
+   628  00C9  3004               	movlw	4
+   629  00CA  1283               	bcf	3,5	;RP0=0, select bank0
+   630  00CB  0099               	movwf	25	;volatile
+   631  00CC  0008               	return
+   632  00CD                     __end_of_PWM1_WHITE:	
+   633                           
+   634                           	psect	text132
+   635  00DF                     __ptext132:	
+   636 ;; =============== function _PWM1_WHITE ends ============
+   637                           
+   638                           
+   639 ;; *************** function _PWM1_GREEN *****************
+   640 ;; Defined at:
+   641 ;;		line 91 in file "FT_62F21X_pwm.c"
+   642 ;; Parameters:    Size  Location     Type
+   643 ;;		None
+   644 ;; Auto vars:     Size  Location     Type
+   645 ;;		None
+   646 ;; Return value:  Size  Location     Type
+   647 ;;		None               void
+   648 ;; Registers used:
+   649 ;;		wreg, status,2
+   650 ;; Tracked objects:
+   651 ;;		On entry : 0/0
+   652 ;;		On exit  : 20/0
+   653 ;;		Unchanged: FFFDF/0
+   654 ;; Data sizes:     COMMON   BANK0
+   655 ;;      Params:         0       0
+   656 ;;      Locals:         0       0
+   657 ;;      Temps:          0       0
+   658 ;;      Totals:         0       0
+   659 ;;Total ram usage:        0 bytes
+   660 ;; Hardware stack levels used:    1
+   661 ;; Hardware stack levels required when called:    1
+   662 ;; This function calls:
+   663 ;;		Nothing
+   664 ;; This function is called by:
+   665 ;;		_PWM1_RATE_CHANGE
+   666 ;; This function uses a non-reentrant model
+   667 ;;
+   668  00DF                     _PWM1_GREEN:	
+   669                           
+   670                           ;FT_62F21X_pwm.c: 92: P1ADTL=0;
+   671                           
+   672                           ; Regs used in _PWM1_GREEN: [wreg+status,2]
+   673  00DF  1283               	bcf	3,5	;RP0=0, select bank0
+   674  00E0  018E               	clrf	14	;volatile
+   675                           
+   676                           ;FT_62F21X_pwm.c: 94: P1OE=0B00100000;
+   677  00E1  3020               	movlw	32
+   678  00E2  1683               	bsf	3,5	;RP0=1, select bank1
+   679  00E3  0090               	movwf	16	;volatile
+   680                           
+   681                           ;FT_62F21X_pwm.c: 102: P1BR1=0B00000000;
+   682  00E4  1283               	bcf	3,5	;RP0=0, select bank0
+   683  00E5  0199               	clrf	25	;volatile
+   684  00E6  0008               	return
+   685  00E7                     __end_of_PWM1_GREEN:	
+   686                           
+   687                           	psect	text133
+   688  00CD                     __ptext133:	
+   689 ;; =============== function _PWM1_GREEN ends ============
+   690                           
+   691                           
+   692 ;; *************** function _PWM1_RED *****************
+   693 ;; Defined at:
+   694 ;;		line 72 in file "FT_62F21X_pwm.c"
+   695 ;; Parameters:    Size  Location     Type
+   696 ;;		None
+   697 ;; Auto vars:     Size  Location     Type
+   698 ;;		None
+   699 ;; Return value:  Size  Location     Type
+   700 ;;		None               void
+   701 ;; Registers used:
+   702 ;;		wreg, status,2
+   703 ;; Tracked objects:
+   704 ;;		On entry : 0/0
+   705 ;;		On exit  : 20/0
+   706 ;;		Unchanged: FFFDF/0
+   707 ;; Data sizes:     COMMON   BANK0
+   708 ;;      Params:         0       0
+   709 ;;      Locals:         0       0
+   710 ;;      Temps:          0       0
+   711 ;;      Totals:         0       0
+   712 ;;Total ram usage:        0 bytes
+   713 ;; Hardware stack levels used:    1
+   714 ;; Hardware stack levels required when called:    1
+   715 ;; This function calls:
+   716 ;;		Nothing
+   717 ;; This function is called by:
+   718 ;;		_PWM1_RATE_CHANGE
+   719 ;; This function uses a non-reentrant model
+   720 ;;
+   721  00CD                     _PWM1_RED:	
+   722                           
+   723                           ;FT_62F21X_pwm.c: 73: P1ADTL=0;
+   724                           
+   725                           ; Regs used in _PWM1_RED: [wreg+status,2]
+   726  00CD  1283               	bcf	3,5	;RP0=0, select bank0
+   727  00CE  018E               	clrf	14	;volatile
+   728                           
+   729                           ;FT_62F21X_pwm.c: 75: P1OE=0B10000000;
+   730  00CF  3080               	movlw	128
+   731  00D0  1683               	bsf	3,5	;RP0=1, select bank1
+   732  00D1  0090               	movwf	16	;volatile
+   733                           
+   734                           ;FT_62F21X_pwm.c: 83: P1BR1=0B00001000;
+   735  00D2  3008               	movlw	8
+   736  00D3  1283               	bcf	3,5	;RP0=0, select bank0
+   737  00D4  0099               	movwf	25	;volatile
+   738  00D5  0008               	return
+   739  00D6                     __end_of_PWM1_RED:	
+   740                           
+   741                           	psect	text134
+   742  00E7                     __ptext134:	
+   743 ;; =============== function _PWM1_RED ends ============
+   744                           
+   745                           
+   746 ;; *************** function _PWM1_BLUE *****************
+   747 ;; Defined at:
+   748 ;;		line 110 in file "FT_62F21X_pwm.c"
+   749 ;; Parameters:    Size  Location     Type
+   750 ;;		None
+   751 ;; Auto vars:     Size  Location     Type
+   752 ;;		None
+   753 ;; Return value:  Size  Location     Type
+   754 ;;		None               void
+   755 ;; Registers used:
+   756 ;;		wreg, status,2
+   757 ;; Tracked objects:
+   758 ;;		On entry : 0/0
+   759 ;;		On exit  : 20/0
+   760 ;;		Unchanged: FFFDF/0
+   761 ;; Data sizes:     COMMON   BANK0
+   762 ;;      Params:         0       0
+   763 ;;      Locals:         0       0
+   764 ;;      Temps:          0       0
+   765 ;;      Totals:         0       0
+   766 ;;Total ram usage:        0 bytes
+   767 ;; Hardware stack levels used:    1
+   768 ;; Hardware stack levels required when called:    1
+   769 ;; This function calls:
+   770 ;;		Nothing
+   771 ;; This function is called by:
+   772 ;;		_PWM1_INITIAL
+   773 ;;		_PWM1_RATE_CHANGE
+   774 ;; This function uses a non-reentrant model
+   775 ;;
+   776  00E7                     _PWM1_BLUE:	
+   777                           
+   778                           ;FT_62F21X_pwm.c: 111: P1ADTL=0;
+   779                           
+   780                           ; Regs used in _PWM1_BLUE: [wreg+status,2]
+   781  00E7  1283               	bcf	3,5	;RP0=0, select bank0
+   782  00E8  018E               	clrf	14	;volatile
+   783                           
+   784                           ;FT_62F21X_pwm.c: 113: P1OE=0B10000000;
+   785  00E9  3080               	movlw	128
+   786  00EA  1683               	bsf	3,5	;RP0=1, select bank1
+   787  00EB  0090               	movwf	16	;volatile
+   788                           
+   789                           ;FT_62F21X_pwm.c: 121: P1BR1=0B00000000;
+   790  00EC  1283               	bcf	3,5	;RP0=0, select bank0
+   791  00ED  0199               	clrf	25	;volatile
+   792  00EE  0008               	return
+   793  00EF                     __end_of_PWM1_BLUE:	
+   794                           
+   795                           	psect	text135
+   796  00D6                     __ptext135:	
+   797 ;; =============== function _PWM1_BLUE ends ============
+   798                           
+   799                           
+   800 ;; *************** function _PA3_Level_Change_INITIAL *****************
+   801 ;; Defined at:
+   802 ;;		line 37 in file "FT_62F21x_IR.c"
+   803 ;; Parameters:    Size  Location     Type
+   804 ;;		None
+   805 ;; Auto vars:     Size  Location     Type
+   806 ;;		None
+   807 ;; Return value:  Size  Location     Type
+   808 ;;		None               void
+   809 ;; Registers used:
+   810 ;;		wreg
+   811 ;; Tracked objects:
+   812 ;;		On entry : 17F/0
+   813 ;;		On exit  : 17F/20
+   814 ;;		Unchanged: FFE80/0
+   815 ;; Data sizes:     COMMON   BANK0
+   816 ;;      Params:         0       0
+   817 ;;      Locals:         0       0
+   818 ;;      Temps:          0       0
+   819 ;;      Totals:         0       0
+   820 ;;Total ram usage:        0 bytes
+   821 ;; Hardware stack levels used:    1
+   822 ;; Hardware stack levels required when called:    1
+   823 ;; This function calls:
+   824 ;;		Nothing
+   825 ;; This function is called by:
+   826 ;;		_main
+   827 ;; This function uses a non-reentrant model
+   828 ;;
+   829  00D6                     _PA3_Level_Change_INITIAL:	
+   830                           
+   831                           ;FT_62F21x_IR.c: 38: TRISA3 =1;
+   832                           
+   833                           ; Regs used in _PA3_Level_Change_INITIAL: [wreg]
+   834  00D6  1683               	bsf	3,5	;RP0=1, select bank1
+   835  00D7  1585               	bsf	5,3
+   836                           
+   837                           ;FT_62F21x_IR.c: 39: ReadAPin = PORTA;
+   838  00D8  1283               	bcf	3,5	;RP0=0, select bank0
+   839  00D9  0805               	movf	5,w	;volatile
+   840                           
+   841                           ;FT_62F21x_IR.c: 40: PAIF =0;
+   842  00DA  100B               	bcf	11,0
+   843                           
+   844                           ;FT_62F21x_IR.c: 41: IOCA3 =1;
+   845  00DB  1683               	bsf	3,5	;RP0=1, select bank1
+   846  00DC  1596               	bsf	22,3
+   847                           
+   848                           ;FT_62F21x_IR.c: 42: PAIE =1;
+   849  00DD  158B               	bsf	11,3
+   850  00DE  0008               	return
+   851  00DF                     __end_of_PA3_Level_Change_INITIAL:	
+   852                           
+   853                           	psect	text136
+   854  00EF                     __ptext136:	
+   855 ;; =============== function _PA3_Level_Change_INITIAL ends ============
+   856                           
+   857                           
+   858 ;; *************** function _TIMER0_INITIAL *****************
+   859 ;; Defined at:
+   860 ;;		line 19 in file "FT_62F21x_IR.c"
+   861 ;; Parameters:    Size  Location     Type
+   862 ;;		None
+   863 ;; Auto vars:     Size  Location     Type
+   864 ;;		None
+   865 ;; Return value:  Size  Location     Type
+   866 ;;		None               void
+   867 ;; Registers used:
+   868 ;;		wreg
+   869 ;; Tracked objects:
+   870 ;;		On entry : 17F/0
+   871 ;;		On exit  : 17F/0
+   872 ;;		Unchanged: FFE80/0
+   873 ;; Data sizes:     COMMON   BANK0
+   874 ;;      Params:         0       0
+   875 ;;      Locals:         0       0
+   876 ;;      Temps:          0       0
+   877 ;;      Totals:         0       0
+   878 ;;Total ram usage:        0 bytes
+   879 ;; Hardware stack levels used:    1
+   880 ;; Hardware stack levels required when called:    1
+   881 ;; This function calls:
+   882 ;;		Nothing
+   883 ;; This function is called by:
+   884 ;;		_main
+   885 ;; This function uses a non-reentrant model
+   886 ;;
+   887  00EF                     _TIMER0_INITIAL:	
+   888                           
+   889                           ;FT_62F21x_IR.c: 20: OPTION = 0B00000011;
+   890                           
+   891                           ; Regs used in _TIMER0_INITIAL: [wreg]
+   892  00EF  3003               	movlw	3
+   893  00F0  1683               	bsf	3,5	;RP0=1, select bank1
+   894  00F1  0081               	movwf	1	;volatile
+   895                           
+   896                           ;FT_62F21x_IR.c: 27: TMR0 = 140;
+   897  00F2  308C               	movlw	140
+   898  00F3  1283               	bcf	3,5	;RP0=0, select bank0
+   899  00F4  0081               	movwf	1	;volatile
+   900                           
+   901                           ;FT_62F21x_IR.c: 28: T0IF = 0;
+   902  00F5  110B               	bcf	11,2
+   903  00F6  0008               	return
+   904  00F7                     __end_of_TIMER0_INITIAL:	
+   905                           
+   906                           	psect	text137
+   907  009C                     __ptext137:	
+   908 ;; =============== function _TIMER0_INITIAL ends ============
+   909                           
+   910                           
+   911 ;; *************** function _POWER_INITIAL *****************
+   912 ;; Defined at:
+   913 ;;		line 105 in file "TEST_FT62F21X_SLEEP.C"
+   914 ;; Parameters:    Size  Location     Type
+   915 ;;		None
+   916 ;; Auto vars:     Size  Location     Type
+   917 ;;		None
+   918 ;; Return value:  Size  Location     Type
+   919 ;;		None               void
+   920 ;; Registers used:
+   921 ;;		wreg, status,2
+   922 ;; Tracked objects:
+   923 ;;		On entry : 17F/0
+   924 ;;		On exit  : 17F/0
+   925 ;;		Unchanged: FFE80/0
+   926 ;; Data sizes:     COMMON   BANK0
+   927 ;;      Params:         0       0
+   928 ;;      Locals:         0       0
+   929 ;;      Temps:          0       0
+   930 ;;      Totals:         0       0
+   931 ;;Total ram usage:        0 bytes
+   932 ;; Hardware stack levels used:    1
+   933 ;; Hardware stack levels required when called:    1
+   934 ;; This function calls:
+   935 ;;		Nothing
+   936 ;; This function is called by:
+   937 ;;		_main
+   938 ;; This function uses a non-reentrant model
+   939 ;;
+   940  009C                     _POWER_INITIAL:	
+   941                           
+   942                           ;TEST_FT62F21X_SLEEP.C: 106: OSCCON = 0X00|0X70|0X00;
+   943                           
+   944                           ; Regs used in _POWER_INITIAL: [wreg+status,2]
+   945  009C  3070               	movlw	112
+   946  009D  1683               	bsf	3,5	;RP0=1, select bank1
+   947  009E  008F               	movwf	15	;volatile
+   948                           
+   949                           ;TEST_FT62F21X_SLEEP.C: 109: INTCON = 0;
+   950  009F  018B               	clrf	11	;volatile
+   951                           
+   952                           ;TEST_FT62F21X_SLEEP.C: 111: PORTA = 0B00000000;
+   953  00A0  1283               	bcf	3,5	;RP0=0, select bank0
+   954  00A1  0185               	clrf	5	;volatile
+   955                           
+   956                           ;TEST_FT62F21X_SLEEP.C: 112: TRISA = 0B00000000;
+   957  00A2  1683               	bsf	3,5	;RP0=1, select bank1
+   958  00A3  0185               	clrf	5	;volatile
+   959                           
+   960                           ;TEST_FT62F21X_SLEEP.C: 113: WPUA = 0B00000000;
+   961  00A4  0195               	clrf	21	;volatile
+   962                           
+   963                           ;TEST_FT62F21X_SLEEP.C: 115: OPTION = 0B00001000;
+   964  00A5  3008               	movlw	8
+   965  00A6  0081               	movwf	1	;volatile
+   966                           
+   967                           ;TEST_FT62F21X_SLEEP.C: 117: MSCON = 0B00000000;
+   968  00A7  1283               	bcf	3,5	;RP0=0, select bank0
+   969  00A8  019B               	clrf	27	;volatile
+   970  00A9  0008               	return
+   971  00AA                     __end_of_POWER_INITIAL:	
+   972                           
+   973                           	psect	text138
+   974  000D                     __ptext138:	
+   975 ;; =============== function _POWER_INITIAL ends ============
+   976                           
+   977                           
+   978 ;; *************** function _ISR *****************
+   979 ;; Defined at:
+   980 ;;		line 34 in file "TEST_FT62F21X_SLEEP.C"
+   981 ;; Parameters:    Size  Location     Type
+   982 ;;		None
+   983 ;; Auto vars:     Size  Location     Type
+   984 ;;		None
+   985 ;; Return value:  Size  Location     Type
+   986 ;;		None               void
+   987 ;; Registers used:
+   988 ;;		wreg, fsr0l, fsr0h, status,2, status,0
+   989 ;; Tracked objects:
+   990 ;;		On entry : 0/0
+   991 ;;		On exit  : 0/0
+   992 ;;		Unchanged: FFFDF/0
+   993 ;; Data sizes:     COMMON   BANK0
+   994 ;;      Params:         0       0
+   995 ;;      Locals:         0       0
+   996 ;;      Temps:          3       0
+   997 ;;      Totals:         3       0
+   998 ;;Total ram usage:        3 bytes
+   999 ;; Hardware stack levels used:    1
+  1000 ;; This function calls:
+  1001 ;;		Nothing
+  1002 ;; This function is called by:
+  1003 ;;		Interrupt level 1
+  1004 ;; This function uses a non-reentrant model
+  1005 ;;
+  1006  000D                     _ISR:	
+  1007                           
+  1008                           ;TEST_FT62F21X_SLEEP.C: 37: if(TMR2IE && TMR2IF)
+  1009  000D  1683               	bsf	3,5	;RP0=1, select bank1
+  1010  000E  1C8C               	btfss	12,1
+  1011  000F  2815               	goto	i1l3024
+  1012  0010  1283               	bcf	3,5	;RP0=0, select bank0
+  1013  0011  1C8C               	btfss	12,1
+  1014  0012  2815               	goto	i1l3024
+  1015                           
+  1016                           ;TEST_FT62F21X_SLEEP.C: 38: {
+  1017                           ;TEST_FT62F21X_SLEEP.C: 39: TMR2IF = 0;
+  1018  0013  108C               	bcf	12,1
+  1019                           
+  1020                           ;TEST_FT62F21X_SLEEP.C: 40: time_15ms_cnt++;
+  1021  0014  0AF8               	incf	_time_15ms_cnt,f
+  1022  0015                     i1l3024:	
+  1023                           
+  1024                           ;TEST_FT62F21X_SLEEP.C: 42: }
+  1025                           ;TEST_FT62F21X_SLEEP.C: 46: if(T0IE && T0IF)
+  1026  0015  1A8B               	btfsc	11,5
+  1027  0016  1D0B               	btfss	11,2
+  1028  0017  2823               	goto	i1l3040
+  1029                           
+  1030                           ;TEST_FT62F21X_SLEEP.C: 47: {
+  1031                           ;TEST_FT62F21X_SLEEP.C: 48: TMR0 = 140;
+  1032  0018  308C               	movlw	140
+  1033  0019  1283               	bcf	3,5	;RP0=0, select bank0
+  1034  001A  0081               	movwf	1	;volatile
+  1035  001B  3033               	movlw	51
+  1036                           
+  1037                           ;TEST_FT62F21X_SLEEP.C: 50: T0IF = 0;
+  1038  001C  110B               	bcf	11,2
+  1039                           
+  1040                           ;TEST_FT62F21X_SLEEP.C: 51: IRbitTime++;
+  1041  001D  0AF5               	incf	_IRbitTime,f
+  1042                           
+  1043                           ;TEST_FT62F21X_SLEEP.C: 52: if(IRbitTime > 50)
+  1044  001E  0275               	subwf	_IRbitTime,w
+  1045  001F  1C03               	skipc
+  1046  0020  2823               	goto	i1l3040
+  1047                           
+  1048                           ;TEST_FT62F21X_SLEEP.C: 53: {
+  1049                           ;TEST_FT62F21X_SLEEP.C: 54: T0IE = 0;
+  1050  0021  128B               	bcf	11,5
+  1051                           
+  1052                           ;TEST_FT62F21X_SLEEP.C: 55: IRbitTime = 0;
+  1053  0022  01F5               	clrf	_IRbitTime
+  1054  0023                     i1l3040:	
+  1055                           
+  1056                           ;TEST_FT62F21X_SLEEP.C: 56: }
+  1057                           ;TEST_FT62F21X_SLEEP.C: 57: }
+  1058                           ;TEST_FT62F21X_SLEEP.C: 60: if(PAIE && PAIF)
+  1059  0023  198B               	btfsc	11,3
+  1060  0024  1C0B               	btfss	11,0
+  1061  0025  284F               	goto	i1l693
+  1062                           
+  1063                           ;TEST_FT62F21X_SLEEP.C: 61: {
+  1064                           ;TEST_FT62F21X_SLEEP.C: 62: ReadAPin = PORTA;
+  1065  0026  1283               	bcf	3,5	;RP0=0, select bank0
+  1066  0027  0805               	movf	5,w	;volatile
+  1067                           
+  1068                           ;TEST_FT62F21X_SLEEP.C: 63: PAIF = 0;
+  1069  0028  100B               	bcf	11,0
+  1070                           
+  1071                           ;TEST_FT62F21X_SLEEP.C: 64: if(RA3 == 0)
+  1072  0029  1985               	btfsc	5,3
+  1073  002A  284F               	goto	i1l693
+  1074  002B  3016               	movlw	22
+  1075                           
+  1076                           ;TEST_FT62F21X_SLEEP.C: 65: {
+  1077                           ;TEST_FT62F21X_SLEEP.C: 66: T0IE = 1;
+  1078  002C  168B               	bsf	11,5
+  1079                           
+  1080                           ;TEST_FT62F21X_SLEEP.C: 67: if(IRbitTime > 21)
+  1081  002D  0275               	subwf	_IRbitTime,w
+  1082  002E  1C03               	skipc
+  1083  002F  2837               	goto	i1l3056
+  1084                           
+  1085                           ;TEST_FT62F21X_SLEEP.C: 68: {
+  1086                           ;TEST_FT62F21X_SLEEP.C: 69: IRDataTimer[0] = 0;
+  1087  0030  01F0               	clrf	_IRDataTimer
+  1088                           
+  1089                           ;TEST_FT62F21X_SLEEP.C: 70: IRDataTimer[1] = 0;
+  1090  0031  01F1               	clrf	_IRDataTimer+1
+  1091                           
+  1092                           ;TEST_FT62F21X_SLEEP.C: 71: IRDataTimer[2] = 0;
+  1093  0032  01F2               	clrf	_IRDataTimer+2
+  1094                           
+  1095                           ;TEST_FT62F21X_SLEEP.C: 72: IRDataTimer[3] = 0;
+  1096  0033  01F3               	clrf	_IRDataTimer+3
+  1097                           
+  1098                           ;TEST_FT62F21X_SLEEP.C: 73: IRbitNum = 0;
+  1099  0034  01F4               	clrf	_IRbitNum
+  1100                           
+  1101                           ;TEST_FT62F21X_SLEEP.C: 74: bitdata = 0x00;
+  1102  0035  01FC               	clrf	_bitdata
+  1103                           
+  1104                           ;TEST_FT62F21X_SLEEP.C: 75: }
+  1105  0036  2840               	goto	i1l3060
+  1106  0037                     i1l3056:	
+  1107                           
+  1108                           ;TEST_FT62F21X_SLEEP.C: 76: else if(IRbitTime > 3)
+  1109  0037  3004               	movlw	4
+  1110  0038  0275               	subwf	_IRbitTime,w
+  1111  0039  1C03               	skipc
+  1112  003A  2840               	goto	i1l3060
+  1113                           
+  1114                           ;TEST_FT62F21X_SLEEP.C: 77: {
+  1115                           ;TEST_FT62F21X_SLEEP.C: 78: IRDataTimer[IRbitNum-1] |= bitdata;
+  1116  003B  0874               	movf	_IRbitNum,w
+  1117  003C  3E6F               	addlw	(_IRDataTimer+-1)& (0+255)
+  1118  003D  0084               	movwf	4
+  1119  003E  087C               	movf	_bitdata,w
+  1120  003F  0480               	iorwf	0,f
+  1121  0040                     i1l3060:	
+  1122                           
+  1123                           ;TEST_FT62F21X_SLEEP.C: 79: }
+  1124                           ;TEST_FT62F21X_SLEEP.C: 80: IRbitTime = 0;
+  1125  0040  01F5               	clrf	_IRbitTime
+  1126                           
+  1127                           ;TEST_FT62F21X_SLEEP.C: 81: bitdata<<=1;
+  1128  0041  1003               	clrc
+  1129  0042  0DFC               	rlf	_bitdata,f
+  1130                           
+  1131                           ;TEST_FT62F21X_SLEEP.C: 82: if(bitdata == 0)
+  1132  0043  08FC               	movf	_bitdata,f
+  1133  0044  1D03               	skipz
+  1134  0045  2849               	goto	i1l3070
+  1135                           
+  1136                           ;TEST_FT62F21X_SLEEP.C: 83: {
+  1137                           ;TEST_FT62F21X_SLEEP.C: 84: bitdata = 0x01;
+  1138  0046  01FC               	clrf	_bitdata
+  1139  0047  0AFC               	incf	_bitdata,f
+  1140                           
+  1141                           ;TEST_FT62F21X_SLEEP.C: 85: IRbitNum++;
+  1142  0048  0AF4               	incf	_IRbitNum,f
+  1143  0049                     i1l3070:	
+  1144                           
+  1145                           ;TEST_FT62F21X_SLEEP.C: 86: }
+  1146                           ;TEST_FT62F21X_SLEEP.C: 87: if(IRbitNum > 4)
+  1147  0049  3005               	movlw	5
+  1148  004A  0274               	subwf	_IRbitNum,w
+  1149  004B  1C03               	skipc
+  1150  004C  284F               	goto	i1l693
+  1151                           
+  1152                           ;TEST_FT62F21X_SLEEP.C: 88: {
+  1153                           ;TEST_FT62F21X_SLEEP.C: 89: IRbitNum = 0;
+  1154  004D  01F4               	clrf	_IRbitNum
+  1155                           
+  1156                           ;TEST_FT62F21X_SLEEP.C: 91: ReceiveFinish = 1;
+  1157  004E  128B               	bcf	11,5
+  1158  004F                     i1l693:	
+  1159  004F  087B               	movf	??_ISR+2,w
+  1160  0050  008A               	movwf	10
+  1161  0051  087A               	movf	??_ISR+1,w
+  1162  0052  0084               	movwf	4
+  1163  0053  0E79               	swapf	??_ISR^(0+-128),w
+  1164  0054  0083               	movwf	3
+  1165  0055  0EFE               	swapf	126,f
+  1166  0056  0E7E               	swapf	126,w
+  1167  0057  0009               	retfie
+  1168  0058                     __end_of_ISR:	
+  1169                           
+  1170                           	psect	intentry
+  1171  0004                     __pintentry:	
+  1172                           ; Regs used in _ISR: [wreg-fsr0h+status,2+status,0]
+  1173                           
+  1174  0004                     interrupt_function:	
+  1175  007E                     saved_w	set	btemp
+  1176  0004  00FE               	movwf	btemp
+  1177  0005  0E03               	swapf	3,w
+  1178  0006  00F9               	movwf	??_ISR
+  1179  0007  0804               	movf	4,w
+  1180  0008  00FA               	movwf	??_ISR+1
+  1181  0009  080A               	movf	10,w
+  1182  000A  00FB               	movwf	??_ISR+2
+  1183  000B  280D               	ljmp	_ISR
+  1184                           
+  1185                           	psect	text139
+  1186  0000                     __ptext139:	
+  1187 ;; =============== function _ISR ends ============
+  1188                           
+  1189  007E                     btemp	set	126	;btemp
+  1190  007E                     wtemp0	set	126
 
 
 HI-TECH Software PICC Macro Assembler V9.83 build 10920 
-Symbol Table                                                                                   Thu Jun 18 13:12:36 2020
+Symbol Table                                                                                   Tue May 25 17:24:25 2021
 
-                   l683 0000                     l691 0000                     l677 0000                     l699 0000  
-                   _RA3 002B                     _RA4 002C                    l1700 0000                    l1630 0000  
-                  l1702 0000                    l1640 0000                    l1632 0000                    l1634 0000  
-                  l1642 0000                    l1636 0000                    l1644 0000                    l1660 0000  
-                  l1638 0000                    l1646 03BB                    l1656 03D7                    l1664 03D2  
-                  l1648 0000                    l1658 0000                    l1674 03E7                    l1682 03E2  
-                  l1666 0000                    l1690 0000                    l1676 0000                    l1692 0000  
-                  l1684 0000                    l1678 0000                    l1694 03F8                    l1686 0000  
-                  l1696 0000                    l1688 0000                    l1698 0000                    _WPUA 0095  
-                  _main 03F0                    btemp 007E                    start 0000         __end_of_DelayMs 03E0  
-       __end_of_DelayUs 03C2                   ?_main 0070                   _MSCON 001B                   _PORTA 0005  
-                 _TRISA 0085                   status 0003                   wtemp0 007E            __end_of_main 0400  
-                ??_main 0078                  _INTCON 000B               ??_DelayMs 0072               ??_DelayUs 0070  
-                _OSCCON 008F                  _OPTION 0081                  _DelayS 03E0   __end_of_POWER_INITIAL 03D0  
-        __pcstackCOMMON 0070                 ?_DelayS 0070              __pmaintext 03F0                 DelayS@a 0076  
-               DelayS@b 0077                 _DelayMs 03D0                 _DelayUs 03B9         __size_of_DelayS 0010  
-  end_of_initialization 03B7          __end_of_DelayS 03F0     start_initialization 03B7                ??_DelayS 0075  
-__size_of_POWER_INITIAL 000E                ?_DelayMs 0070                ?_DelayUs 0070           _POWER_INITIAL 03C2  
-              DelayMs@a 0073                DelayMs@b 0074                DelayUs@a 0071             DelayMs@Time 0072  
-        ?_POWER_INITIAL 0070             DelayUs@Time 0070        __size_of_DelayMs 0010        __size_of_DelayUs 0009  
-              __ptext53 0000                __ptext54 03E0                __ptext55 03D0                __ptext56 03B9  
-              __ptext57 03C2                __ptext58 0000           __size_of_main 0010              DelayS@Time 0075  
-       ??_POWER_INITIAL 0070  
+                              l696 0000                                _GIE 005F  
+                              _RA3 002B                                _ISR 000D  
+                              fsr0 0004                                indf 0000  
+                             ?_ISR 0079                               l1402 0000  
+                             l3100 0000                               l3102 0000  
+                             l3110 0000                               l3104 0000  
+                             l3112 0000                               l3120 0000  
+                             l3106 0000                               l3114 0000  
+                             l3122 0000                               l3130 0000  
+                             l2091 0000                               l3108 0000  
+                             l3116 0000                               l3124 0000  
+                             l3140 0000                               l3132 0000  
+                             l3118 0000                               l1390 0000  
+                             l3142 0000                               l3134 0000  
+                             l3126 0000                               l3080 0000  
+                             l2088 0000                               l3144 0000  
+                             l3136 0000                               l3128 0000  
+                             l3160 0065                               l3152 0000  
+                             l1393 0000                               l3082 0000  
+                             l3090 0000                               l3146 0000  
+                             l3138 0000                               l3162 0000  
+                             l3154 0000                               l3084 0000  
+                             l3076 0000                               l3092 0000  
+                             l1396 0000                               l3164 0069  
+                             l3156 0000                               l3172 0074  
+                             l3148 0000                               l3180 00BB  
+                             l3086 0000                               l3078 0000  
+                             l3094 0000                               l3182 0000  
+                             l1399 0000                               l3088 0000  
+                             l3096 0000                               l3168 006F  
+                             l3098 0000                               l3186 0000  
+                             l3178 0000                               l3188 0000  
+                             _P1OE 0090                               _T0IE 005D  
+                             _T0IF 005A                               _PAIE 005B  
+                             _PAIF 0058                               _PEIE 005E  
+                             _PR2H 0092                               _PR2L 0091  
+                             _TMR0 0001                               _WPUA 0095  
+                             _main 00B7                               btemp 007E  
+                             start 000C                              ??_ISR 0079  
+                   _TIMER0_INITIAL 00EF                              ?_main 0079  
+                            _P1BR1 0019                              _P1CON 0016  
+                            _P1AUX 001E                              _P1POL 0099  
+                            _IOCA3 04B3                     _pwm_rate_value 0077  
+                      ?_PWM1_GREEN 0079                              i1l693 004F  
+                            _MSCON 001B                              _TMR2H 0013  
+                            _TMR2L 0011                              _PORTA 0005  
+                            _TRISA 0085                        ?_PWM1_WHITE 0079  
+               __size_of_PWM1_BLUE 0008                   __end_of_PWM1_RED 00D6  
+                 _pwm_colour_value 0076                              pclath 000A  
+                            status 0003                              wtemp0 007E  
+ __end_of_PA3_Level_Change_INITIAL 00DF                       __end_of_main 00C4  
+           __end_of_TIMER0_INITIAL 00F7                             ??_main 007C  
+                           _P1ADTH 0014                             _P1ADTL 000E  
+                           _T2CON0 0012                             _T2CON1 009E  
+                           i1l3030 0000                             i1l3022 0000  
+                           i1l3032 0000                             i1l3040 0023  
+                           i1l3024 0015                             i1l3016 0000  
+                           i1l3034 0000                             i1l3060 0040  
+                           i1l3052 0000                             i1l3070 0049  
+                           i1l3062 0000                             i1l3046 0000  
+                           i1l3038 0000                             i1l3064 0000  
+                           i1l3056 0037                             i1l3048 0000  
+                           i1l3074 0000                             i1l3068 0000  
+                           _INTCON 000B                             _OSCCON 008F  
+                           _TMR2IE 0461                             _TMR2IF 0061  
+                           _OPTION 0081                             _TMR2ON 0092  
+                           _TRISA3 042B          __size_of_PWM1_RATE_CHANGE 0028  
+              __size_of_PWM1_GREEN 0008                __size_of_PWM1_WHITE 0009  
+                __end_of_PWM1_BLUE 00EF                    ?_TIMER0_INITIAL 0079  
+                     __pdataCOMMON 007C                             saved_w 007E  
+            __end_of_POWER_INITIAL 00AA                     __pcstackCOMMON 0079  
+         _PA3_Level_Change_INITIAL 00D6                          ?_PWM1_RED 0079  
+                       __pmaintext 00B7                         ??_PWM1_RED 007C  
+                       __pintentry 0004                       ??_PWM1_GREEN 007C  
+                     ??_PWM1_WHITE 007C                      ?_PWM1_INITIAL 0079  
+                 _PWM1_RATE_CHANGE 0058                 __end_of_PWM1_GREEN 00E7  
+               __end_of_PWM1_WHITE 00CD                            _bitdata 007C  
+                     __size_of_ISR 004B                     ??_PWM1_INITIAL 007C  
+             end_of_initialization 00B5                   ??_TIMER0_INITIAL 007C  
+                        _PWM1_BLUE 00E7                          _IRbitTime 0075  
+       ??_PA3_Level_Change_INITIAL 007C                         ?_PWM1_BLUE 0079  
+                    __pidataCOMMON 0000                  __size_of_PWM1_RED 0009  
+              start_initialization 00AA                        __end_of_ISR 0058  
+             __end_of_PWM1_INITIAL 009C             __size_of_POWER_INITIAL 000E  
+         __end_of_PWM1_RATE_CHANGE 0080                        __pbssCOMMON 0070  
+                    _time_15ms_cnt 0078                          __ptext130 0080  
+                        __ptext131 00C4                          __ptext132 00DF  
+                        __ptext133 00CD                          __ptext134 00E7  
+                        __ptext135 00D6                          __ptext136 00EF  
+                        __ptext137 009C                          __ptext129 0058  
+                        __ptext138 000D                          __ptext139 0000  
+                      ??_PWM1_BLUE 007C                  interrupt_function 0004  
+                    _POWER_INITIAL 009C                           _PWM1_RED 00CD  
+                         _IRbitNum 0074                     ?_POWER_INITIAL 0079  
+            __size_of_PWM1_INITIAL 001C                       _PWM1_INITIAL 0080  
+                    __size_of_main 000D                        _IRDataTimer 0070  
+__size_of_PA3_Level_Change_INITIAL 0009            __size_of_TIMER0_INITIAL 0008  
+        ?_PA3_Level_Change_INITIAL 0079                  ?_PWM1_RATE_CHANGE 0079  
+               ??_PWM1_RATE_CHANGE 007C                    ??_POWER_INITIAL 007C  
+                         intlevel1 0000                         _PWM1_GREEN 00DF  
+                       _PWM1_WHITE 00C4  
