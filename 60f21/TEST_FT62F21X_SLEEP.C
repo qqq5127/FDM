@@ -22,7 +22,7 @@
 #include 	"FT_USER_CONFIG.h";
 
 unchar time_15ms_cnt = 0;
-
+unchar key_release = 0;
 
  /*-------------------------------------------------
   *  函数名：中断处理程序
@@ -109,7 +109,7 @@ void POWER_INITIAL (void)
 	INTCON = 0;  							//暂禁止所有中断
 
 	PORTA = 0B00000000;				
-	TRISA = 0B00000000;				//PA输入输出 0-输出 1-输入  
+	TRISA = 0B00010000;				//PA输入输出 0-输出 1-输入  
 	WPUA = 0B00000000;     		//PA端口上拉控制 1-开上拉 0-关上拉
 
 	OPTION = 0B00001000;			//Bit3=1 WDT MODE,PS=000=1:1 WDT RATE
@@ -180,11 +180,32 @@ void main(void)
     while(1)
 	{
     	CLRWDT();  		    //清看门狗
-		if(time_15ms_cnt > 15)
+    	
+		if(ft_user_pwm_mode == 0)
 		{
-			time_15ms_cnt = 0;
-			pwm_rate_value++;
-			PWM1_RATE_CHANGE();
+			if(time_15ms_cnt > 150)
+			{
+				time_15ms_cnt = 0;
+				pwm_rate_value++;
+				PWM1_RATE_CHANGE();
+			}
+		}
+		if(ft_user_pwm_mode == 5)
+		{
+
+		}
+		if(PORTA & 0B00010000)
+		{
+			key_release = 0;
+		}
+		else
+		{
+			if(key_release == 0)
+			{
+				PWM_MODE_CHANGE();
+			}
+			key_release = 1;
+			
 		}
 	}
 }

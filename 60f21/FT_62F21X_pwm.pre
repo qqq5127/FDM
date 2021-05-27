@@ -957,20 +957,23 @@ extern void PWM1_GREEN(void);
 extern void PWM1_BLUE(void);
 extern void PWM1_WHITE(void);
 extern void PWM1_RATE_CHANGE(void);
+extern void PWM_MODE_CHANGE(void);
 
 # 1 "FT_62F21X_pwm.c"
 ;
 
 unsigned char ft_user_pwm_mode = 0;
+
+# 11
 unsigned char pwm_rate_value = 0;
 unsigned char pwm_colour_value = 0;
 
-# 13
+# 20
 void PWM1_INITIAL(void)
 {
 T2CON0=0B00000001;
 
-# 21
+# 28
 T2CON1=0B00000000;
 
 
@@ -981,20 +984,23 @@ TMR2L=100;
 
 PR2H=0;
 PR2L=100;
-P1ADTH=0;
 
+P1CDTH=0;
+P1DDTH=0;
+P1CDTL=0;
+P1DDTL=0;
 
 P1POL=0B00000000;
 
-# 41
+# 51
 P1CON=0B00000000;
 
-# 48
+# 58
 P1AUX=0B00000000;
 
-# 59
-PWM1_BLUE();
-
+# 66
+PWM1_RED();
+pwm_colour_value = 0;
 
 TMR2IF=0;
 TMR2IE=1;
@@ -1007,39 +1013,40 @@ GIE=1;
 
 void PWM1_RED(void)
 {
-P1ADTL=0;
 
-P1OE=0B10000000;
+# 96
+P1CDTL=0;
 
-# 83
-P1BR1=0B00001000;
+P1OE=0B00000000;
 
-
+# 106
+P1BR1=0B00000000;
 
 
 }
 
 void PWM1_GREEN(void)
 {
-P1ADTL=0;
 
-P1OE=0B00100000;
+# 129
+P1CDTL=0;
 
-# 102
+P1OE=0B00000000;
+
+# 139
 P1BR1=0B00000000;
-
-
 
 
 }
 
 void PWM1_BLUE(void)
 {
-P1ADTL=0;
+P1CDTL=0;
+P1DDTL=0;
 
 P1OE=0B10000000;
 
-# 121
+# 157
 P1BR1=0B00000000;
 
 
@@ -1048,11 +1055,12 @@ P1BR1=0B00000000;
 
 void PWM1_WHITE(void)
 {
-P1ADTL=0;
+P1CDTL=0;
+P1DDTL=0;
 
 P1OE=0B00100000;
 
-# 139
+# 176
 P1BR1=0B00000100;
 
 
@@ -1061,35 +1069,103 @@ P1BR1=0B00000100;
 
 void PWM1_RATE_CHANGE(void)
 {
+unsigned char pwm_value;
+
 if(pwm_rate_value >= 200)
 {
 pwm_rate_value = 0;
 pwm_colour_value++;
 pwm_colour_value = pwm_colour_value%4;
-if(pwm_colour_value == 0)
+switch(pwm_colour_value)
 {
+case 0:
 PWM1_RED();
-}
-else if(pwm_colour_value == 1)
-{
+break;
+
+case 1:
 PWM1_GREEN();
-}
-else if(pwm_colour_value == 2)
-{
+break;
+
+case 2:
 PWM1_BLUE();
-}
-else if(pwm_colour_value == 3)
-{
+break;
+
+case 3:
 PWM1_WHITE();
+break;
+
+default:
+
+break;
 }
 }
 if(pwm_rate_value <=100)
 {
-P1ADTL = pwm_rate_value;
+pwm_value = pwm_rate_value;
 }
 else
 {
-P1ADTL = 200 - pwm_rate_value;
+pwm_value = 200 - pwm_rate_value;
+}
+
+switch(pwm_colour_value)
+{
+case 0:
+P1CDTL = pwm_value;
+break;
+
+case 1:
+P1DDTL = pwm_value;
+break;
+
+case 2:
+P1CDTL = pwm_value;
+break;
+
+case 3:
+P1DDTL = pwm_value;
+break;
+
+default:
+
+break;
+}
+
+}
+
+void PWM_MODE_CHANGE(void)
+{
+ft_user_pwm_mode++;
+ft_user_pwm_mode = ft_user_pwm_mode%6;
+switch(ft_user_pwm_mode)
+{
+case 0:
+
+break;
+
+case 1:
+
+break;
+
+case 2:
+
+break;
+
+case 3:
+
+break;
+
+case 4:
+
+break;
+
+case 5:
+
+break;
+
+default:
+
+break;
 }
 }
 

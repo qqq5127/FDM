@@ -16,6 +16,7 @@ extern void PWM1_GREEN(void);
 extern void PWM1_BLUE(void);
 extern void PWM1_WHITE(void);
 extern void PWM1_RATE_CHANGE(void);
+extern void PWM_MODE_CHANGE(void);
 
 #endif
 

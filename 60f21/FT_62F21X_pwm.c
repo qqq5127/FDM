@@ -1,6 +1,13 @@
 #include "FT_62F21X_pwm.h";
 
 unsigned char ft_user_pwm_mode = 0;
+// 0: FADE 模式
+// 1: 红色灯
+// 2: 绿色灯
+// 3: 蓝色灯
+// 4: 白色灯
+// 5: jump模式
+
 unchar pwm_rate_value = 0;
 unchar pwm_colour_value = 0;
 
@@ -28,8 +35,11 @@ void PWM1_INITIAL(void)
     
     PR2H=0;							//周期=（PR2+1）*Tt2ck*TMR2预分频
     PR2L=PWM_PILSE_WIDTH;
-    P1ADTH=0;						//脉宽=P1xDT*Tt2ck*TMR2预分频
-    
+
+	P1CDTH=0;						//脉宽=P1xDT*Tt2ck*TMR2预分频
+	P1DDTH=0;
+    P1CDTL=0;
+    P1DDTL=0;
  
     P1POL=0B00000000;		//P1A0高电平有效
     //BIT7: 0:P1C高电平有效;1:P1C低电平有效
@@ -53,11 +63,8 @@ void PWM1_INITIAL(void)
 			//1 = 输出 P1B 和 P1C 的同或
 			//0 = 输出 P1B 和 P1C 的异或		
 
-#ifndef	DEBUG_MODE
 	PWM1_RED();
-#else
-	PWM1_BLUE();
-#endif
+	pwm_colour_value = 0;
 
     TMR2IF=0;						//清TIMER2中断标志
     TMR2IE=1;						//使能TIMER2的中断
@@ -70,7 +77,9 @@ void PWM1_INITIAL(void)
 
 void PWM1_RED(void)
 {
-    P1ADTL=0;
+#ifndef DEBUG_MODE
+    P1CDTL=0;
+    P1DDTL=0;
 
     P1OE=0B10000000;		//P1A0输出使能
 	//BIT7: 0:禁止P1C输出到管脚;1:允许P1C输出到管脚
@@ -83,13 +92,27 @@ void PWM1_RED(void)
 	P1BR1=0B00001000;
 	//BIT3:P1CALT [P1C]功能映射选择, 1 = 输出 P1C, 0 = GPIO
 	//BIT2:P1DALT [P1D]功能映射选择, 1 = 输出 P1D，或者 P1B 和 P1C 的逻辑波形
+#else
+	P1CDTL=0;
 
+	P1OE=0B00000000;		//P1A0输出使能
+	//BIT7: 0:禁止P1C输出到管脚;1:允许P1C输出到管脚
+	//BIT6: 0:禁止P1B输出到管脚;1:允许P1B输出到管脚
+	//BIT6: 0:禁止P1D输出到管脚;1:允许P1D输出到管脚
+	//BIT3~BIT2: 故障下，[P1C]管脚的状态，只有当P1CALT为1时才有效 00=高阻  01=输出0  1x=输出1
+	//BIT1: 0:禁止P1A0N输出到管脚;1:允许P1A0N输出到管脚
+	//BIT0: 0:禁止P1A0输出到管脚;1:允许P1A0输出到管脚 
+
+	P1BR1=0B00000000;
+#endif
 
 }
 
 void PWM1_GREEN(void)
 {
-    P1ADTL=0;
+#ifndef DEBUG_MODE
+    P1CDTL=0;
+    P1DDTL=0;
 
     P1OE=0B00100000;		//P1A0输出使能
 	//BIT7: 0:禁止P1C输出到管脚;1:允许P1C输出到管脚
@@ -102,13 +125,26 @@ void PWM1_GREEN(void)
 	P1BR1=0B00000000;
 	//BIT3:P1CALT [P1C]功能映射选择, 1 = 输出 P1C, 0 = GPIO
 	//BIT2:P1DALT [P1D]功能映射选择, 1 = 输出 P1D，或者 P1B 和 P1C 的逻辑波形
-		
+#else
+	P1CDTL=0;
 
+	P1OE=0B00000000;		//P1A0输出使能
+	//BIT7: 0:禁止P1C输出到管脚;1:允许P1C输出到管脚
+	//BIT6: 0:禁止P1B输出到管脚;1:允许P1B输出到管脚
+	//BIT6: 0:禁止P1D输出到管脚;1:允许P1D输出到管脚
+	//BIT3~BIT2: 故障下，[P1C]管脚的状态，只有当P1CALT为1时才有效 00=高阻  01=输出0  1x=输出1
+	//BIT1: 0:禁止P1A0N输出到管脚;1:允许P1A0N输出到管脚
+	//BIT0: 0:禁止P1A0输出到管脚;1:允许P1A0输出到管脚 
+
+	P1BR1=0B00000000;
+
+#endif
 }
 
 void PWM1_BLUE(void)
 {
-    P1ADTL=0;
+    P1CDTL=0;
+    P1DDTL=0;
 
     P1OE=0B10000000;		//P1A0输出使能
 	//BIT7: 0:禁止P1C输出到管脚;1:允许P1C输出到管脚
@@ -126,7 +162,8 @@ void PWM1_BLUE(void)
 
 void PWM1_WHITE(void)
 {
-    P1ADTL=0;
+    P1CDTL=0;
+    P1DDTL=0;
 
     P1OE=0B00100000;		//P1A0输出使能
 	//BIT7: 0:禁止P1C输出到管脚;1:允许P1C输出到管脚
@@ -144,35 +181,117 @@ void PWM1_WHITE(void)
 
 void PWM1_RATE_CHANGE(void)
 {
+	unchar pwm_value;
+	
 	if(pwm_rate_value >= 200)
 	{
 		pwm_rate_value = 0;
 		pwm_colour_value++;
 		pwm_colour_value = pwm_colour_value%4;
-		if(pwm_colour_value == 0)
+		switch(pwm_colour_value)
 		{
-			PWM1_RED();
-		}
-		else if(pwm_colour_value == 1)
-		{
-			PWM1_GREEN();
-		}
-		else if(pwm_colour_value == 2)
-		{
-			PWM1_BLUE();
-		}
-		else if(pwm_colour_value == 3)
-		{
-			PWM1_WHITE();
+			case 0:
+				PWM1_RED();
+			break;
+			
+			case 1:
+				PWM1_GREEN();
+			break;
+			
+			case 2:
+				PWM1_BLUE();
+			break;
+			
+			case 3:
+				PWM1_WHITE();
+			break;
+
+			default:
+
+			break;
 		}
 	}
 	if(pwm_rate_value <=100)
 	{
-		P1ADTL = pwm_rate_value;
+		pwm_value = pwm_rate_value;
 	}
 	else
 	{
-		P1ADTL = 200 - pwm_rate_value;
+		pwm_value = 200 - pwm_rate_value;
+	}
+	
+	switch(pwm_colour_value)
+	{
+		case 0:
+			P1CDTL = pwm_value;
+		break;
+		
+		case 1:
+			P1DDTL = pwm_value;
+		break;
+		
+		case 2:
+			P1CDTL = pwm_value;
+		break;
+		
+		case 3:
+			P1DDTL = pwm_value;
+		break;
+	
+		default:
+	
+		break;
+	}
+	
+}
+
+void PWM_MODE_CHANGE(void)
+{
+	ft_user_pwm_mode++;
+	ft_user_pwm_mode = ft_user_pwm_mode%6;
+	switch(ft_user_pwm_mode)
+	{
+		case 0:
+			pwm_rate_value = 0;
+			pwm_colour_value = 0;
+			PWM1_RED();
+
+		break;
+		
+		case 1:
+#ifndef DEBUG_MODE
+			P1OE=0B00000000;	
+			PORTA = 0B00000001; 	
+#endif
+		break;
+		
+		case 2:
+#ifndef DEBUG_MODE
+			P1OE=0B00000000;	
+			PORTA = 0B00000010; 	
+#endif
+		break;
+		
+		case 3:
+			P1OE=0B00000000;	
+			PORTA = 0B00000100; 	
+		break;
+		
+		case 4:
+			P1OE=0B00000000;	
+			PORTA = 0B00100000; 	
+		break;
+		
+		case 5:
+#ifndef DEBUG_MODE
+		P1OE=0B00000000;	
+		PORTA = 0B00000010; 	
+#endif
+		break;
+		
+		default:
+
+		break;
 	}
 }
 

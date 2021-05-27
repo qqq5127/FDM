@@ -825,6 +825,8 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _SFR9F `Vuc  1 e@159 ]
 "24 TEST_FT62F21X_SLEEP.C
 [v _time_15ms_cnt `uc  1 e ]
+"25 TEST_FT62F21X_SLEEP.C
+[v _key_release `uc  1 e ]
 "15 FT_62F21X_IR.h
 [v _IRbitTime `uc  0 e ]
 "19 FT_62F21X_IR.h
@@ -847,10 +849,14 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _PA3_Level_Change_INITIAL `(v  0 ef ]
 "13 FT_62F21X_pwm.h
 [v _PWM1_INITIAL `(v  0 ef ]
+"9 FT_62F21X_pwm.h
+[v _ft_user_pwm_mode `uc  0 e ]
 "10 FT_62F21X_pwm.h
 [v _pwm_rate_value `uc  0 e ]
 "18 FT_62F21X_pwm.h
 [v _PWM1_RATE_CHANGE `(v  0 ef ]
+"19 FT_62F21X_pwm.h
+[v _PWM_MODE_CHANGE `(v  0 ef ]
 [; ;DEVICE.h: 6: volatile unsigned char INDF @ 0x000;
 [; ;DEVICE.h: 10: volatile unsigned char TMR0 @ 0x001;
 [; ;DEVICE.h: 14: volatile unsigned char PCL @ 0x002;
@@ -1564,6 +1570,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;FT_62F21X_pwm.h: 16: extern void PWM1_BLUE(void);
 [; ;FT_62F21X_pwm.h: 17: extern void PWM1_WHITE(void);
 [; ;FT_62F21X_pwm.h: 18: extern void PWM1_RATE_CHANGE(void);
+[; ;FT_62F21X_pwm.h: 19: extern void PWM_MODE_CHANGE(void);
 [; ;TEST_FT62F21X_SLEEP.C: 20: ;
 [; ;FT_62F21X_IR.h: 4: ;
 [; ;FT_62F21X_IR.h: 5: ;
@@ -1585,9 +1592,14 @@ Version 3.2 HI-TECH Software Intermediate Code
 -> -> 0 `i `uc
 ]
 [; ;TEST_FT62F21X_SLEEP.C: 24: unsigned char time_15ms_cnt = 0;
+"25
+[i _key_release
+-> -> 0 `i `uc
+]
+[; ;TEST_FT62F21X_SLEEP.C: 25: unsigned char key_release = 0;
 "34
-[v F923 `(v  1 tf ]
-[v _ISR `IF923  1 e ]
+[v F926 `(v  1 tf ]
+[v _ISR `IF926  1 e ]
 {
 [; ;TEST_FT62F21X_SLEEP.C: 33: void interrupt ISR(void)
 [; ;TEST_FT62F21X_SLEEP.C: 34: {
@@ -1777,9 +1789,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;TEST_FT62F21X_SLEEP.C: 111: PORTA = 0B00000000;
 "111
 [e = _PORTA -> -> 0 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 112: TRISA = 0B00000000;
+[; ;TEST_FT62F21X_SLEEP.C: 112: TRISA = 0B00010000;
 "112
-[e = _TRISA -> -> 0 `i `uc ]
+[e = _TRISA -> -> 16 `i `uc ]
 [; ;TEST_FT62F21X_SLEEP.C: 113: WPUA = 0B00000000;
 "113
 [e = _WPUA -> -> 0 `i `uc ]
@@ -1972,33 +1984,82 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;TEST_FT62F21X_SLEEP.C: 182: asm("clrwdt");
 "182
 [; clrwdt ;#
-[; ;TEST_FT62F21X_SLEEP.C: 183: if(time_15ms_cnt > 15)
-"183
-[e $ ! > -> _time_15ms_cnt `i -> 15 `i 123  ]
-[; ;TEST_FT62F21X_SLEEP.C: 184: {
+[; ;TEST_FT62F21X_SLEEP.C: 184: if(ft_user_pwm_mode == 0)
 "184
-{
-[; ;TEST_FT62F21X_SLEEP.C: 185: time_15ms_cnt = 0;
+[e $ ! == -> _ft_user_pwm_mode `i -> 0 `i 123  ]
+[; ;TEST_FT62F21X_SLEEP.C: 185: {
 "185
-[e = _time_15ms_cnt -> -> 0 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 186: pwm_rate_value++;
+{
+[; ;TEST_FT62F21X_SLEEP.C: 186: if(time_15ms_cnt > 150)
 "186
-[e ++ _pwm_rate_value -> -> 1 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 187: PWM1_RATE_CHANGE();
+[e $ ! > -> _time_15ms_cnt `i -> 150 `i 124  ]
+[; ;TEST_FT62F21X_SLEEP.C: 187: {
 "187
-[e ( _PWM1_RATE_CHANGE ..  ]
+{
+[; ;TEST_FT62F21X_SLEEP.C: 188: time_15ms_cnt = 0;
 "188
+[e = _time_15ms_cnt -> -> 0 `i `uc ]
+[; ;TEST_FT62F21X_SLEEP.C: 189: pwm_rate_value++;
+"189
+[e ++ _pwm_rate_value -> -> 1 `i `uc ]
+[; ;TEST_FT62F21X_SLEEP.C: 190: PWM1_RATE_CHANGE();
+"190
+[e ( _PWM1_RATE_CHANGE ..  ]
+"191
+}
+[e :U 124 ]
+"192
 }
 [e :U 123 ]
-"189
+[; ;TEST_FT62F21X_SLEEP.C: 191: }
+[; ;TEST_FT62F21X_SLEEP.C: 192: }
+[; ;TEST_FT62F21X_SLEEP.C: 194: if(PORTA & 0B00010000)
+"194
+[e $ ! != & -> _PORTA `i -> 16 `i -> 0 `i 125  ]
+[; ;TEST_FT62F21X_SLEEP.C: 195: {
+"195
+{
+[; ;TEST_FT62F21X_SLEEP.C: 196: key_release = 0;
+"196
+[e = _key_release -> -> 0 `i `uc ]
+"197
+}
+[; ;TEST_FT62F21X_SLEEP.C: 197: }
+[e $U 126  ]
+"198
+[e :U 125 ]
+[; ;TEST_FT62F21X_SLEEP.C: 198: else
+[; ;TEST_FT62F21X_SLEEP.C: 199: {
+"199
+{
+[; ;TEST_FT62F21X_SLEEP.C: 200: if(key_release == 0)
+"200
+[e $ ! == -> _key_release `i -> 0 `i 127  ]
+[; ;TEST_FT62F21X_SLEEP.C: 201: {
+"201
+{
+[; ;TEST_FT62F21X_SLEEP.C: 202: PWM_MODE_CHANGE();
+"202
+[e ( _PWM_MODE_CHANGE ..  ]
+"203
+}
+[e :U 127 ]
+[; ;TEST_FT62F21X_SLEEP.C: 203: }
+[; ;TEST_FT62F21X_SLEEP.C: 204: key_release = 1;
+"204
+[e = _key_release -> -> 1 `i `uc ]
+"206
+}
+[e :U 126 ]
+"207
 }
 [e :U 120 ]
 "180
 [e $U 121  ]
 [e :U 122 ]
-[; ;TEST_FT62F21X_SLEEP.C: 188: }
-[; ;TEST_FT62F21X_SLEEP.C: 189: }
-[; ;TEST_FT62F21X_SLEEP.C: 190: }
-"190
+[; ;TEST_FT62F21X_SLEEP.C: 206: }
+[; ;TEST_FT62F21X_SLEEP.C: 207: }
+[; ;TEST_FT62F21X_SLEEP.C: 208: }
+"208
 [e :UE 119 ]
 }

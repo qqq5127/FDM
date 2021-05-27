@@ -24,41 +24,53 @@ startup.obj     end_init                              C        C        1       
                 reset_vec                             0        0        1        0       0
 test_ft62f21x_sleep.obj
                 intentry                              4        4        8        8       0
-                text138                               D        D       4B        8       0
-                text137                              9C       9C        E        8       0
-                text136                              EF       EF        8        8       0
-                text135                              D6       D6        9        8       0
-                text134                              E7       E7        8        8       0
-                text133                              CD       CD        9        8       0
-                text132                              DF       DF        8        8       0
-                text131                              C4       C4        9        8       0
-                text130                              80       80       1C        8       0
-                text129                              58       58       28        8       0
-                maintext                             B7       B7        D        8       0
-                cstackCOMMON                         79       79        3       70       1
-                dataCOMMON                           7C       7C        1       70       1
-                bssCOMMON                            70       70        9       70       1
-                cinit                                AA       AA        D        8       0
+                text381                               D        D       4C        8       0
+                text380                             106      106        F        8       0
+                text379                             12F      12F        8        8       0
+                text378                             11E      11E        9        8       0
+                text377                             143      143        6      27A       0
+                text376                             13D      13D        6      27A       0
+                text375                             127      127        8        8       0
+                text374                             115      115        9        8       0
+                text373                              CA       CA       1C        8       0
+                text372                              8E       8E       20        8       0
+                swtext3                             14D      14D        4      292       0
+                swtext2                             149      149        4      292       0
+                text371                              59       59       35        8       0
+                swtext1                             137      137        6      26E       0
+                text370                              E6       E6       11        8       0
+                maintext                             AE       AE       1C        8       0
+                cstackBANK0                          46       46        3       40       1
+                cstackCOMMON                         75       75        5       70       1
+                bssBANK0                             40       40        6       40       1
+                dataCOMMON                           7A       7A        1       70       1
+                bssCOMMON                            70       70        5       70       1
+                cinit                                F7       F7        F        8       0
 
 TOTAL           Name                               Link     Load   Length     Space
         CLASS   CONST          
+                swtext3                             14D      14D        4         0
+                swtext2                             149      149        4         0
+                swtext1                             137      137        6         0
 
         CLASS   CODE           
                 end_init                              C        C        1         0
                 intentry                              4        4        8         0
                 reset_vec                             0        0        1         0
-                text138                               D        D       4B         0
-                text137                              9C       9C        E         0
-                text136                              EF       EF        8         0
-                text135                              D6       D6        9         0
-                text134                              E7       E7        8         0
-                text133                              CD       CD        9         0
-                text132                              DF       DF        8         0
-                text131                              C4       C4        9         0
-                text130                              80       80       1C         0
-                text129                              58       58       28         0
-                maintext                             B7       B7        D         0
-                cinit                                AA       AA        D         0
+                text381                               D        D       4C         0
+                text380                             106      106        F         0
+                text379                             12F      12F        8         0
+                text378                             11E      11E        9         0
+                text377                             143      143        6         0
+                text376                             13D      13D        6         0
+                text375                             127      127        8         0
+                text374                             115      115        9         0
+                text373                              CA       CA       1C         0
+                text372                              8E       8E       20         0
+                text371                              59       59       35         0
+                text370                              E6       E6       11         0
+                maintext                             AE       AE       1C         0
+                cinit                                F7       F7        F         0
 
         CLASS   STRCODE        
 
@@ -67,6 +79,8 @@ TOTAL           Name                               Link     Load   Length     Sp
         CLASS   STRING         
 
         CLASS   BANK0          
+                cstackBANK0                          46       46        3         1
+                bssBANK0                             40       40        6         1
 
         CLASS   RAM            
 
@@ -74,9 +88,9 @@ TOTAL           Name                               Link     Load   Length     Sp
                 abs_s1                               7E       7E        2         1
 
         CLASS   COMMON         
-                cstackCOMMON                         79       79        3         1
-                dataCOMMON                           7C       7C        1         1
-                bssCOMMON                            70       70        9         1
+                cstackCOMMON                         75       75        5         1
+                dataCOMMON                           7A       7A        1         1
+                bssCOMMON                            70       70        5         1
 
         CLASS   SFR0           
 
@@ -95,93 +109,105 @@ TOTAL           Name                               Link     Load   Length     Sp
 SEGMENTS        Name                           Load    Length   Top    Selector   Space  Class     Delta
 
                 reset_vec                      000000  000001  000001         0       0  CODE        2
-                intentry                       000004  0000F3  0000F7         8       0  CODE        2
-                bssCOMMON                      000070  00000D  00007D        70       1  COMMON      1
+                intentry                       000004  000133  000137         8       0  CODE        2
+                bssBANK0                       000040  000009  000049        40       1  BANK0       1
+                bssCOMMON                      000070  00000B  00007B        70       1  COMMON      1
+                swtext1                        000137  000006  00013D       26E       0  CONST       2
+                text376                        00013D  00000C  000149       27A       0  CODE        2
+                swtext2                        000149  000008  000151       292       0  CONST       2
 
 
 UNUSED ADDRESS RANGES
 
         Name                Unused          Largest block    Delta
-        BANK0            040-06F            30           1
+        BANK0            049-06F            27           1
         CODE             001-003             3           2
-                         0F7-3FF           309
-        COMMON           07D-07D             1           1
+                         151-3FF           2AF
+        COMMON           07B-07D             3           1
         CONFIG           2007-2007             1           2
         CONST            001-003             3           2
-                         0F7-3FF           100
+                         151-3FF           100
         EEDATA           2100-217F            80           2
         ENTRY            001-003             3           2
-                         0F7-3FF           100
+                         151-3FF           100
         IDLOC            2000-2003             4           2
-        RAM              040-06F            30           1
+        RAM              049-06F            27           1
         SFR0             000-03F            40           1
         SFR1             080-0EF            70           1
         STRCODE          001-003             3           2
-                         0F7-3FF           309
+                         151-3FF           2AF
         STRING           001-003             3           2
-                         0F7-3FF           100
+                         151-3FF           100
 
                                   Symbol Table
 
-??_ISR                             cstackCOMMON 079
-??_PA3_Level_Change_INITIAL        cstackCOMMON 07C
-??_POWER_INITIAL                   cstackCOMMON 07C
-??_PWM1_BLUE                       cstackCOMMON 07C
-??_PWM1_GREEN                      cstackCOMMON 07C
-??_PWM1_INITIAL                    cstackCOMMON 07C
-??_PWM1_RATE_CHANGE                cstackCOMMON 07C
-??_PWM1_RED                        cstackCOMMON 07C
-??_PWM1_WHITE                      cstackCOMMON 07C
-??_TIMER0_INITIAL                  cstackCOMMON 07C
-??_main                            cstackCOMMON 07C
-?_ISR                              cstackCOMMON 079
-?_PA3_Level_Change_INITIAL         cstackCOMMON 079
-?_POWER_INITIAL                    cstackCOMMON 079
-?_PWM1_BLUE                        cstackCOMMON 079
-?_PWM1_GREEN                       cstackCOMMON 079
-?_PWM1_INITIAL                     cstackCOMMON 079
-?_PWM1_RATE_CHANGE                 cstackCOMMON 079
-?_PWM1_RED                         cstackCOMMON 079
-?_PWM1_WHITE                       cstackCOMMON 079
-?_TIMER0_INITIAL                   cstackCOMMON 079
-?_main                             cstackCOMMON 079
+??_ISR                             cstackCOMMON 075
+??_PA3_Level_Change_INITIAL        cstackCOMMON 078
+??_POWER_INITIAL                   cstackCOMMON 078
+??_PWM1_BLUE                       cstackCOMMON 078
+??_PWM1_GREEN                      cstackCOMMON 078
+??_PWM1_INITIAL                    cstackCOMMON 078
+??_PWM1_RATE_CHANGE                cstackCOMMON 078
+??_PWM1_RED                        cstackCOMMON 078
+??_PWM1_WHITE                      cstackCOMMON 078
+??_PWM_MODE_CHANGE                 cstackCOMMON 07A
+??_TIMER0_INITIAL                  cstackCOMMON 078
+??___lbmod                         cstackCOMMON 079
+??_main                            cstackCOMMON 07A
+?_ISR                              cstackCOMMON 075
+?_PA3_Level_Change_INITIAL         cstackCOMMON 075
+?_POWER_INITIAL                    cstackCOMMON 075
+?_PWM1_BLUE                        cstackCOMMON 075
+?_PWM1_GREEN                       cstackCOMMON 075
+?_PWM1_INITIAL                     cstackCOMMON 075
+?_PWM1_RATE_CHANGE                 cstackCOMMON 075
+?_PWM1_RED                         cstackCOMMON 075
+?_PWM1_WHITE                       cstackCOMMON 075
+?_PWM_MODE_CHANGE                  cstackCOMMON 075
+?_TIMER0_INITIAL                   cstackCOMMON 075
+?___lbmod                          cstackCOMMON 078
+?_main                             cstackCOMMON 075
+PWM1_RATE_CHANGE@pwm_value         cstackCOMMON 078
 _GIE                               (abs)        05F
 _INTCON                            (abs)        00B
 _IOCA3                             (abs)        4B3
-_IRDataTimer                       bssCOMMON    070
-_IRbitNum                          bssCOMMON    074
-_IRbitTime                         bssCOMMON    075
-_ISR                               text138      00D
+_IRDataTimer                       bssBANK0     040
+_IRbitNum                          bssCOMMON    070
+_IRbitTime                         bssCOMMON    071
+_ISR                               text381      00D
 _MSCON                             (abs)        01B
 _OPTION                            (abs)        081
 _OSCCON                            (abs)        08F
-_P1ADTH                            (abs)        014
-_P1ADTL                            (abs)        00E
 _P1AUX                             (abs)        01E
 _P1BR1                             (abs)        019
+_P1CDTH                            (abs)        01A
+_P1CDTL                            (abs)        010
 _P1CON                             (abs)        016
+_P1DDTH                            (abs)        009
+_P1DDTL                            (abs)        008
 _P1OE                              (abs)        090
 _P1POL                             (abs)        099
-_PA3_Level_Change_INITIAL          text135      0D6
+_PA3_Level_Change_INITIAL          text378      11E
 _PAIE                              (abs)        05B
 _PAIF                              (abs)        058
 _PEIE                              (abs)        05E
 _PORTA                             (abs)        005
-_POWER_INITIAL                     text137      09C
+_POWER_INITIAL                     text380      106
 _PR2H                              (abs)        092
 _PR2L                              (abs)        091
-_PWM1_BLUE                         text134      0E7
-_PWM1_GREEN                        text132      0DF
-_PWM1_INITIAL                      text130      080
-_PWM1_RATE_CHANGE                  text129      058
-_PWM1_RED                          text133      0CD
-_PWM1_WHITE                        text131      0C4
+_PWM1_BLUE                         text375      127
+_PWM1_GREEN                        text376      13D
+_PWM1_INITIAL                      text372      08E
+_PWM1_RATE_CHANGE                  text371      059
+_PWM1_RED                          text377      143
+_PWM1_WHITE                        text374      115
+_PWM_MODE_CHANGE                   text370      0E6
 _RA3                               (abs)        02B
 _T0IE                              (abs)        05D
 _T0IF                              (abs)        05A
 _T2CON0                            (abs)        012
 _T2CON1                            (abs)        09E
-_TIMER0_INITIAL                    text136      0EF
+_TIMER0_INITIAL                    text379      12F
 _TMR0                              (abs)        001
 _TMR2H                             (abs)        013
 _TMR2IE                            (abs)        461
@@ -194,12 +220,14 @@ _WPUA                              (abs)        095
 __Habs1                            abs1         000
 __Hbank0                           bank0        000
 __Hbank1                           bank1        000
+__HbssBANK0                        bssBANK0     000
 __HbssCOMMON                       bssCOMMON    000
 __Hcinit                           cinit        000
 __Hclrtext                         clrtext      000
 __Hcode                            code         000
 __Hcommon                          common       000
 __Hconfig                          config       000
+__HcstackBANK0                     cstackBANK0  000
 __HcstackCOMMON                    cstackCOMMON 000
 __HdataCOMMON                      dataCOMMON   000
 __Heeprom_data                     eeprom_data  000
@@ -221,12 +249,14 @@ __Htext                            text         000
 __Labs1                            abs1         000
 __Lbank0                           bank0        000
 __Lbank1                           bank1        000
+__LbssBANK0                        bssBANK0     000
 __LbssCOMMON                       bssCOMMON    000
 __Lcinit                           cinit        000
 __Lclrtext                         clrtext      000
 __Lcode                            code         000
 __Lcommon                          common       000
 __Lconfig                          config       000
+__LcstackBANK0                     cstackBANK0  000
 __LcstackCOMMON                    cstackCOMMON 000
 __LdataCOMMON                      dataCOMMON   000
 __Leeprom_data                     eeprom_data  000
@@ -245,37 +275,51 @@ __Lsfr0                            sfr0         000
 __Lsfr1                            sfr1         000
 __Lstrings                         strings      000
 __Ltext                            text         000
-__S0                               (abs)        0F7
-__S1                               (abs)        07D
+__S0                               (abs)        151
+__S1                               (abs)        07B
 __S2                               (abs)        000
-__end_of_ISR                       text138      058
-__end_of_PA3_Level_Change_INITIAL  text135      0DF
-__end_of_POWER_INITIAL             text137      0AA
-__end_of_PWM1_BLUE                 text134      0EF
-__end_of_PWM1_GREEN                text132      0E7
-__end_of_PWM1_INITIAL              text130      09C
-__end_of_PWM1_RATE_CHANGE          text129      080
-__end_of_PWM1_RED                  text133      0D6
-__end_of_PWM1_WHITE                text131      0CD
-__end_of_TIMER0_INITIAL            text136      0F7
-__end_of_main                      maintext     0C4
+___lbmod                           text373      0CA
+___lbmod@counter                   cstackBANK0  047
+___lbmod@dividend                  cstackBANK0  046
+___lbmod@divisor                   cstackCOMMON 078
+___lbmod@rem                       cstackBANK0  048
+__end_of_ISR                       text381      059
+__end_of_PA3_Level_Change_INITIAL  text378      127
+__end_of_POWER_INITIAL             text380      115
+__end_of_PWM1_BLUE                 text375      12F
+__end_of_PWM1_GREEN                text376      143
+__end_of_PWM1_INITIAL              text372      0AE
+__end_of_PWM1_RATE_CHANGE          text371      08E
+__end_of_PWM1_RED                  text377      149
+__end_of_PWM1_WHITE                text374      11E
+__end_of_PWM_MODE_CHANGE           text370      0F7
+__end_of_TIMER0_INITIAL            text379      137
+__end_of___lbmod                   text373      0E6
+__end_of_main                      maintext     0CA
+__pbssBANK0                        bssBANK0     040
 __pbssCOMMON                       bssCOMMON    070
-__pcstackCOMMON                    cstackCOMMON 079
-__pdataCOMMON                      dataCOMMON   07C
+__pcstackBANK0                     cstackBANK0  046
+__pcstackCOMMON                    cstackCOMMON 075
+__pdataCOMMON                      dataCOMMON   07A
 __pidataCOMMON                     idataCOMMON  000
 __pintentry                        intentry     004
-__pmaintext                        maintext     0B7
-__ptext129                         text129      058
-__ptext130                         text130      080
-__ptext131                         text131      0C4
-__ptext132                         text132      0DF
-__ptext133                         text133      0CD
-__ptext134                         text134      0E7
-__ptext135                         text135      0D6
-__ptext136                         text136      0EF
-__ptext137                         text137      09C
-__ptext138                         text138      00D
-__ptext139                         text139      000
+__pmaintext                        maintext     0AE
+__pswtext1                         swtext1      137
+__pswtext2                         swtext2      149
+__pswtext3                         swtext3      14D
+__ptext370                         text370      0E6
+__ptext371                         text371      059
+__ptext372                         text372      08E
+__ptext373                         text373      0CA
+__ptext374                         text374      115
+__ptext375                         text375      127
+__ptext376                         text376      13D
+__ptext377                         text377      143
+__ptext378                         text378      11E
+__ptext379                         text379      12F
+__ptext380                         text380      106
+__ptext381                         text381      00D
+__ptext382                         text382      000
 __size_of_ISR                      (abs)        000
 __size_of_PA3_Level_Change_INITIAL (abs)        000
 __size_of_POWER_INITIAL            (abs)        000
@@ -285,29 +329,33 @@ __size_of_PWM1_INITIAL             (abs)        000
 __size_of_PWM1_RATE_CHANGE         (abs)        000
 __size_of_PWM1_RED                 (abs)        000
 __size_of_PWM1_WHITE               (abs)        000
+__size_of_PWM_MODE_CHANGE          (abs)        000
 __size_of_TIMER0_INITIAL           (abs)        000
+__size_of___lbmod                  (abs)        000
 __size_of_main                     (abs)        000
-_bitdata                           dataCOMMON   07C
+_bitdata                           dataCOMMON   07A
 _exit                              init         00C
-_main                              maintext     0B7
-_pwm_colour_value                  bssCOMMON    076
-_pwm_rate_value                    bssCOMMON    077
-_time_15ms_cnt                     bssCOMMON    078
+_ft_user_pwm_mode                  bssCOMMON    072
+_key_release                       bssBANK0     044
+_main                              maintext     0AE
+_pwm_colour_value                  bssCOMMON    073
+_pwm_rate_value                    bssCOMMON    074
+_time_15ms_cnt                     bssBANK0     045
 btemp                              (abs)        07E
-end_of_initialization              cinit        0B5
-i1l3016                                            
-i1l3022                                            
-i1l3030                                            
-i1l3032                                            
-i1l3034                                            
-i1l3038                                            
-i1l3046                                            
-i1l3048                                            
-i1l3052                                            
-i1l3062                                            
-i1l3064                                            
-i1l3068                                            
-i1l3074                                            
+end_of_initialization              cinit        104
+i1l3333                                            
+i1l3339                                            
+i1l3347                                            
+i1l3349                                            
+i1l3351                                            
+i1l3355                                            
+i1l3363                                            
+i1l3365                                            
+i1l3369                                            
+i1l3379                                            
+i1l3381                                            
+i1l3385                                            
+i1l3391                                            
 interrupt_function                 intentry     004
 intlevel0                          functab      000
 intlevel1                          functab      000
@@ -315,61 +363,64 @@ intlevel2                          functab      000
 intlevel3                          functab      000
 intlevel4                          functab      000
 intlevel5                          functab      000
-l1390                                              
-l1393                                              
-l1396                                              
-l1399                                              
-l1402                                              
-l2088                                              
-l2091                                              
-l3076                                              
-l3078                                              
-l3080                                              
-l3082                                              
-l3084                                              
-l3086                                              
-l3088                                              
-l3090                                              
-l3092                                              
-l3094                                              
-l3096                                              
-l3098                                              
-l3100                                              
-l3102                                              
-l3104                                              
-l3106                                              
-l3108                                              
-l3110                                              
-l3112                                              
-l3114                                              
-l3116                                              
-l3118                                              
-l3120                                              
-l3122                                              
-l3124                                              
-l3126                                              
-l3128                                              
-l3130                                              
-l3132                                              
-l3134                                              
-l3136                                              
-l3138                                              
-l3140                                              
-l3142                                              
-l3144                                              
-l3146                                              
-l3148                                              
-l3152                                              
-l3154                                              
-l3156                                              
-l3162                                              
-l3178                                              
-l3182                                              
-l3186                                              
-l3188                                              
-l696                                               
+l1400                                              
+l1403                                              
+l1406                                              
+l1409                                              
+l1412                                              
+l2117                                              
+l2120                                              
+l2720                                              
+l3393                                              
+l3395                                              
+l3397                                              
+l3399                                              
+l3401                                              
+l3403                                              
+l3405                                              
+l3407                                              
+l3409                                              
+l3411                                              
+l3413                                              
+l3415                                              
+l3417                                              
+l3419                                              
+l3421                                              
+l3423                                              
+l3425                                              
+l3427                                              
+l3429                                              
+l3431                                              
+l3451                                              
+l3453                                              
+l3455                                              
+l3457                                              
+l3459                                              
+l3461                                              
+l3463                                              
+l3465                                              
+l3467                                              
+l3469                                              
+l3471                                              
+l3473                                              
+l3475                                              
+l3479                                              
+l3481                                              
+l3587                                              
+l3589                                              
+l3593                                              
+l3595                                              
+l3601                                              
+l3605                                              
+l3607                                              
+l3611                                              
+l3615                                              
+l3619                                              
+l3625                                              
+l3627                                              
+l702                                               
 reset_vec                          reset_vec    000
 saved_w                            (abs)        07E
 start                              init         00C
-start_initialization               cinit        0AA
+start_initialization               cinit        0F7
 wtemp0                             (abs)        07E

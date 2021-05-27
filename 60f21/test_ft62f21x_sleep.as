@@ -44,11 +44,13 @@ pclath	equ	10
 	FNCALL	_main,_PA3_Level_Change_INITIAL
 	FNCALL	_main,_PWM1_INITIAL
 	FNCALL	_main,_PWM1_RATE_CHANGE
+	FNCALL	_main,_PWM_MODE_CHANGE
+	FNCALL	_PWM_MODE_CHANGE,___lbmod
 	FNCALL	_PWM1_RATE_CHANGE,_PWM1_RED
 	FNCALL	_PWM1_RATE_CHANGE,_PWM1_GREEN
 	FNCALL	_PWM1_RATE_CHANGE,_PWM1_BLUE
 	FNCALL	_PWM1_RATE_CHANGE,_PWM1_WHITE
-	FNCALL	_PWM1_INITIAL,_PWM1_BLUE
+	FNCALL	_PWM1_INITIAL,_PWM1_RED
 	FNROOT	_main
 	FNCALL	intlevel1,_ISR
 	global	intlevel1
@@ -63,25 +65,31 @@ __pidataCOMMON:
 ;initializer for _bitdata
 	retlw	01h
 	global	_IRDataTimer
+	global	_key_release
+	global	_time_15ms_cnt
 	global	_IRbitNum
 	global	_IRbitTime
+	global	_ft_user_pwm_mode
 	global	_pwm_colour_value
 	global	_pwm_rate_value
-	global	_time_15ms_cnt
 	global	_INTCON
 _INTCON	set	11
 	global	_MSCON
 _MSCON	set	27
-	global	_P1ADTH
-_P1ADTH	set	20
-	global	_P1ADTL
-_P1ADTL	set	14
 	global	_P1AUX
 _P1AUX	set	30
 	global	_P1BR1
 _P1BR1	set	25
+	global	_P1CDTH
+_P1CDTH	set	26
+	global	_P1CDTL
+_P1CDTL	set	16
 	global	_P1CON
 _P1CON	set	22
+	global	_P1DDTH
+_P1DDTH	set	9
+	global	_P1DDTL
+_P1DDTL	set	8
 	global	_PORTA
 _PORTA	set	5
 	global	_T2CON0
@@ -143,22 +151,19 @@ start_initialization:
 psect	bssCOMMON,class=COMMON,space=1
 global __pbssCOMMON
 __pbssCOMMON:
-_IRDataTimer:
-       ds      4
-
 _IRbitNum:
        ds      1
 
 _IRbitTime:
        ds      1
 
+_ft_user_pwm_mode:
+       ds      1
+
 _pwm_colour_value:
        ds      1
 
 _pwm_rate_value:
-       ds      1
-
-_time_15ms_cnt:
        ds      1
 
 psect	dataCOMMON,class=COMMON,space=1
@@ -168,6 +173,18 @@ __pdataCOMMON:
 _bitdata:
        ds      1
 
+psect	bssBANK0,class=BANK0,space=1
+global __pbssBANK0
+__pbssBANK0:
+_IRDataTimer:
+       ds      4
+
+_key_release:
+       ds      1
+
+_time_15ms_cnt:
+       ds      1
+
 ; Clear objects allocated to COMMON
 psect cinit,class=CODE,delta=2
 	clrf	((__pbssCOMMON)+0)&07Fh
@@ -175,10 +192,14 @@ psect cinit,class=CODE,delta=2
 	clrf	((__pbssCOMMON)+2)&07Fh
 	clrf	((__pbssCOMMON)+3)&07Fh
 	clrf	((__pbssCOMMON)+4)&07Fh
-	clrf	((__pbssCOMMON)+5)&07Fh
-	clrf	((__pbssCOMMON)+6)&07Fh
-	clrf	((__pbssCOMMON)+7)&07Fh
-	clrf	((__pbssCOMMON)+8)&07Fh
+; Clear objects allocated to BANK0
+psect cinit,class=CODE,delta=2
+	clrf	((__pbssBANK0)+0)&07Fh
+	clrf	((__pbssBANK0)+1)&07Fh
+	clrf	((__pbssBANK0)+2)&07Fh
+	clrf	((__pbssBANK0)+3)&07Fh
+	clrf	((__pbssBANK0)+4)&07Fh
+	clrf	((__pbssBANK0)+5)&07Fh
 ; Initialize objects allocated to COMMON
 	global __pidataCOMMON
 psect cinit,class=CODE,delta=2
@@ -203,8 +224,10 @@ __pcstackCOMMON:
 ?_PWM1_INITIAL:	; 0 bytes @ 0x0
 	global	?_PWM1_RATE_CHANGE
 ?_PWM1_RATE_CHANGE:	; 0 bytes @ 0x0
-	global	?_PWM1_BLUE
-?_PWM1_BLUE:	; 0 bytes @ 0x0
+	global	?_PWM_MODE_CHANGE
+?_PWM_MODE_CHANGE:	; 0 bytes @ 0x0
+	global	?_PWM1_RED
+?_PWM1_RED:	; 0 bytes @ 0x0
 	global	?_ISR
 ?_ISR:	; 0 bytes @ 0x0
 	global	??_ISR
@@ -213,10 +236,10 @@ __pcstackCOMMON:
 ?_POWER_INITIAL:	; 0 bytes @ 0x0
 	global	?_main
 ?_main:	; 0 bytes @ 0x0
-	global	?_PWM1_RED
-?_PWM1_RED:	; 0 bytes @ 0x0
 	global	?_PWM1_GREEN
 ?_PWM1_GREEN:	; 0 bytes @ 0x0
+	global	?_PWM1_BLUE
+?_PWM1_BLUE:	; 0 bytes @ 0x0
 	global	?_PWM1_WHITE
 ?_PWM1_WHITE:	; 0 bytes @ 0x0
 	ds	3
@@ -228,22 +251,46 @@ __pcstackCOMMON:
 ??_PWM1_INITIAL:	; 0 bytes @ 0x3
 	global	??_PWM1_RATE_CHANGE
 ??_PWM1_RATE_CHANGE:	; 0 bytes @ 0x3
-	global	??_PWM1_BLUE
-??_PWM1_BLUE:	; 0 bytes @ 0x3
-	global	??_POWER_INITIAL
-??_POWER_INITIAL:	; 0 bytes @ 0x3
-	global	??_main
-??_main:	; 0 bytes @ 0x3
 	global	??_PWM1_RED
 ??_PWM1_RED:	; 0 bytes @ 0x3
+	global	??_POWER_INITIAL
+??_POWER_INITIAL:	; 0 bytes @ 0x3
 	global	??_PWM1_GREEN
 ??_PWM1_GREEN:	; 0 bytes @ 0x3
+	global	??_PWM1_BLUE
+??_PWM1_BLUE:	; 0 bytes @ 0x3
 	global	??_PWM1_WHITE
 ??_PWM1_WHITE:	; 0 bytes @ 0x3
-;;Data sizes: Strings 0, constant 0, data 1, bss 9, persistent 0 stack 0
+	global	?___lbmod
+?___lbmod:	; 1 bytes @ 0x3
+	global	PWM1_RATE_CHANGE@pwm_value
+PWM1_RATE_CHANGE@pwm_value:	; 1 bytes @ 0x3
+	global	___lbmod@divisor
+___lbmod@divisor:	; 1 bytes @ 0x3
+	ds	1
+	global	??___lbmod
+??___lbmod:	; 0 bytes @ 0x4
+	ds	1
+	global	??_PWM_MODE_CHANGE
+??_PWM_MODE_CHANGE:	; 0 bytes @ 0x5
+	global	??_main
+??_main:	; 0 bytes @ 0x5
+psect	cstackBANK0,class=BANK0,space=1
+global __pcstackBANK0
+__pcstackBANK0:
+	global	___lbmod@dividend
+___lbmod@dividend:	; 1 bytes @ 0x0
+	ds	1
+	global	___lbmod@counter
+___lbmod@counter:	; 1 bytes @ 0x1
+	ds	1
+	global	___lbmod@rem
+___lbmod@rem:	; 1 bytes @ 0x2
+	ds	1
+;;Data sizes: Strings 0, constant 0, data 1, bss 11, persistent 0 stack 0
 ;;Auto spaces:   Size  Autos    Used
-;; COMMON          14      3      13
-;; BANK0           48      0       0
+;; COMMON          14      5      11
+;; BANK0           48      3       9
 
 ;;
 ;; Pointer list with targets:
@@ -253,7 +300,7 @@ __pcstackCOMMON:
 ;;
 ;; Critical Paths under _main in COMMON
 ;;
-;;   None.
+;;   _PWM_MODE_CHANGE->___lbmod
 ;;
 ;; Critical Paths under _ISR in COMMON
 ;;
@@ -261,7 +308,7 @@ __pcstackCOMMON:
 ;;
 ;; Critical Paths under _main in BANK0
 ;;
-;;   None.
+;;   _PWM_MODE_CHANGE->___lbmod
 ;;
 ;; Critical Paths under _ISR in BANK0
 ;;
@@ -277,29 +324,38 @@ __pcstackCOMMON:
 ;; ---------------------------------------------------------------------------------
 ;; (Depth) Function   	        Calls       Base Space   Used Autos Params    Refs
 ;; ---------------------------------------------------------------------------------
-;; (0) _main                                                 0     0      0       0
+;; (0) _main                                                 0     0      0     322
 ;;                      _POWER_INITIAL
 ;;                     _TIMER0_INITIAL
 ;;           _PA3_Level_Change_INITIAL
 ;;                       _PWM1_INITIAL
 ;;                   _PWM1_RATE_CHANGE
+;;                    _PWM_MODE_CHANGE
 ;; ---------------------------------------------------------------------------------
-;; (1) _PWM1_RATE_CHANGE                                     0     0      0       0
+;; (1) _PWM_MODE_CHANGE                                      0     0      0     232
+;;                            ___lbmod
+;; ---------------------------------------------------------------------------------
+;; (1) _PWM1_RATE_CHANGE                                     1     1      0      90
+;;                                              3 COMMON     1     1      0
 ;;                           _PWM1_RED
 ;;                         _PWM1_GREEN
 ;;                          _PWM1_BLUE
 ;;                         _PWM1_WHITE
 ;; ---------------------------------------------------------------------------------
 ;; (1) _PWM1_INITIAL                                         0     0      0       0
-;;                          _PWM1_BLUE
+;;                           _PWM1_RED
+;; ---------------------------------------------------------------------------------
+;; (2) ___lbmod                                              5     4      1     232
+;;                                              3 COMMON     2     1      1
+;;                                              0 BANK0      3     3      0
 ;; ---------------------------------------------------------------------------------
 ;; (2) _PWM1_WHITE                                           0     0      0       0
+;; ---------------------------------------------------------------------------------
+;; (2) _PWM1_BLUE                                            0     0      0       0
 ;; ---------------------------------------------------------------------------------
 ;; (2) _PWM1_GREEN                                           0     0      0       0
 ;; ---------------------------------------------------------------------------------
 ;; (2) _PWM1_RED                                             0     0      0       0
-;; ---------------------------------------------------------------------------------
-;; (2) _PWM1_BLUE                                            0     0      0       0
 ;; ---------------------------------------------------------------------------------
 ;; (1) _PA3_Level_Change_INITIAL                             0     0      0       0
 ;; ---------------------------------------------------------------------------------
@@ -324,12 +380,14 @@ __pcstackCOMMON:
 ;;   _TIMER0_INITIAL
 ;;   _PA3_Level_Change_INITIAL
 ;;   _PWM1_INITIAL
-;;     _PWM1_BLUE
+;;     _PWM1_RED
 ;;   _PWM1_RATE_CHANGE
 ;;     _PWM1_RED
 ;;     _PWM1_GREEN
 ;;     _PWM1_BLUE
 ;;     _PWM1_WHITE
+;;   _PWM_MODE_CHANGE
+;;     ___lbmod
 ;;
 ;; _ISR (ROOT)
 ;;
@@ -340,15 +398,15 @@ __pcstackCOMMON:
 ;;SFR1                 0      0       0       2        0.0%
 ;;BITSFR1              0      0       0       2        0.0%
 ;;CODE                 0      0       0       0        0.0%
-;;DATA                 0      0       F       3        0.0%
-;;ABS                  0      0       D       6        0.0%
+;;DATA                 0      0      16       3        0.0%
+;;ABS                  0      0      14       6        0.0%
 ;;NULL                 0      0       0       0        0.0%
 ;;STACK                0      0       2       2        0.0%
-;;BANK0               30      0       0       5        0.0%
+;;BANK0               30      3       9       5       18.8%
 ;;BITBANK0            30      0       0       4        0.0%
 ;;SFR0                 0      0       0       1        0.0%
 ;;BITSFR0              0      0       0       1        0.0%
-;;COMMON               E      3       D       1       92.9%
+;;COMMON               E      5       B       1       78.6%
 ;;BITCOMMON            E      0       0       0        0.0%
 ;;EEDATA              80      0       0       0        0.0%
 
@@ -367,7 +425,7 @@ __pmaintext:
 ;; Return value:  Size  Location     Type
 ;;		None               void
 ;; Registers used:
-;;		wreg, status,2, status,0, pclath, cstack
+;;		wreg, fsr0l, fsr0h, status,2, status,0, pclath, cstack
 ;; Tracked objects:
 ;;		On entry : 17F/0
 ;;		On exit  : 20/0
@@ -385,6 +443,7 @@ __pmaintext:
 ;;		_PA3_Level_Change_INITIAL
 ;;		_PWM1_INITIAL
 ;;		_PWM1_RATE_CHANGE
+;;		_PWM_MODE_CHANGE
 ;; This function is called by:
 ;;		Startup code after reset
 ;; This function uses a non-reentrant model
@@ -397,10 +456,10 @@ psect	maintext
 	
 _main:	
 	opt	stack 5
-; Regs used in _main: [wreg+status,2+status,0+pclath+cstack]
+; Regs used in _main: [wreg-fsr0h+status,2+status,0+pclath+cstack]
 	line	175
 	
-l3178:	
+l3615:	
 ;TEST_FT62F21X_SLEEP.C: 175: POWER_INITIAL();
 	fcall	_POWER_INITIAL
 	line	176
@@ -414,57 +473,118 @@ l3178:
 	fcall	_PWM1_INITIAL
 	line	182
 	
-l3180:	
+l3617:	
 # 182 "TEST_FT62F21X_SLEEP.C"
 clrwdt ;#
 psect	maintext
-	line	183
+	line	184
 	
-l3182:	
-;TEST_FT62F21X_SLEEP.C: 183: if(time_15ms_cnt > 15)
-	movlw	(010h)
-	subwf	(_time_15ms_cnt),w
-	skipc
-	goto	u191
-	goto	u190
-u191:
-	goto	l3180
-u190:
-	line	185
-	
-l3184:	
-;TEST_FT62F21X_SLEEP.C: 184: {
-;TEST_FT62F21X_SLEEP.C: 185: time_15ms_cnt = 0;
-	clrf	(_time_15ms_cnt)
+l3619:	
+;TEST_FT62F21X_SLEEP.C: 184: if(ft_user_pwm_mode == 0)
+	movf	(_ft_user_pwm_mode),f
+	skipz
+	goto	u461
+	goto	u460
+u461:
+	goto	l3629
+u460:
 	line	186
 	
-l3186:	
-;TEST_FT62F21X_SLEEP.C: 186: pwm_rate_value++;
-	incf	(_pwm_rate_value),f
-	line	187
+l3621:	
+;TEST_FT62F21X_SLEEP.C: 185: {
+;TEST_FT62F21X_SLEEP.C: 186: if(time_15ms_cnt > 150)
+	movlw	(097h)
+	bcf	status, 5	;RP0=0, select bank0
+	subwf	(_time_15ms_cnt),w
+	skipc
+	goto	u471
+	goto	u470
+u471:
+	goto	l3629
+u470:
+	line	188
 	
-l3188:	
-;TEST_FT62F21X_SLEEP.C: 187: PWM1_RATE_CHANGE();
+l3623:	
+;TEST_FT62F21X_SLEEP.C: 187: {
+;TEST_FT62F21X_SLEEP.C: 188: time_15ms_cnt = 0;
+	clrf	(_time_15ms_cnt)
+	line	189
+	
+l3625:	
+;TEST_FT62F21X_SLEEP.C: 189: pwm_rate_value++;
+	incf	(_pwm_rate_value),f
+	line	190
+	
+l3627:	
+;TEST_FT62F21X_SLEEP.C: 190: PWM1_RATE_CHANGE();
 	fcall	_PWM1_RATE_CHANGE
-	goto	l3180
+	line	194
+	
+l3629:	
+;TEST_FT62F21X_SLEEP.C: 191: }
+;TEST_FT62F21X_SLEEP.C: 192: }
+;TEST_FT62F21X_SLEEP.C: 194: if(PORTA & 0B00010000)
+	bcf	status, 5	;RP0=0, select bank0
+	btfss	(5),(4)&7
+	goto	u481
+	goto	u480
+u481:
+	goto	l3633
+u480:
+	line	196
+	
+l3631:	
+;TEST_FT62F21X_SLEEP.C: 195: {
+;TEST_FT62F21X_SLEEP.C: 196: key_release = 0;
+	clrf	(_key_release)
+	line	197
+;TEST_FT62F21X_SLEEP.C: 197: }
+	goto	l3617
+	line	200
+	
+l3633:	
+;TEST_FT62F21X_SLEEP.C: 198: else
+;TEST_FT62F21X_SLEEP.C: 199: {
+;TEST_FT62F21X_SLEEP.C: 200: if(key_release == 0)
+	movf	(_key_release),f
+	skipz
+	goto	u491
+	goto	u490
+u491:
+	goto	l3637
+u490:
+	line	202
+	
+l3635:	
+;TEST_FT62F21X_SLEEP.C: 201: {
+;TEST_FT62F21X_SLEEP.C: 202: PWM_MODE_CHANGE();
+	fcall	_PWM_MODE_CHANGE
+	line	204
+	
+l3637:	
+;TEST_FT62F21X_SLEEP.C: 203: }
+;TEST_FT62F21X_SLEEP.C: 204: key_release = 1;
+	clrf	(_key_release)
+	incf	(_key_release),f
+	goto	l3617
 	global	start
 	ljmp	start
 	opt stack 0
 psect	maintext
-	line	190
+	line	208
 GLOBAL	__end_of_main
 	__end_of_main:
 ;; =============== function _main ends ============
 
 	signat	_main,88
-	global	_PWM1_RATE_CHANGE
-psect	text129,local,class=CODE,delta=2
-global __ptext129
-__ptext129:
+	global	_PWM_MODE_CHANGE
+psect	text370,local,class=CODE,delta=2
+global __ptext370
+__ptext370:
 
-;; *************** function _PWM1_RATE_CHANGE *****************
+;; *************** function _PWM_MODE_CHANGE *****************
 ;; Defined at:
-;;		line 146 in file "FT_62F21X_pwm.c"
+;;		line 249 in file "FT_62F21X_pwm.c"
 ;; Parameters:    Size  Location     Type
 ;;		None
 ;; Auto vars:     Size  Location     Type
@@ -472,9 +592,9 @@ __ptext129:
 ;; Return value:  Size  Location     Type
 ;;		None               void
 ;; Registers used:
-;;		wreg, status,2, status,0, pclath, cstack
+;;		wreg, fsr0l, fsr0h, status,2, status,0, pclath, cstack
 ;; Tracked objects:
-;;		On entry : 0/0
+;;		On entry : 20/0
 ;;		On exit  : 20/0
 ;;		Unchanged: FFFDF/0
 ;; Data sizes:     COMMON   BANK0
@@ -486,6 +606,112 @@ __ptext129:
 ;; Hardware stack levels used:    1
 ;; Hardware stack levels required when called:    2
 ;; This function calls:
+;;		___lbmod
+;; This function is called by:
+;;		_main
+;; This function uses a non-reentrant model
+;;
+psect	text370
+	file	"FT_62F21X_pwm.c"
+	line	249
+	global	__size_of_PWM_MODE_CHANGE
+	__size_of_PWM_MODE_CHANGE	equ	__end_of_PWM_MODE_CHANGE-_PWM_MODE_CHANGE
+	
+_PWM_MODE_CHANGE:	
+	opt	stack 5
+; Regs used in _PWM_MODE_CHANGE: [wreg-fsr0h+status,2+status,0+pclath+cstack]
+	line	250
+	
+l3605:	
+;FT_62F21X_pwm.c: 250: ft_user_pwm_mode++;
+	incf	(_ft_user_pwm_mode),f
+	line	251
+	
+l3607:	
+;FT_62F21X_pwm.c: 251: ft_user_pwm_mode = ft_user_pwm_mode%6;
+	movlw	(06h)
+	movwf	(?___lbmod)
+	movf	(_ft_user_pwm_mode),w
+	fcall	___lbmod
+	movwf	(_ft_user_pwm_mode)
+	line	252
+;FT_62F21X_pwm.c: 252: switch(ft_user_pwm_mode)
+	
+l3611:	
+	movf	(_ft_user_pwm_mode),w
+	; Switch size 1, requested type "space"
+; Number of cases is 6, Range of values is 0 to 5
+; switch strategies available:
+; Name         Instructions Cycles
+; direct_byte           12     6 (fixed)
+; simple_byte           19    10 (average)
+; jumptable            260     6 (fixed)
+; rangetable            10     6 (fixed)
+; spacedrange           18     9 (fixed)
+; locatedrange           6     3 (fixed)
+;	Chosen strategy is direct_byte
+
+	movwf fsr
+	movlw	6
+	subwf	fsr,w
+skipnc
+goto l1444
+movlw high(S3669)
+movwf pclath
+	movlw low(S3669)
+	addwf fsr,w
+	movwf pc
+psect	swtext1,local,class=CONST,delta=2
+global __pswtext1
+__pswtext1:
+S3669:
+	ljmp	l1444
+	ljmp	l1444
+	ljmp	l1444
+	ljmp	l1444
+	ljmp	l1444
+	ljmp	l1444
+psect	text370
+
+	line	282
+	
+l1444:	
+	return
+	opt stack 0
+GLOBAL	__end_of_PWM_MODE_CHANGE
+	__end_of_PWM_MODE_CHANGE:
+;; =============== function _PWM_MODE_CHANGE ends ============
+
+	signat	_PWM_MODE_CHANGE,88
+	global	_PWM1_RATE_CHANGE
+psect	text371,local,class=CODE,delta=2
+global __ptext371
+__ptext371:
+
+;; *************** function _PWM1_RATE_CHANGE *****************
+;; Defined at:
+;;		line 183 in file "FT_62F21X_pwm.c"
+;; Parameters:    Size  Location     Type
+;;		None
+;; Auto vars:     Size  Location     Type
+;;  pwm_value       1    3[COMMON] unsigned char 
+;; Return value:  Size  Location     Type
+;;		None               void
+;; Registers used:
+;;		wreg, fsr0l, fsr0h, status,2, status,0, pclath, cstack
+;; Tracked objects:
+;;		On entry : 20/0
+;;		On exit  : 20/0
+;;		Unchanged: FFFDF/0
+;; Data sizes:     COMMON   BANK0
+;;      Params:         0       0
+;;      Locals:         1       0
+;;      Temps:          0       0
+;;      Totals:         1       0
+;;Total ram usage:        1 bytes
+;; Hardware stack levels used:    1
+;; Hardware stack levels required when called:    2
+;; This function calls:
 ;;		_PWM1_RED
 ;;		_PWM1_GREEN
 ;;		_PWM1_BLUE
@@ -494,165 +720,206 @@ __ptext129:
 ;;		_main
 ;; This function uses a non-reentrant model
 ;;
-psect	text129
+psect	text371
 	file	"FT_62F21X_pwm.c"
-	line	146
+	line	183
 	global	__size_of_PWM1_RATE_CHANGE
 	__size_of_PWM1_RATE_CHANGE	equ	__end_of_PWM1_RATE_CHANGE-_PWM1_RATE_CHANGE
 	
 _PWM1_RATE_CHANGE:	
 	opt	stack 5
-; Regs used in _PWM1_RATE_CHANGE: [wreg+status,2+status,0+pclath+cstack]
-	line	147
+; Regs used in _PWM1_RATE_CHANGE: [wreg-fsr0h+status,2+status,0+pclath+cstack]
+	line	186
 	
-l3148:	
-;FT_62F21X_pwm.c: 147: if(pwm_rate_value >= 200)
+l3475:	
+;FT_62F21X_pwm.c: 184: unsigned char pwm_value;
+;FT_62F21X_pwm.c: 186: if(pwm_rate_value >= 200)
 	movlw	(0C8h)
 	subwf	(_pwm_rate_value),w
 	skipc
-	goto	u131
-	goto	u130
-u131:
-	goto	l3172
-u130:
-	line	149
+	goto	u371
+	goto	u370
+u371:
+	goto	l3495
+u370:
+	line	188
 	
-l3150:	
-;FT_62F21X_pwm.c: 148: {
-;FT_62F21X_pwm.c: 149: pwm_rate_value = 0;
+l3477:	
+;FT_62F21X_pwm.c: 187: {
+;FT_62F21X_pwm.c: 188: pwm_rate_value = 0;
 	clrf	(_pwm_rate_value)
-	line	150
+	line	189
 	
-l3152:	
-;FT_62F21X_pwm.c: 150: pwm_colour_value++;
+l3479:	
+;FT_62F21X_pwm.c: 189: pwm_colour_value++;
 	incf	(_pwm_colour_value),f
-	line	151
+	line	190
 	
-l3154:	
-;FT_62F21X_pwm.c: 151: pwm_colour_value = pwm_colour_value%4;
+l3481:	
+;FT_62F21X_pwm.c: 190: pwm_colour_value = pwm_colour_value%4;
 	movlw	(03h)
 	andwf	(_pwm_colour_value),f
-	line	152
+	line	191
+;FT_62F21X_pwm.c: 191: switch(pwm_colour_value)
+	goto	l3493
+	line	194
 	
-l3156:	
-;FT_62F21X_pwm.c: 152: if(pwm_colour_value == 0)
-	movf	(_pwm_colour_value),f
-	skipz
-	goto	u141
-	goto	u140
-u141:
-	goto	l3160
-u140:
-	line	154
-	
-l3158:	
-;FT_62F21X_pwm.c: 153: {
-;FT_62F21X_pwm.c: 154: PWM1_RED();
+l3483:	
+;FT_62F21X_pwm.c: 194: PWM1_RED();
 	fcall	_PWM1_RED
-	line	155
-;FT_62F21X_pwm.c: 155: }
-	goto	l3172
-	line	156
+	line	195
+;FT_62F21X_pwm.c: 195: break;
+	goto	l3495
+	line	198
 	
-l3160:	
-;FT_62F21X_pwm.c: 156: else if(pwm_colour_value == 1)
-	decf	(_pwm_colour_value),w
-	skipz
-	goto	u151
-	goto	u150
-u151:
-	goto	l3164
-u150:
-	line	158
-	
-l3162:	
-;FT_62F21X_pwm.c: 157: {
-;FT_62F21X_pwm.c: 158: PWM1_GREEN();
+l3485:	
+;FT_62F21X_pwm.c: 198: PWM1_GREEN();
 	fcall	_PWM1_GREEN
-	line	159
-;FT_62F21X_pwm.c: 159: }
-	goto	l3172
-	line	160
+	line	199
+;FT_62F21X_pwm.c: 199: break;
+	goto	l3495
+	line	202
 	
-l3164:	
-;FT_62F21X_pwm.c: 160: else if(pwm_colour_value == 2)
-	movf	(_pwm_colour_value),w
-	xorlw	02h
-	skipz
-	goto	u161
-	goto	u160
-u161:
-	goto	l3168
-u160:
-	line	162
-	
-l3166:	
-;FT_62F21X_pwm.c: 161: {
-;FT_62F21X_pwm.c: 162: PWM1_BLUE();
+l3487:	
+;FT_62F21X_pwm.c: 202: PWM1_BLUE();
 	fcall	_PWM1_BLUE
-	line	163
-;FT_62F21X_pwm.c: 163: }
-	goto	l3172
-	line	164
+	line	203
+;FT_62F21X_pwm.c: 203: break;
+	goto	l3495
+	line	206
 	
-l3168:	
-;FT_62F21X_pwm.c: 164: else if(pwm_colour_value == 3)
-	movf	(_pwm_colour_value),w
-	xorlw	03h
-	skipz
-	goto	u171
-	goto	u170
-u171:
-	goto	l1407
-u170:
-	line	166
-	
-l3170:	
-;FT_62F21X_pwm.c: 165: {
-;FT_62F21X_pwm.c: 166: PWM1_WHITE();
+l3489:	
+;FT_62F21X_pwm.c: 206: PWM1_WHITE();
 	fcall	_PWM1_WHITE
-	goto	l3172
-	line	168
+	line	207
+;FT_62F21X_pwm.c: 207: break;
+	goto	l3495
+	line	191
 	
-l1407:	
-	line	169
+l3493:	
+	movf	(_pwm_colour_value),w
+	; Switch size 1, requested type "space"
+; Number of cases is 4, Range of values is 0 to 3
+; switch strategies available:
+; Name         Instructions Cycles
+; direct_byte           10     6 (fixed)
+; simple_byte           13     7 (average)
+; jumptable            260     6 (fixed)
+; rangetable             8     6 (fixed)
+; spacedrange           14     9 (fixed)
+; locatedrange           4     3 (fixed)
+;	Chosen strategy is direct_byte
+
+	movwf fsr
+	movlw	4
+	subwf	fsr,w
+skipnc
+goto l3495
+movlw high(S3671)
+movwf pclath
+	movlw low(S3671)
+	addwf fsr,w
+	movwf pc
+psect	swtext2,local,class=CONST,delta=2
+global __pswtext2
+__pswtext2:
+S3671:
+	ljmp	l3483
+	ljmp	l3485
+	ljmp	l3487
+	ljmp	l3489
+psect	text371
+
+	line	214
 	
-l3172:	
-;FT_62F21X_pwm.c: 167: }
-;FT_62F21X_pwm.c: 168: }
-;FT_62F21X_pwm.c: 169: if(pwm_rate_value <=100)
+l3495:	
+;FT_62F21X_pwm.c: 213: }
+;FT_62F21X_pwm.c: 214: if(pwm_rate_value <=100)
 	movlw	(065h)
 	subwf	(_pwm_rate_value),w
 	skipnc
-	goto	u181
-	goto	u180
-u181:
-	goto	l3176
-u180:
-	line	171
+	goto	u381
+	goto	u380
+u381:
+	goto	l3499
+u380:
+	line	216
 	
-l3174:	
-;FT_62F21X_pwm.c: 170: {
-;FT_62F21X_pwm.c: 171: P1ADTL = pwm_rate_value;
+l3497:	
+;FT_62F21X_pwm.c: 215: {
+;FT_62F21X_pwm.c: 216: pwm_value = pwm_rate_value;
 	movf	(_pwm_rate_value),w
-	bcf	status, 5	;RP0=0, select bank0
-	movwf	(14)	;volatile
-	line	172
-;FT_62F21X_pwm.c: 172: }
-	goto	l1415
-	line	175
+	movwf	(PWM1_RATE_CHANGE@pwm_value)
+	line	217
+;FT_62F21X_pwm.c: 217: }
+	goto	l3511
+	line	220
 	
-l3176:	
-;FT_62F21X_pwm.c: 173: else
-;FT_62F21X_pwm.c: 174: {
-;FT_62F21X_pwm.c: 175: P1ADTL = 200 - pwm_rate_value;
+l3499:	
+;FT_62F21X_pwm.c: 218: else
+;FT_62F21X_pwm.c: 219: {
+;FT_62F21X_pwm.c: 220: pwm_value = 200 - pwm_rate_value;
 	movf	(_pwm_rate_value),w
 	sublw	0C8h
-	bcf	status, 5	;RP0=0, select bank0
-	movwf	(14)	;volatile
-	line	177
+	movwf	(PWM1_RATE_CHANGE@pwm_value)
+	goto	l3511
+	line	226
 	
-l1415:	
+l3501:	
+;FT_62F21X_pwm.c: 226: P1CDTL = pwm_value;
+	movf	(PWM1_RATE_CHANGE@pwm_value),w
+	movwf	(16)	;volatile
+	line	227
+;FT_62F21X_pwm.c: 227: break;
+	goto	l1432
+	line	230
+	
+l3503:	
+;FT_62F21X_pwm.c: 230: P1DDTL = pwm_value;
+	movf	(PWM1_RATE_CHANGE@pwm_value),w
+	movwf	(8)	;volatile
+	line	231
+;FT_62F21X_pwm.c: 231: break;
+	goto	l1432
+	line	223
+	
+l3511:	
+	movf	(_pwm_colour_value),w
+	; Switch size 1, requested type "space"
+; Number of cases is 4, Range of values is 0 to 3
+; switch strategies available:
+; Name         Instructions Cycles
+; direct_byte           10     6 (fixed)
+; simple_byte           13     7 (average)
+; jumptable            260     6 (fixed)
+; rangetable             8     6 (fixed)
+; spacedrange           14     9 (fixed)
+; locatedrange           4     3 (fixed)
+;	Chosen strategy is direct_byte
+
+	movwf fsr
+	movlw	4
+	subwf	fsr,w
+skipnc
+goto l1432
+movlw high(S3673)
+movwf pclath
+	movlw low(S3673)
+	addwf fsr,w
+	movwf pc
+psect	swtext3,local,class=CONST,delta=2
+global __pswtext3
+__pswtext3:
+S3673:
+	ljmp	l3501
+	ljmp	l3503
+	ljmp	l3501
+	ljmp	l3503
+psect	text371
+
+	line	246
+	
+l1432:	
 	return
 	opt stack 0
 GLOBAL	__end_of_PWM1_RATE_CHANGE
@@ -661,13 +928,13 @@ GLOBAL	__end_of_PWM1_RATE_CHANGE
 
 	signat	_PWM1_RATE_CHANGE,88
 	global	_PWM1_INITIAL
-psect	text130,local,class=CODE,delta=2
-global __ptext130
-__ptext130:
+psect	text372,local,class=CODE,delta=2
+global __ptext372
+__ptext372:
 
 ;; *************** function _PWM1_INITIAL *****************
 ;; Defined at:
-;;		line 14 in file "FT_62F21X_pwm.c"
+;;		line 21 in file "FT_62F21X_pwm.c"
 ;; Parameters:    Size  Location     Type
 ;;		None
 ;; Auto vars:     Size  Location     Type
@@ -689,105 +956,119 @@ __ptext130:
 ;; Hardware stack levels used:    1
 ;; Hardware stack levels required when called:    2
 ;; This function calls:
-;;		_PWM1_BLUE
+;;		_PWM1_RED
 ;; This function is called by:
 ;;		_main
 ;; This function uses a non-reentrant model
 ;;
-psect	text130
+psect	text372
 	file	"FT_62F21X_pwm.c"
-	line	14
+	line	21
 	global	__size_of_PWM1_INITIAL
 	__size_of_PWM1_INITIAL	equ	__end_of_PWM1_INITIAL-_PWM1_INITIAL
 	
 _PWM1_INITIAL:	
 	opt	stack 5
 ; Regs used in _PWM1_INITIAL: [wreg+status,2+status,0+pclath+cstack]
-	line	15
+	line	22
 	
-l3126:	
-;FT_62F21X_pwm.c: 15: T2CON0=0B00000001;
+l3451:	
+;FT_62F21X_pwm.c: 22: T2CON0=0B00000001;
 	movlw	(01h)
 	bcf	status, 5	;RP0=0, select bank0
 	movwf	(18)	;volatile
-	line	21
+	line	28
 	
-l3128:	
-;FT_62F21X_pwm.c: 21: T2CON1=0B00000000;
+l3453:	
+;FT_62F21X_pwm.c: 28: T2CON1=0B00000000;
 	bsf	status, 5	;RP0=1, select bank1
 	clrf	(158)^080h	;volatile
-	line	26
+	line	33
 	
-l3130:	
-;FT_62F21X_pwm.c: 26: TMR2H=0;
+l3455:	
+;FT_62F21X_pwm.c: 33: TMR2H=0;
 	bcf	status, 5	;RP0=0, select bank0
 	clrf	(19)	;volatile
-	line	27
-;FT_62F21X_pwm.c: 27: TMR2L=100;
+	line	34
+;FT_62F21X_pwm.c: 34: TMR2L=100;
 	movlw	(064h)
 	movwf	(17)	;volatile
-	line	29
+	line	36
 	
-l3132:	
-;FT_62F21X_pwm.c: 29: PR2H=0;
+l3457:	
+;FT_62F21X_pwm.c: 36: PR2H=0;
 	bsf	status, 5	;RP0=1, select bank1
 	clrf	(146)^080h	;volatile
-	line	30
+	line	37
 	
-l3134:	
-;FT_62F21X_pwm.c: 30: PR2L=100;
+l3459:	
+;FT_62F21X_pwm.c: 37: PR2L=100;
 	movlw	(064h)
 	movwf	(145)^080h	;volatile
-	line	31
-;FT_62F21X_pwm.c: 31: P1ADTH=0;
+	line	39
+;FT_62F21X_pwm.c: 39: P1CDTH=0;
 	bcf	status, 5	;RP0=0, select bank0
-	clrf	(20)	;volatile
-	line	34
-;FT_62F21X_pwm.c: 34: P1POL=0B00000000;
+	clrf	(26)	;volatile
+	line	40
+;FT_62F21X_pwm.c: 40: P1DDTH=0;
+	clrf	(9)	;volatile
+	line	41
+;FT_62F21X_pwm.c: 41: P1CDTL=0;
+	clrf	(16)	;volatile
+	line	42
+;FT_62F21X_pwm.c: 42: P1DDTL=0;
+	clrf	(8)	;volatile
+	line	44
+;FT_62F21X_pwm.c: 44: P1POL=0B00000000;
 	bsf	status, 5	;RP0=1, select bank1
 	clrf	(153)^080h	;volatile
-	line	41
-;FT_62F21X_pwm.c: 41: P1CON=0B00000000;
+	line	51
+;FT_62F21X_pwm.c: 51: P1CON=0B00000000;
 	bcf	status, 5	;RP0=0, select bank0
 	clrf	(22)	;volatile
-	line	48
-;FT_62F21X_pwm.c: 48: P1AUX=0B00000000;
+	line	58
+;FT_62F21X_pwm.c: 58: P1AUX=0B00000000;
 	clrf	(30)	;volatile
-	line	59
-	
-l3136:	
-;FT_62F21X_pwm.c: 59: PWM1_BLUE();
-	fcall	_PWM1_BLUE
-	line	62
-	
-l3138:	
-;FT_62F21X_pwm.c: 62: TMR2IF=0;
-	bcf	(97/8),(97)&7
-	line	63
-	
-l3140:	
-;FT_62F21X_pwm.c: 63: TMR2IE=1;
-	bsf	status, 5	;RP0=1, select bank1
-	bsf	(1121/8)^080h,(1121)&7
-	line	64
-	
-l3142:	
-;FT_62F21X_pwm.c: 64: TMR2ON=1;
-	bcf	status, 5	;RP0=0, select bank0
-	bsf	(146/8),(146)&7
-	line	65
-	
-l3144:	
-;FT_62F21X_pwm.c: 65: PEIE=1;
-	bsf	(94/8),(94)&7
 	line	66
 	
-l3146:	
-;FT_62F21X_pwm.c: 66: GIE=1;
-	bsf	(95/8),(95)&7
-	line	68
+l3461:	
+;FT_62F21X_pwm.c: 66: PWM1_RED();
+	fcall	_PWM1_RED
+	line	67
 	
-l1390:	
+l3463:	
+;FT_62F21X_pwm.c: 67: pwm_colour_value = 0;
+	clrf	(_pwm_colour_value)
+	line	69
+	
+l3465:	
+;FT_62F21X_pwm.c: 69: TMR2IF=0;
+	bcf	(97/8),(97)&7
+	line	70
+	
+l3467:	
+;FT_62F21X_pwm.c: 70: TMR2IE=1;
+	bsf	status, 5	;RP0=1, select bank1
+	bsf	(1121/8)^080h,(1121)&7
+	line	71
+	
+l3469:	
+;FT_62F21X_pwm.c: 71: TMR2ON=1;
+	bcf	status, 5	;RP0=0, select bank0
+	bsf	(146/8),(146)&7
+	line	72
+	
+l3471:	
+;FT_62F21X_pwm.c: 72: PEIE=1;
+	bsf	(94/8),(94)&7
+	line	73
+	
+l3473:	
+;FT_62F21X_pwm.c: 73: GIE=1;
+	bsf	(95/8),(95)&7
+	line	75
+	
+l1400:	
 	return
 	opt stack 0
 GLOBAL	__end_of_PWM1_INITIAL
@@ -795,14 +1076,131 @@ GLOBAL	__end_of_PWM1_INITIAL
 ;; =============== function _PWM1_INITIAL ends ============
 
 	signat	_PWM1_INITIAL,88
+	global	___lbmod
+psect	text373,local,class=CODE,delta=2
+global __ptext373
+__ptext373:
+
+;; *************** function ___lbmod *****************
+;; Defined at:
+;;		line 5 in file "c:\program files (x86)\fmd\fmdide\data\sources\lbmod.c"
+;; Parameters:    Size  Location     Type
+;;  dividend        1    wreg     unsigned char 
+;;  divisor         1    3[COMMON] unsigned char 
+;; Auto vars:     Size  Location     Type
+;;  dividend        1    0[BANK0 ] unsigned char 
+;;  rem             1    2[BANK0 ] unsigned char 
+;;  counter         1    1[BANK0 ] unsigned char 
+;; Return value:  Size  Location     Type
+;;                  1    wreg      unsigned char 
+;; Registers used:
+;;		wreg, status,2, status,0
+;; Tracked objects:
+;;		On entry : 20/0
+;;		On exit  : 20/0
+;;		Unchanged: FFFDF/0
+;; Data sizes:     COMMON   BANK0
+;;      Params:         1       0
+;;      Locals:         0       3
+;;      Temps:          1       0
+;;      Totals:         2       3
+;;Total ram usage:        5 bytes
+;; Hardware stack levels used:    1
+;; Hardware stack levels required when called:    1
+;; This function calls:
+;;		Nothing
+;; This function is called by:
+;;		_PWM_MODE_CHANGE
+;; This function uses a non-reentrant model
+;;
+psect	text373
+	file	"c:\program files (x86)\fmd\fmdide\data\sources\lbmod.c"
+	line	5
+	global	__size_of___lbmod
+	__size_of___lbmod	equ	__end_of___lbmod-___lbmod
+	
+___lbmod:	
+	opt	stack 5
+; Regs used in ___lbmod: [wreg+status,2+status,0]
+;___lbmod@dividend stored from wreg
+	line	9
+	movwf	(___lbmod@dividend)
+	
+l3587:	
+	movlw	(08h)
+	movwf	(___lbmod@counter)
+	line	10
+	
+l3589:	
+	clrf	(___lbmod@rem)
+	line	12
+	
+l3591:	
+	movf	(___lbmod@dividend),w
+	movwf	(??___lbmod+0)+0
+	movlw	07h
+u435:
+	clrc
+	rrf	(??___lbmod+0)+0,f
+	addlw	-1
+	skipz
+	goto	u435
+	clrc
+	rlf	(___lbmod@rem),w
+	iorwf	0+(??___lbmod+0)+0,w
+	movwf	(___lbmod@rem)
+	line	13
+	
+l3593:	
+	clrc
+	rlf	(___lbmod@dividend),f
+	line	14
+	
+l3595:	
+	movf	(___lbmod@divisor),w
+	subwf	(___lbmod@rem),w
+	skipc
+	goto	u441
+	goto	u440
+u441:
+	goto	l3599
+u440:
+	line	15
+	
+l3597:	
+	movf	(___lbmod@divisor),w
+	subwf	(___lbmod@rem),f
+	line	16
+	
+l3599:	
+	decfsz	(___lbmod@counter),f
+	goto	u451
+	goto	u450
+u451:
+	goto	l3591
+u450:
+	line	17
+	
+l3601:	
+	movf	(___lbmod@rem),w
+	line	18
+	
+l2720:	
+	return
+	opt stack 0
+GLOBAL	__end_of___lbmod
+	__end_of___lbmod:
+;; =============== function ___lbmod ends ============
+
+	signat	___lbmod,8313
 	global	_PWM1_WHITE
-psect	text131,local,class=CODE,delta=2
-global __ptext131
-__ptext131:
+psect	text374,local,class=CODE,delta=2
+global __ptext374
+__ptext374:
 
 ;; *************** function _PWM1_WHITE *****************
 ;; Defined at:
-;;		line 128 in file "FT_62F21X_pwm.c"
+;;		line 164 in file "FT_62F21X_pwm.c"
 ;; Parameters:    Size  Location     Type
 ;;		None
 ;; Auto vars:     Size  Location     Type
@@ -812,7 +1210,7 @@ __ptext131:
 ;; Registers used:
 ;;		wreg, status,2
 ;; Tracked objects:
-;;		On entry : 0/0
+;;		On entry : 20/0
 ;;		On exit  : 20/0
 ;;		Unchanged: FFFDF/0
 ;; Data sizes:     COMMON   BANK0
@@ -829,38 +1227,40 @@ __ptext131:
 ;;		_PWM1_RATE_CHANGE
 ;; This function uses a non-reentrant model
 ;;
-psect	text131
+psect	text374
 	file	"FT_62F21X_pwm.c"
-	line	128
+	line	164
 	global	__size_of_PWM1_WHITE
 	__size_of_PWM1_WHITE	equ	__end_of_PWM1_WHITE-_PWM1_WHITE
 	
 _PWM1_WHITE:	
 	opt	stack 5
 ; Regs used in _PWM1_WHITE: [wreg+status,2]
-	line	129
+	line	165
 	
-l3120:	
-;FT_62F21X_pwm.c: 129: P1ADTL=0;
-	bcf	status, 5	;RP0=0, select bank0
-	clrf	(14)	;volatile
-	line	131
+l3427:	
+;FT_62F21X_pwm.c: 165: P1CDTL=0;
+	clrf	(16)	;volatile
+	line	166
+;FT_62F21X_pwm.c: 166: P1DDTL=0;
+	clrf	(8)	;volatile
+	line	168
 	
-l3122:	
-;FT_62F21X_pwm.c: 131: P1OE=0B00100000;
+l3429:	
+;FT_62F21X_pwm.c: 168: P1OE=0B00100000;
 	movlw	(020h)
 	bsf	status, 5	;RP0=1, select bank1
 	movwf	(144)^080h	;volatile
-	line	139
+	line	176
 	
-l3124:	
-;FT_62F21X_pwm.c: 139: P1BR1=0B00000100;
+l3431:	
+;FT_62F21X_pwm.c: 176: P1BR1=0B00000100;
 	movlw	(04h)
 	bcf	status, 5	;RP0=0, select bank0
 	movwf	(25)	;volatile
-	line	143
+	line	180
 	
-l1402:	
+l1412:	
 	return
 	opt stack 0
 GLOBAL	__end_of_PWM1_WHITE
@@ -868,14 +1268,14 @@ GLOBAL	__end_of_PWM1_WHITE
 ;; =============== function _PWM1_WHITE ends ============
 
 	signat	_PWM1_WHITE,88
-	global	_PWM1_GREEN
-psect	text132,local,class=CODE,delta=2
-global __ptext132
-__ptext132:
+	global	_PWM1_BLUE
+psect	text375,local,class=CODE,delta=2
+global __ptext375
+__ptext375:
 
-;; *************** function _PWM1_GREEN *****************
+;; *************** function _PWM1_BLUE *****************
 ;; Defined at:
-;;		line 91 in file "FT_62F21X_pwm.c"
+;;		line 145 in file "FT_62F21X_pwm.c"
 ;; Parameters:    Size  Location     Type
 ;;		None
 ;; Auto vars:     Size  Location     Type
@@ -885,7 +1285,7 @@ __ptext132:
 ;; Registers used:
 ;;		wreg, status,2
 ;; Tracked objects:
-;;		On entry : 0/0
+;;		On entry : 20/0
 ;;		On exit  : 20/0
 ;;		Unchanged: FFFDF/0
 ;; Data sizes:     COMMON   BANK0
@@ -902,37 +1302,105 @@ __ptext132:
 ;;		_PWM1_RATE_CHANGE
 ;; This function uses a non-reentrant model
 ;;
-psect	text132
+psect	text375
 	file	"FT_62F21X_pwm.c"
-	line	91
+	line	145
+	global	__size_of_PWM1_BLUE
+	__size_of_PWM1_BLUE	equ	__end_of_PWM1_BLUE-_PWM1_BLUE
+	
+_PWM1_BLUE:	
+	opt	stack 5
+; Regs used in _PWM1_BLUE: [wreg+status,2]
+	line	146
+	
+l3421:	
+;FT_62F21X_pwm.c: 146: P1CDTL=0;
+	clrf	(16)	;volatile
+	line	147
+;FT_62F21X_pwm.c: 147: P1DDTL=0;
+	clrf	(8)	;volatile
+	line	149
+	
+l3423:	
+;FT_62F21X_pwm.c: 149: P1OE=0B10000000;
+	movlw	(080h)
+	bsf	status, 5	;RP0=1, select bank1
+	movwf	(144)^080h	;volatile
+	line	157
+	
+l3425:	
+;FT_62F21X_pwm.c: 157: P1BR1=0B00000000;
+	bcf	status, 5	;RP0=0, select bank0
+	clrf	(25)	;volatile
+	line	161
+	
+l1409:	
+	return
+	opt stack 0
+GLOBAL	__end_of_PWM1_BLUE
+	__end_of_PWM1_BLUE:
+;; =============== function _PWM1_BLUE ends ============
+
+	signat	_PWM1_BLUE,88
+	global	_PWM1_GREEN
+psect	text376,local,class=CODE,delta=2
+global __ptext376
+__ptext376:
+
+;; *************** function _PWM1_GREEN *****************
+;; Defined at:
+;;		line 112 in file "FT_62F21X_pwm.c"
+;; Parameters:    Size  Location     Type
+;;		None
+;; Auto vars:     Size  Location     Type
+;;		None
+;; Return value:  Size  Location     Type
+;;		None               void
+;; Registers used:
+;;		status,2
+;; Tracked objects:
+;;		On entry : 20/0
+;;		On exit  : 20/0
+;;		Unchanged: FFFDF/0
+;; Data sizes:     COMMON   BANK0
+;;      Params:         0       0
+;;      Locals:         0       0
+;;      Temps:          0       0
+;;      Totals:         0       0
+;;Total ram usage:        0 bytes
+;; Hardware stack levels used:    1
+;; Hardware stack levels required when called:    1
+;; This function calls:
+;;		Nothing
+;; This function is called by:
+;;		_PWM1_RATE_CHANGE
+;; This function uses a non-reentrant model
+;;
+psect	text376
+	file	"FT_62F21X_pwm.c"
+	line	112
 	global	__size_of_PWM1_GREEN
 	__size_of_PWM1_GREEN	equ	__end_of_PWM1_GREEN-_PWM1_GREEN
 	
 _PWM1_GREEN:	
 	opt	stack 5
-; Regs used in _PWM1_GREEN: [wreg+status,2]
-	line	92
+; Regs used in _PWM1_GREEN: [status,2]
+	line	129
 	
-l3114:	
-;FT_62F21X_pwm.c: 92: P1ADTL=0;
-	bcf	status, 5	;RP0=0, select bank0
-	clrf	(14)	;volatile
-	line	94
-	
-l3116:	
-;FT_62F21X_pwm.c: 94: P1OE=0B00100000;
-	movlw	(020h)
+l3419:	
+;FT_62F21X_pwm.c: 129: P1CDTL=0;
+	clrf	(16)	;volatile
+	line	131
+;FT_62F21X_pwm.c: 131: P1OE=0B00000000;
 	bsf	status, 5	;RP0=1, select bank1
-	movwf	(144)^080h	;volatile
-	line	102
-	
-l3118:	
-;FT_62F21X_pwm.c: 102: P1BR1=0B00000000;
+	clrf	(144)^080h	;volatile
+	line	139
+;FT_62F21X_pwm.c: 139: P1BR1=0B00000000;
 	bcf	status, 5	;RP0=0, select bank0
 	clrf	(25)	;volatile
-	line	107
+	line	142
 	
-l1396:	
+l1406:	
 	return
 	opt stack 0
 GLOBAL	__end_of_PWM1_GREEN
@@ -941,13 +1409,13 @@ GLOBAL	__end_of_PWM1_GREEN
 
 	signat	_PWM1_GREEN,88
 	global	_PWM1_RED
-psect	text133,local,class=CODE,delta=2
-global __ptext133
-__ptext133:
+psect	text377,local,class=CODE,delta=2
+global __ptext377
+__ptext377:
 
 ;; *************** function _PWM1_RED *****************
 ;; Defined at:
-;;		line 72 in file "FT_62F21X_pwm.c"
+;;		line 79 in file "FT_62F21X_pwm.c"
 ;; Parameters:    Size  Location     Type
 ;;		None
 ;; Auto vars:     Size  Location     Type
@@ -955,82 +1423,9 @@ __ptext133:
 ;; Return value:  Size  Location     Type
 ;;		None               void
 ;; Registers used:
-;;		wreg, status,2
+;;		status,2
 ;; Tracked objects:
-;;		On entry : 0/0
-;;		On exit  : 20/0
-;;		Unchanged: FFFDF/0
-;; Data sizes:     COMMON   BANK0
-;;      Params:         0       0
-;;      Locals:         0       0
-;;      Temps:          0       0
-;;      Totals:         0       0
-;;Total ram usage:        0 bytes
-;; Hardware stack levels used:    1
-;; Hardware stack levels required when called:    1
-;; This function calls:
-;;		Nothing
-;; This function is called by:
-;;		_PWM1_RATE_CHANGE
-;; This function uses a non-reentrant model
-;;
-psect	text133
-	file	"FT_62F21X_pwm.c"
-	line	72
-	global	__size_of_PWM1_RED
-	__size_of_PWM1_RED	equ	__end_of_PWM1_RED-_PWM1_RED
-	
-_PWM1_RED:	
-	opt	stack 5
-; Regs used in _PWM1_RED: [wreg+status,2]
-	line	73
-	
-l3108:	
-;FT_62F21X_pwm.c: 73: P1ADTL=0;
-	bcf	status, 5	;RP0=0, select bank0
-	clrf	(14)	;volatile
-	line	75
-	
-l3110:	
-;FT_62F21X_pwm.c: 75: P1OE=0B10000000;
-	movlw	(080h)
-	bsf	status, 5	;RP0=1, select bank1
-	movwf	(144)^080h	;volatile
-	line	83
-	
-l3112:	
-;FT_62F21X_pwm.c: 83: P1BR1=0B00001000;
-	movlw	(08h)
-	bcf	status, 5	;RP0=0, select bank0
-	movwf	(25)	;volatile
-	line	88
-	
-l1393:	
-	return
-	opt stack 0
-GLOBAL	__end_of_PWM1_RED
-	__end_of_PWM1_RED:
-;; =============== function _PWM1_RED ends ============
-
-	signat	_PWM1_RED,88
-	global	_PWM1_BLUE
-psect	text134,local,class=CODE,delta=2
-global __ptext134
-__ptext134:
-
-;; *************** function _PWM1_BLUE *****************
-;; Defined at:
-;;		line 110 in file "FT_62F21X_pwm.c"
-;; Parameters:    Size  Location     Type
-;;		None
-;; Auto vars:     Size  Location     Type
-;;		None
-;; Return value:  Size  Location     Type
-;;		None               void
-;; Registers used:
-;;		wreg, status,2
-;; Tracked objects:
-;;		On entry : 0/0
+;;		On entry : 20/0
 ;;		On exit  : 20/0
 ;;		Unchanged: FFFDF/0
 ;; Data sizes:     COMMON   BANK0
@@ -1048,48 +1443,42 @@ __ptext134:
 ;;		_PWM1_RATE_CHANGE
 ;; This function uses a non-reentrant model
 ;;
-psect	text134
+psect	text377
 	file	"FT_62F21X_pwm.c"
-	line	110
-	global	__size_of_PWM1_BLUE
-	__size_of_PWM1_BLUE	equ	__end_of_PWM1_BLUE-_PWM1_BLUE
+	line	79
+	global	__size_of_PWM1_RED
+	__size_of_PWM1_RED	equ	__end_of_PWM1_RED-_PWM1_RED
 	
-_PWM1_BLUE:	
+_PWM1_RED:	
 	opt	stack 5
-; Regs used in _PWM1_BLUE: [wreg+status,2]
-	line	111
+; Regs used in _PWM1_RED: [status,2]
+	line	96
 	
-l3102:	
-;FT_62F21X_pwm.c: 111: P1ADTL=0;
-	bcf	status, 5	;RP0=0, select bank0
-	clrf	(14)	;volatile
-	line	113
-	
-l3104:	
-;FT_62F21X_pwm.c: 113: P1OE=0B10000000;
-	movlw	(080h)
+l3417:	
+;FT_62F21X_pwm.c: 96: P1CDTL=0;
+	clrf	(16)	;volatile
+	line	98
+;FT_62F21X_pwm.c: 98: P1OE=0B00000000;
 	bsf	status, 5	;RP0=1, select bank1
-	movwf	(144)^080h	;volatile
-	line	121
-	
-l3106:	
-;FT_62F21X_pwm.c: 121: P1BR1=0B00000000;
+	clrf	(144)^080h	;volatile
+	line	106
+;FT_62F21X_pwm.c: 106: P1BR1=0B00000000;
 	bcf	status, 5	;RP0=0, select bank0
 	clrf	(25)	;volatile
-	line	125
+	line	109
 	
-l1399:	
+l1403:	
 	return
 	opt stack 0
-GLOBAL	__end_of_PWM1_BLUE
-	__end_of_PWM1_BLUE:
-;; =============== function _PWM1_BLUE ends ============
+GLOBAL	__end_of_PWM1_RED
+	__end_of_PWM1_RED:
+;; =============== function _PWM1_RED ends ============
 
-	signat	_PWM1_BLUE,88
+	signat	_PWM1_RED,88
 	global	_PA3_Level_Change_INITIAL
-psect	text135,local,class=CODE,delta=2
-global __ptext135
-__ptext135:
+psect	text378,local,class=CODE,delta=2
+global __ptext378
+__ptext378:
 
 ;; *************** function _PA3_Level_Change_INITIAL *****************
 ;; Defined at:
@@ -1120,7 +1509,7 @@ __ptext135:
 ;;		_main
 ;; This function uses a non-reentrant model
 ;;
-psect	text135
+psect	text378
 	file	"FT_62F21x_IR.c"
 	line	37
 	global	__size_of_PA3_Level_Change_INITIAL
@@ -1131,35 +1520,35 @@ _PA3_Level_Change_INITIAL:
 ; Regs used in _PA3_Level_Change_INITIAL: [wreg]
 	line	38
 	
-l3092:	
+l3407:	
 ;FT_62F21x_IR.c: 38: TRISA3 =1;
 	bsf	status, 5	;RP0=1, select bank1
 	bsf	(1067/8)^080h,(1067)&7
 	line	39
 	
-l3094:	
+l3409:	
 ;FT_62F21x_IR.c: 39: ReadAPin = PORTA;
 	bcf	status, 5	;RP0=0, select bank0
 	movf	(5),w	;volatile
 	line	40
 	
-l3096:	
+l3411:	
 ;FT_62F21x_IR.c: 40: PAIF =0;
 	bcf	(88/8),(88)&7
 	line	41
 	
-l3098:	
+l3413:	
 ;FT_62F21x_IR.c: 41: IOCA3 =1;
 	bsf	status, 5	;RP0=1, select bank1
 	bsf	(1203/8)^080h,(1203)&7
 	line	42
 	
-l3100:	
+l3415:	
 ;FT_62F21x_IR.c: 42: PAIE =1;
 	bsf	(91/8),(91)&7
 	line	43
 	
-l2091:	
+l2120:	
 	return
 	opt stack 0
 GLOBAL	__end_of_PA3_Level_Change_INITIAL
@@ -1168,9 +1557,9 @@ GLOBAL	__end_of_PA3_Level_Change_INITIAL
 
 	signat	_PA3_Level_Change_INITIAL,88
 	global	_TIMER0_INITIAL
-psect	text136,local,class=CODE,delta=2
-global __ptext136
-__ptext136:
+psect	text379,local,class=CODE,delta=2
+global __ptext379
+__ptext379:
 
 ;; *************** function _TIMER0_INITIAL *****************
 ;; Defined at:
@@ -1201,7 +1590,7 @@ __ptext136:
 ;;		_main
 ;; This function uses a non-reentrant model
 ;;
-psect	text136
+psect	text379
 	file	"FT_62F21x_IR.c"
 	line	19
 	global	__size_of_TIMER0_INITIAL
@@ -1212,7 +1601,7 @@ _TIMER0_INITIAL:
 ; Regs used in _TIMER0_INITIAL: [wreg]
 	line	20
 	
-l3088:	
+l3403:	
 ;FT_62F21x_IR.c: 20: OPTION = 0B00000011;
 	movlw	(03h)
 	bsf	status, 5	;RP0=1, select bank1
@@ -1224,12 +1613,12 @@ l3088:
 	movwf	(1)	;volatile
 	line	28
 	
-l3090:	
+l3405:	
 ;FT_62F21x_IR.c: 28: T0IF = 0;
 	bcf	(90/8),(90)&7
 	line	29
 	
-l2088:	
+l2117:	
 	return
 	opt stack 0
 GLOBAL	__end_of_TIMER0_INITIAL
@@ -1238,9 +1627,9 @@ GLOBAL	__end_of_TIMER0_INITIAL
 
 	signat	_TIMER0_INITIAL,88
 	global	_POWER_INITIAL
-psect	text137,local,class=CODE,delta=2
-global __ptext137
-__ptext137:
+psect	text380,local,class=CODE,delta=2
+global __ptext380
+__ptext380:
 
 ;; *************** function _POWER_INITIAL *****************
 ;; Defined at:
@@ -1271,7 +1660,7 @@ __ptext137:
 ;;		_main
 ;; This function uses a non-reentrant model
 ;;
-psect	text137
+psect	text380
 	file	"TEST_FT62F21X_SLEEP.C"
 	line	105
 	global	__size_of_POWER_INITIAL
@@ -1282,46 +1671,45 @@ _POWER_INITIAL:
 ; Regs used in _POWER_INITIAL: [wreg+status,2]
 	line	106
 	
-l3076:	
+l3393:	
 ;TEST_FT62F21X_SLEEP.C: 106: OSCCON = 0X00|0X70|0X00;
 	movlw	(070h)
 	bsf	status, 5	;RP0=1, select bank1
 	movwf	(143)^080h	;volatile
 	line	109
 	
-l3078:	
+l3395:	
 ;TEST_FT62F21X_SLEEP.C: 109: INTCON = 0;
 	clrf	(11)	;volatile
 	line	111
 	
-l3080:	
+l3397:	
 ;TEST_FT62F21X_SLEEP.C: 111: PORTA = 0B00000000;
 	bcf	status, 5	;RP0=0, select bank0
 	clrf	(5)	;volatile
 	line	112
-	
-l3082:	
-;TEST_FT62F21X_SLEEP.C: 112: TRISA = 0B00000000;
+;TEST_FT62F21X_SLEEP.C: 112: TRISA = 0B00010000;
+	movlw	(010h)
 	bsf	status, 5	;RP0=1, select bank1
-	clrf	(133)^080h	;volatile
+	movwf	(133)^080h	;volatile
 	line	113
 	
-l3084:	
+l3399:	
 ;TEST_FT62F21X_SLEEP.C: 113: WPUA = 0B00000000;
 	clrf	(149)^080h	;volatile
 	line	115
+	
+l3401:	
 ;TEST_FT62F21X_SLEEP.C: 115: OPTION = 0B00001000;
 	movlw	(08h)
 	movwf	(129)^080h	;volatile
 	line	117
-	
-l3086:	
 ;TEST_FT62F21X_SLEEP.C: 117: MSCON = 0B00000000;
 	bcf	status, 5	;RP0=0, select bank0
 	clrf	(27)	;volatile
 	line	118
 	
-l696:	
+l702:	
 	return
 	opt stack 0
 GLOBAL	__end_of_POWER_INITIAL
@@ -1330,9 +1718,9 @@ GLOBAL	__end_of_POWER_INITIAL
 
 	signat	_POWER_INITIAL,88
 	global	_ISR
-psect	text138,local,class=CODE,delta=2
-global __ptext138
-__ptext138:
+psect	text381,local,class=CODE,delta=2
+global __ptext381
+__ptext381:
 
 ;; *************** function _ISR *****************
 ;; Defined at:
@@ -1348,7 +1736,7 @@ __ptext138:
 ;; Tracked objects:
 ;;		On entry : 0/0
 ;;		On exit  : 0/0
-;;		Unchanged: FFFDF/0
+;;		Unchanged: FFEDF/0
 ;; Data sizes:     COMMON   BANK0
 ;;      Params:         0       0
 ;;      Locals:         0       0
@@ -1362,7 +1750,7 @@ __ptext138:
 ;;		Interrupt level 1
 ;; This function uses a non-reentrant model
 ;;
-psect	text138
+psect	text381
 	file	"TEST_FT62F21X_SLEEP.C"
 	line	34
 	global	__size_of_ISR
@@ -1386,60 +1774,60 @@ interrupt_function:
 	movf	pclath,w
 	movwf	(??_ISR+2)
 	ljmp	_ISR
-psect	text138
+psect	text381
 	line	37
 	
-i1l3016:	
+i1l3333:	
 ;TEST_FT62F21X_SLEEP.C: 37: if(TMR2IE && TMR2IF)
 	bsf	status, 5	;RP0=1, select bank1
 	btfss	(1121/8)^080h,(1121)&7
-	goto	u1_21
-	goto	u1_20
-u1_21:
-	goto	i1l3024
-u1_20:
+	goto	u22_21
+	goto	u22_20
+u22_21:
+	goto	i1l3341
+u22_20:
 	
-i1l3018:	
+i1l3335:	
 	bcf	status, 5	;RP0=0, select bank0
 	btfss	(97/8),(97)&7
-	goto	u2_21
-	goto	u2_20
-u2_21:
-	goto	i1l3024
-u2_20:
+	goto	u23_21
+	goto	u23_20
+u23_21:
+	goto	i1l3341
+u23_20:
 	line	39
 	
-i1l3020:	
+i1l3337:	
 ;TEST_FT62F21X_SLEEP.C: 38: {
 ;TEST_FT62F21X_SLEEP.C: 39: TMR2IF = 0;
 	bcf	(97/8),(97)&7
 	line	40
 	
-i1l3022:	
+i1l3339:	
 ;TEST_FT62F21X_SLEEP.C: 40: time_15ms_cnt++;
 	incf	(_time_15ms_cnt),f
 	line	46
 	
-i1l3024:	
+i1l3341:	
 ;TEST_FT62F21X_SLEEP.C: 42: }
 ;TEST_FT62F21X_SLEEP.C: 46: if(T0IE && T0IF)
 	btfss	(93/8),(93)&7
-	goto	u3_21
-	goto	u3_20
-u3_21:
-	goto	i1l3040
-u3_20:
+	goto	u24_21
+	goto	u24_20
+u24_21:
+	goto	i1l3357
+u24_20:
 	
-i1l3026:	
+i1l3343:	
 	btfss	(90/8),(90)&7
-	goto	u4_21
-	goto	u4_20
-u4_21:
-	goto	i1l3040
-u4_20:
+	goto	u25_21
+	goto	u25_20
+u25_21:
+	goto	i1l3357
+u25_20:
 	line	48
 	
-i1l3028:	
+i1l3345:	
 ;TEST_FT62F21X_SLEEP.C: 47: {
 ;TEST_FT62F21X_SLEEP.C: 48: TMR0 = 140;
 	movlw	(08Ch)
@@ -1447,100 +1835,100 @@ i1l3028:
 	movwf	(1)	;volatile
 	line	50
 	
-i1l3030:	
+i1l3347:	
 ;TEST_FT62F21X_SLEEP.C: 50: T0IF = 0;
 	bcf	(90/8),(90)&7
 	line	51
 	
-i1l3032:	
+i1l3349:	
 ;TEST_FT62F21X_SLEEP.C: 51: IRbitTime++;
 	incf	(_IRbitTime),f
 	line	52
 	
-i1l3034:	
+i1l3351:	
 ;TEST_FT62F21X_SLEEP.C: 52: if(IRbitTime > 50)
 	movlw	(033h)
 	subwf	(_IRbitTime),w
 	skipc
-	goto	u5_21
-	goto	u5_20
-u5_21:
-	goto	i1l3040
-u5_20:
+	goto	u26_21
+	goto	u26_20
+u26_21:
+	goto	i1l3357
+u26_20:
 	line	54
 	
-i1l3036:	
+i1l3353:	
 ;TEST_FT62F21X_SLEEP.C: 53: {
 ;TEST_FT62F21X_SLEEP.C: 54: T0IE = 0;
 	bcf	(93/8),(93)&7
 	line	55
 	
-i1l3038:	
+i1l3355:	
 ;TEST_FT62F21X_SLEEP.C: 55: IRbitTime = 0;
 	clrf	(_IRbitTime)
 	line	60
 	
-i1l3040:	
+i1l3357:	
 ;TEST_FT62F21X_SLEEP.C: 56: }
 ;TEST_FT62F21X_SLEEP.C: 57: }
 ;TEST_FT62F21X_SLEEP.C: 60: if(PAIE && PAIF)
 	btfss	(91/8),(91)&7
-	goto	u6_21
-	goto	u6_20
-u6_21:
-	goto	i1l693
-u6_20:
+	goto	u27_21
+	goto	u27_20
+u27_21:
+	goto	i1l699
+u27_20:
 	
-i1l3042:	
+i1l3359:	
 	btfss	(88/8),(88)&7
-	goto	u7_21
-	goto	u7_20
-u7_21:
-	goto	i1l693
-u7_20:
+	goto	u28_21
+	goto	u28_20
+u28_21:
+	goto	i1l699
+u28_20:
 	line	62
 	
-i1l3044:	
+i1l3361:	
 ;TEST_FT62F21X_SLEEP.C: 61: {
 ;TEST_FT62F21X_SLEEP.C: 62: ReadAPin = PORTA;
 	bcf	status, 5	;RP0=0, select bank0
 	movf	(5),w	;volatile
 	line	63
 	
-i1l3046:	
+i1l3363:	
 ;TEST_FT62F21X_SLEEP.C: 63: PAIF = 0;
 	bcf	(88/8),(88)&7
 	line	64
 	
-i1l3048:	
+i1l3365:	
 ;TEST_FT62F21X_SLEEP.C: 64: if(RA3 == 0)
 	btfsc	(43/8),(43)&7
-	goto	u8_21
-	goto	u8_20
-u8_21:
-	goto	i1l693
-u8_20:
+	goto	u29_21
+	goto	u29_20
+u29_21:
+	goto	i1l699
+u29_20:
 	line	66
 	
-i1l3050:	
+i1l3367:	
 ;TEST_FT62F21X_SLEEP.C: 65: {
 ;TEST_FT62F21X_SLEEP.C: 66: T0IE = 1;
 	bsf	(93/8),(93)&7
 	line	67
 	
-i1l3052:	
+i1l3369:	
 ;TEST_FT62F21X_SLEEP.C: 67: if(IRbitTime > 21)
 	movlw	(016h)
 	subwf	(_IRbitTime),w
 	skipc
-	goto	u9_21
-	goto	u9_20
-u9_21:
-	goto	i1l3056
-u9_20:
+	goto	u30_21
+	goto	u30_20
+u30_21:
+	goto	i1l3373
+u30_20:
 	line	69
 	
-i1l3054:	
+i1l3371:	
 ;TEST_FT62F21X_SLEEP.C: 68: {
 ;TEST_FT62F21X_SLEEP.C: 69: IRDataTimer[0] = 0;
 	clrf	(_IRDataTimer)
@@ -1561,91 +1949,92 @@ i1l3054:
 	clrf	(_bitdata)
 	line	75
 ;TEST_FT62F21X_SLEEP.C: 75: }
-	goto	i1l3060
+	goto	i1l3377
 	line	76
 	
-i1l3056:	
+i1l3373:	
 ;TEST_FT62F21X_SLEEP.C: 76: else if(IRbitTime > 3)
 	movlw	(04h)
 	subwf	(_IRbitTime),w
 	skipc
-	goto	u10_21
-	goto	u10_20
-u10_21:
-	goto	i1l3060
-u10_20:
+	goto	u31_21
+	goto	u31_20
+u31_21:
+	goto	i1l3377
+u31_20:
 	line	78
 	
-i1l3058:	
+i1l3375:	
 ;TEST_FT62F21X_SLEEP.C: 77: {
 ;TEST_FT62F21X_SLEEP.C: 78: IRDataTimer[IRbitNum-1] |= bitdata;
 	movf	(_IRbitNum),w
 	addlw	_IRDataTimer+-1&0ffh
 	movwf	fsr0
 	movf	(_bitdata),w
+	bcf	status, 7	;select IRP bank0
 	iorwf	indf,f
 	line	80
 	
-i1l3060:	
+i1l3377:	
 ;TEST_FT62F21X_SLEEP.C: 79: }
 ;TEST_FT62F21X_SLEEP.C: 80: IRbitTime = 0;
 	clrf	(_IRbitTime)
 	line	81
 	
-i1l3062:	
+i1l3379:	
 ;TEST_FT62F21X_SLEEP.C: 81: bitdata<<=1;
 	clrc
 	rlf	(_bitdata),f
 	line	82
 	
-i1l3064:	
+i1l3381:	
 ;TEST_FT62F21X_SLEEP.C: 82: if(bitdata == 0)
 	movf	(_bitdata),f
 	skipz
-	goto	u11_21
-	goto	u11_20
-u11_21:
-	goto	i1l3070
-u11_20:
+	goto	u32_21
+	goto	u32_20
+u32_21:
+	goto	i1l3387
+u32_20:
 	line	84
 	
-i1l3066:	
+i1l3383:	
 ;TEST_FT62F21X_SLEEP.C: 83: {
 ;TEST_FT62F21X_SLEEP.C: 84: bitdata = 0x01;
 	clrf	(_bitdata)
 	incf	(_bitdata),f
 	line	85
 	
-i1l3068:	
+i1l3385:	
 ;TEST_FT62F21X_SLEEP.C: 85: IRbitNum++;
 	incf	(_IRbitNum),f
 	line	87
 	
-i1l3070:	
+i1l3387:	
 ;TEST_FT62F21X_SLEEP.C: 86: }
 ;TEST_FT62F21X_SLEEP.C: 87: if(IRbitNum > 4)
 	movlw	(05h)
 	subwf	(_IRbitNum),w
 	skipc
-	goto	u12_21
-	goto	u12_20
-u12_21:
-	goto	i1l693
-u12_20:
+	goto	u33_21
+	goto	u33_20
+u33_21:
+	goto	i1l699
+u33_20:
 	line	89
 	
-i1l3072:	
+i1l3389:	
 ;TEST_FT62F21X_SLEEP.C: 88: {
 ;TEST_FT62F21X_SLEEP.C: 89: IRbitNum = 0;
 	clrf	(_IRbitNum)
 	line	90
 	
-i1l3074:	
+i1l3391:	
 ;TEST_FT62F21X_SLEEP.C: 91: ReceiveFinish = 1;
 	bcf	(93/8),(93)&7
 	line	96
 	
-i1l693:	
+i1l699:	
 	movf	(??_ISR+2),w
 	movwf	pclath
 	movf	(??_ISR+1),w
@@ -1661,9 +2050,9 @@ GLOBAL	__end_of_ISR
 ;; =============== function _ISR ends ============
 
 	signat	_ISR,88
-psect	text139,local,class=CODE,delta=2
-global __ptext139
-__ptext139:
+psect	text382,local,class=CODE,delta=2
+global __ptext382
+__ptext382:
 	global	btemp
 	btemp set 07Eh
 

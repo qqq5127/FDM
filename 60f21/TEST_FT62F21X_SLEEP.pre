@@ -963,6 +963,7 @@ extern void PWM1_GREEN(void);
 extern void PWM1_BLUE(void);
 extern void PWM1_WHITE(void);
 extern void PWM1_RATE_CHANGE(void);
+extern void PWM_MODE_CHANGE(void);
 
 # 20 "TEST_FT62F21X_SLEEP.C"
 ;
@@ -997,6 +998,7 @@ extern unsigned char rdata1,rdata2;
 ;
 
 unsigned char time_15ms_cnt = 0;
+unsigned char key_release = 0;
 
 # 33
 void interrupt ISR(void)
@@ -1073,7 +1075,7 @@ OSCCON = 0X00|0X70|0X00;
 INTCON = 0;
 
 PORTA = 0B00000000;
-TRISA = 0B00000000;
+TRISA = 0B00010000;
 WPUA = 0B00000000;
 
 OPTION = 0B00001000;
@@ -1128,11 +1130,29 @@ PWM1_INITIAL();
 while(1)
 {
 asm("clrwdt");
-if(time_15ms_cnt > 15)
+
+if(ft_user_pwm_mode == 0)
+{
+if(time_15ms_cnt > 150)
 {
 time_15ms_cnt = 0;
 pwm_rate_value++;
 PWM1_RATE_CHANGE();
+}
+}
+
+if(PORTA & 0B00010000)
+{
+key_release = 0;
+}
+else
+{
+if(key_release == 0)
+{
+PWM_MODE_CHANGE();
+}
+key_release = 1;
+
 }
 }
 }
