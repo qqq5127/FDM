@@ -1,6 +1,9 @@
 #include "FT_62F21X_pwm.h";
 
+extern void reset_led_status(void);
+
 unsigned char ft_user_pwm_mode = 0;
+unsigned char ft_user_set_mode = 0;
 // 0: FADE 模式
 // 1: 红色灯
 // 2: 绿色灯
@@ -10,7 +13,10 @@ unsigned char ft_user_pwm_mode = 0;
 
 unchar pwm_rate_value = 0;
 unchar pwm_colour_value = 0;
-
+unchar jump_led_rate = 100;
+unchar power_off_mode_backup = 0xff;
+unchar set_time_mode_backup = 0xff;
+unchar power_off_flag = 0;
 /*-------------------------------------------------
  *	函数名: PWM1_INITIAL 
  *	功能：  PWM1初始化函数
@@ -81,7 +87,7 @@ void PWM1_RED(void)
     P1CDTL=0;
     P1DDTL=0;
 
-    P1OE=0B10000000;		//P1A0输出使能
+    P1OE=0B00000000;		//P1A0输出使能
 	//BIT7: 0:禁止P1C输出到管脚;1:允许P1C输出到管脚
     //BIT6: 0:禁止P1B输出到管脚;1:允许P1B输出到管脚
     //BIT6: 0:禁止P1D输出到管脚;1:允许P1D输出到管脚
@@ -165,7 +171,7 @@ void PWM1_WHITE(void)
     P1CDTL=0;
     P1DDTL=0;
 
-    P1OE=0B00100000;		//P1A0输出使能
+    P1OE=0B00000000;		//P1A0输出使能
 	//BIT7: 0:禁止P1C输出到管脚;1:允许P1C输出到管脚
     //BIT6: 0:禁止P1B输出到管脚;1:允许P1B输出到管脚
     //BIT6: 0:禁止P1D输出到管脚;1:允许P1D输出到管脚
@@ -245,53 +251,307 @@ void PWM1_RATE_CHANGE(void)
 	
 }
 
-void PWM_MODE_CHANGE(void)
+void JUMP_MODE_CHANGE(void)
 {
-	ft_user_pwm_mode++;
-	ft_user_pwm_mode = ft_user_pwm_mode%6;
-	switch(ft_user_pwm_mode)
+	pwm_colour_value++;
+	pwm_colour_value = pwm_colour_value%4;
+	switch(pwm_colour_value)
 	{
 		case 0:
-			pwm_rate_value = 0;
-			pwm_colour_value = 0;
-			PWM1_RED();
-
+#ifndef DEBUG_MODE
+			P1OE=0B00000000;
+			P1BR1=0B00001000;
+#endif
 		break;
 		
 		case 1:
-#ifndef DEBUG_MODE
-			P1OE=0B00000000;	
-			PORTA = 0B00000001; 	
+#ifndef DEBUG_MODE			
+			P1OE=0B00100000;
+			P1BR1=0B00000000;
 #endif
 		break;
 		
 		case 2:
-#ifndef DEBUG_MODE
-			P1OE=0B00000000;	
-			PORTA = 0B00000010; 	
-#endif
+			P1OE=0B10000000;
+			P1BR1=0B00000000;
 		break;
 		
 		case 3:
-			P1OE=0B00000000;	
-			PORTA = 0B00000100; 	
+			P1OE=0B00000000;
+			P1BR1=0B00000100;
 		break;
-		
-		case 4:
-			P1OE=0B00000000;	
-			PORTA = 0B00100000; 	
-		break;
-		
-		case 5:
-#ifndef DEBUG_MODE
-		P1OE=0B00000000;	
-		PORTA = 0B00000010; 	
-#endif
-		break;
-		
+
 		default:
 
 		break;
 	}
 }
 
+void PWM_MODE_CHANGE(void)
+{
+	ft_user_pwm_mode++;
+	ft_user_pwm_mode = ft_user_pwm_mode%6;
+	PWM_MODE_REFRESH();
+
+}
+
+void MIX_MODE_CHANGE(void)
+{
+	pwm_colour_value++;
+	pwm_colour_value = pwm_colour_value%6;
+
+	switch(pwm_colour_value)
+	{
+		case 0:
+			P1OE=0B00100000;
+			P1BR1=0B00001000;
+		break;
+
+		case 1:
+			P1OE=0B10000000;
+			P1BR1=0B00001000;
+
+		break;
+
+		case 2:
+			P1OE=0B00000000;
+			P1BR1=0B00001100;
+
+		break;
+
+		case 3:
+			P1OE=0B10100000;
+			P1BR1=0B00000000;
+		break;
+
+		case 4:
+			P1OE=0B00100000;
+			P1BR1=0B00000100;
+		break;
+
+		case 5:
+			P1OE=0B10000000;
+			P1BR1=0B00000100;
+		break;
+
+		default:
+
+		break;
+	}
+}
+
+
+ /*-------------------------------------------------
+ *  函数名称：DelayUs
+ *  功能：    短延时函数 --16M-4T--大概快1%左右.
+ *  输入参数：Time 延时时间长度 延时时长Time*2 Us
+ * 	返回参数：无 
+ -------------------------------------------------*/
+void DelayUs(unsigned char Time)
+{
+	unsigned char a;
+	for(a=0;a<Time;a++)
+	{
+		NOP();
+	}
+}                  
+/*------------------------------------------------- 
+ * 	函数名称： DelayMs
+ * 	功能：    短延时函数
+ * 	输入参数：Time 延时时间长度 延时时长Time ms
+ * 	返回参数：无 
+ -------------------------------------------------*/
+void DelayMs(unsigned char Time)
+{
+	unsigned char a,b;
+	for(a=0;a<Time;a++)
+	{
+		for(b=0;b<5;b++)
+		{
+		 	DelayUs(98);               //快1%
+		}
+	}
+}
+
+
+/*
+0xEA,0x06,		// RG mode
+0xBF,0x07,		// RB  mode
+0xE1,0x08,		// RY mode
+0xE4,0x09,		// RGB mode 
+0xE2,0x0A,		// MIX COLOR MODE
+0xE5,0x0B,		// - rate
+0xE0,0x0C,		// + rate
+
+0xF2,0x0D,		// 0.5H
+0xE8,0x0E,		// 1.0H
+0xB3,0x0F,		// 1.5H
+0xE6,0x10,		// 2.0H
+
+0xF1,0x11,		// POWER ON
+0xF0,0x12,		// POWER OFF
+
+*/
+
+void PWM_MODE_REFRESH(void)
+{
+	reset_led_status();
+
+	jump_led_rate = 100;
+	if(ft_user_pwm_mode != 0)
+	{
+		P1CDTL=jump_led_rate;
+		P1DDTL=jump_led_rate;
+	}
+
+	if(power_off_flag == 1)
+	{
+			return;
+	}
+	
+	switch(ft_user_pwm_mode)
+	{
+		case 0x00:
+			pwm_rate_value = 0;
+			pwm_colour_value = 0;
+			PWM1_RED();
+
+		break;
+		
+		case 0x01:
+#ifndef DEBUG_MODE
+			P1OE=0B00000000;
+			P1BR1=0B00001000;
+#endif
+		break;
+		
+		case 0x02:
+#ifndef DEBUG_MODE			
+			P1OE=0B00100000;
+			P1BR1=0B00000000;
+#endif
+		break;
+		
+		case 0x03:
+			P1OE=0B10000000;
+			P1BR1=0B00000000;
+		break;
+		
+		case 0x04:
+			P1OE=0B00000000;
+			P1BR1=0B00000100;
+		break;
+		
+		case 0x05:
+			pwm_colour_value = 0;
+#ifndef DEBUG_MODE
+			P1OE=0B00000000;
+			P1BR1=0B00001000;
+#endif
+		break;
+
+		case 0x06:
+#ifndef	 DEBUG_MODE
+		P1OE=0B00100000;
+		P1BR1=0B00001000;
+#endif
+		break;
+
+		case 0x07:
+#ifndef	 DEBUG_MODE
+		P1OE=0B10000000;
+		P1BR1=0B00001000;
+		
+#endif
+		break;
+
+		case 0x08:
+			P1OE=0B00000000;
+			P1BR1=0B00001100;
+		break;
+
+		case 0x09:
+			P1OE=0B10100000;
+			P1BR1=0B00001000;
+		break;
+
+		case 0x0A:
+			pwm_colour_value = 0;
+			P1OE=0B00100000;
+			P1BR1=0B00001000;
+
+		break;
+				default:
+		
+				break;
+			}
+		
+}
+
+void SET_MODE_REFRESH(void)
+{
+
+	switch(ft_user_set_mode)
+		{
+		case 0x0B:
+			if(jump_led_rate > 20)
+			{
+				jump_led_rate = jump_led_rate - 20;
+			}
+			if(ft_user_pwm_mode != 0)
+			{
+				P1CDTL=jump_led_rate;
+				P1DDTL=jump_led_rate;
+			}
+		break;
+
+		
+		case 0x0C:
+			if(jump_led_rate < 100)
+			{
+				jump_led_rate = jump_led_rate + 20;
+			}
+			if(ft_user_pwm_mode != 0)
+			{
+				P1CDTL=jump_led_rate;
+				P1DDTL=jump_led_rate;
+			}
+		break;
+					
+		case 0x0D:
+		case 0x0E:
+		case 0x0F:
+		case 0x10:
+			P1OE=0B10100000;
+			P1BR1=0B00001100;
+			DelayMs(50);
+			if(set_time_mode_backup != 0xff)
+			{
+				ft_user_pwm_mode = set_time_mode_backup;
+				PWM_MODE_REFRESH();
+			}
+		break;
+		
+		case 0x11:
+			if(power_off_mode_backup != 0xff)
+			{
+				ft_user_pwm_mode = power_off_mode_backup;
+				PWM_MODE_REFRESH();
+			}
+			power_off_mode_backup = 0xff;			
+			power_off_flag = 0;
+		break;
+
+		case 0x12:
+			P1OE=0B00000000;
+			P1BR1=0B00000000;
+			power_off_flag = 1;
+		break;
+
+		
+		default:
+
+		break;
+	}
+
+}

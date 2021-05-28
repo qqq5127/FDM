@@ -1,660 +1,1458 @@
 //Deviec:FT60F21X
 //-----------------------Variable---------------------------------
-		_IRbitNum		EQU		70H
-		_IRbitTime		EQU		71H
+		_IRbitNum		EQU		44H
+		_IRbitTime		EQU		45H
 		_IRDataTimer		EQU		40H
-		_bitdata		EQU		7AH
-		_ft_user_pwm_mode		EQU		72H
-		_pwm_rate_value		EQU		74H
-		_pwm_colour_value		EQU		73H
-		_time_15ms_cnt		EQU		45H
-		_key_release		EQU		44H
+		_bitdata		EQU		4CH
+		_ReceiveFinish		EQU		46H
+		_ft_user_pwm_mode		EQU		77H
+		_ft_user_set_mode		EQU		47H
+		_pwm_rate_value		EQU		79H
+		_pwm_colour_value		EQU		78H
+		_jump_led_rate		EQU		7AH
+		_power_off_mode_backup		EQU		4DH
+		_set_time_mode_backup		EQU		4EH
+		_power_off_flag		EQU		49H
+		_time_15ms_cnt		EQU		4AH
+		_time_2s_cnt		EQU		4BH
+		_key_release		EQU		48H
 //-----------------------Variable END---------------------------------
 		ORG		0000H
 		LJUMP 	0CH 			//0000 	380C
 		ORG		0004H
 		STR 	7EH 			//0004 	01FE
 		SWAPR 	STATUS,0 		//0005 	0703
-		STR 	75H 			//0006 	01F5
+		STR 	70H 			//0006 	01F0
 		LDR 	FSR,0 			//0007 	0804
-		STR 	76H 			//0008 	01F6
+		STR 	71H 			//0008 	01F1
 		LDR 	PCLATH,0 		//0009 	080A
-		STR 	77H 			//000A 	01F7
-		LJUMP 	0DH 			//000B 	380D
+		STR 	72H 			//000A 	01F2
+		LJUMP 	8EH 			//000B 	388E
 		ORG		000CH
-		LJUMP 	F7H 			//000C 	38F7
+		LJUMP 	255H 			//000C 	3A55
 
-		//;TEST_FT62F21X_SLEEP.C: 37: if(TMR2IE && TMR2IF)
-		BSR 	STATUS,5 		//000D 	1A83
-		BTSS 	CH,1 			//000E 	1C8C
-		LJUMP 	15H 			//000F 	3815
-		BCR 	STATUS,5 		//0010 	1283
-		BTSS 	CH,1 			//0011 	1C8C
-		LJUMP 	15H 			//0012 	3815
+		//;TEST_FT62F21X_SLEEP.C: 161: POWER_INITIAL();
+		LCALL 	277H 			//000D 	3277
 
-		//;TEST_FT62F21X_SLEEP.C: 38: {
-		//;TEST_FT62F21X_SLEEP.C: 39: TMR2IF = 0;
-		BCR 	CH,1 			//0013 	108C
+		//;TEST_FT62F21X_SLEEP.C: 162: TIMER0_INITIAL();
+		LCALL 	2D3H 			//000E 	32D3
+
+		//;TEST_FT62F21X_SLEEP.C: 163: PA3_Level_Change_INITIAL();
+		LCALL 	29AH 			//000F 	329A
+
+		//;TEST_FT62F21X_SLEEP.C: 164: PWM1_INITIAL();
+		LCALL 	219H 			//0010 	3219
+		CLRWDT	 			//0011 	0001
+
+		//;TEST_FT62F21X_SLEEP.C: 170: if(power_off_flag == 0)
+		BCR 	STATUS,5 		//0012 	1283
+		LDR 	49H,1 			//0013 	08C9
 		ORG		0014H
+		BTSS 	STATUS,2 		//0014 	1D03
+		LJUMP 	40H 			//0015 	3840
 
-		//;TEST_FT62F21X_SLEEP.C: 40: time_15ms_cnt++;
-		INCR	45H,1 			//0014 	09C5
+		//;TEST_FT62F21X_SLEEP.C: 171: {
+		//;TEST_FT62F21X_SLEEP.C: 172: if(ft_user_pwm_mode == 0)
+		LDR 	77H,1 			//0016 	08F7
+		BTSS 	STATUS,2 		//0017 	1D03
+		LJUMP 	20H 			//0018 	3820
 
-		//;TEST_FT62F21X_SLEEP.C: 42: }
-		//;TEST_FT62F21X_SLEEP.C: 46: if(T0IE && T0IF)
-		BTSC 	INTCON,5 		//0015 	168B
-		BTSS 	INTCON,2 		//0016 	1D0B
-		LJUMP 	23H 			//0017 	3823
-
-		//;TEST_FT62F21X_SLEEP.C: 47: {
-		//;TEST_FT62F21X_SLEEP.C: 48: TMR0 = 140;
-		LDWI 	8CH 			//0018 	2A8C
-		BCR 	STATUS,5 		//0019 	1283
-		STR 	1H 			//001A 	0181
-		LDWI 	33H 			//001B 	2A33
+		//;TEST_FT62F21X_SLEEP.C: 173: {
+		//;TEST_FT62F21X_SLEEP.C: 174: if(time_15ms_cnt > 150)
+		LDWI 	97H 			//0019 	2A97
+		SUBWR 	4AH,0 			//001A 	0C4A
+		BTSS 	STATUS,0 		//001B 	1C03
 		ORG		001CH
+		LJUMP 	20H 			//001C 	3820
 
-		//;TEST_FT62F21X_SLEEP.C: 50: T0IF = 0;
-		BCR 	INTCON,2 		//001C 	110B
+		//;TEST_FT62F21X_SLEEP.C: 175: {
+		//;TEST_FT62F21X_SLEEP.C: 176: time_15ms_cnt = 0;
+		CLRR 	4AH 			//001D 	014A
 
-		//;TEST_FT62F21X_SLEEP.C: 51: IRbitTime++;
-		INCR	71H,1 			//001D 	09F1
+		//;TEST_FT62F21X_SLEEP.C: 177: pwm_rate_value++;
+		INCR	79H,1 			//001E 	09F9
 
-		//;TEST_FT62F21X_SLEEP.C: 52: if(IRbitTime > 50)
-		SUBWR 	71H,0 			//001E 	0C71
-		BTSS 	STATUS,0 		//001F 	1C03
-		LJUMP 	23H 			//0020 	3823
+		//;TEST_FT62F21X_SLEEP.C: 178: PWM1_RATE_CHANGE();
+		LCALL 	163H 			//001F 	3163
 
-		//;TEST_FT62F21X_SLEEP.C: 53: {
-		//;TEST_FT62F21X_SLEEP.C: 54: T0IE = 0;
-		BCR 	INTCON,5 		//0021 	128B
-
-		//;TEST_FT62F21X_SLEEP.C: 55: IRbitTime = 0;
-		CLRR 	71H 			//0022 	0171
-
-		//;TEST_FT62F21X_SLEEP.C: 56: }
-		//;TEST_FT62F21X_SLEEP.C: 57: }
-		//;TEST_FT62F21X_SLEEP.C: 60: if(PAIE && PAIF)
-		BTSC 	INTCON,3 		//0023 	158B
+		//;TEST_FT62F21X_SLEEP.C: 179: }
+		//;TEST_FT62F21X_SLEEP.C: 180: }
+		//;TEST_FT62F21X_SLEEP.C: 181: if(ft_user_pwm_mode == 5)
+		LDR 	77H,0 			//0020 	0877
+		XORWI 	5H 			//0021 	2605
+		BTSS 	STATUS,2 		//0022 	1D03
+		LJUMP 	30H 			//0023 	3830
 		ORG		0024H
-		BTSS 	INTCON,0 		//0024 	1C0B
-		LJUMP 	50H 			//0025 	3850
 
-		//;TEST_FT62F21X_SLEEP.C: 61: {
-		//;TEST_FT62F21X_SLEEP.C: 62: ReadAPin = PORTA;
-		BCR 	STATUS,5 		//0026 	1283
-		LDR 	5H,0 			//0027 	0805
+		//;TEST_FT62F21X_SLEEP.C: 182: {
+		//;TEST_FT62F21X_SLEEP.C: 183: if(time_15ms_cnt>200)
+		LDWI 	C9H 			//0024 	2AC9
+		SUBWR 	4AH,0 			//0025 	0C4A
+		BTSS 	STATUS,0 		//0026 	1C03
+		LJUMP 	30H 			//0027 	3830
+		LDWI 	65H 			//0028 	2A65
 
-		//;TEST_FT62F21X_SLEEP.C: 63: PAIF = 0;
-		BCR 	INTCON,0 		//0028 	100B
+		//;TEST_FT62F21X_SLEEP.C: 184: {
+		//;TEST_FT62F21X_SLEEP.C: 185: time_2s_cnt++;
+		INCR	4BH,1 			//0029 	09CB
 
-		//;TEST_FT62F21X_SLEEP.C: 64: if(RA3 == 0)
-		BTSC 	5H,3 			//0029 	1585
-		LJUMP 	50H 			//002A 	3850
-		LDWI 	16H 			//002B 	2A16
+		//;TEST_FT62F21X_SLEEP.C: 186: if(time_2s_cnt > 100)
+		SUBWR 	4BH,0 			//002A 	0C4B
+		BTSS 	STATUS,0 		//002B 	1C03
 		ORG		002CH
-
-		//;TEST_FT62F21X_SLEEP.C: 65: {
-		//;TEST_FT62F21X_SLEEP.C: 66: T0IE = 1;
-		BSR 	INTCON,5 		//002C 	1A8B
-
-		//;TEST_FT62F21X_SLEEP.C: 67: if(IRbitTime > 21)
-		SUBWR 	71H,0 			//002D 	0C71
-		BTSS 	STATUS,0 		//002E 	1C03
-		LJUMP 	37H 			//002F 	3837
-
-		//;TEST_FT62F21X_SLEEP.C: 68: {
-		//;TEST_FT62F21X_SLEEP.C: 69: IRDataTimer[0] = 0;
-		CLRR 	40H 			//0030 	0140
-
-		//;TEST_FT62F21X_SLEEP.C: 70: IRDataTimer[1] = 0;
-		CLRR 	41H 			//0031 	0141
-
-		//;TEST_FT62F21X_SLEEP.C: 71: IRDataTimer[2] = 0;
-		CLRR 	42H 			//0032 	0142
-
-		//;TEST_FT62F21X_SLEEP.C: 72: IRDataTimer[3] = 0;
-		CLRR 	43H 			//0033 	0143
-		ORG		0034H
-
-		//;TEST_FT62F21X_SLEEP.C: 73: IRbitNum = 0;
-		CLRR 	70H 			//0034 	0170
-
-		//;TEST_FT62F21X_SLEEP.C: 74: bitdata = 0x00;
-		CLRR 	7AH 			//0035 	017A
-
-		//;TEST_FT62F21X_SLEEP.C: 75: }
-		LJUMP 	41H 			//0036 	3841
-
-		//;TEST_FT62F21X_SLEEP.C: 76: else if(IRbitTime > 3)
-		LDWI 	4H 			//0037 	2A04
-		SUBWR 	71H,0 			//0038 	0C71
-		BTSS 	STATUS,0 		//0039 	1C03
-		LJUMP 	41H 			//003A 	3841
-
-		//;TEST_FT62F21X_SLEEP.C: 77: {
-		//;TEST_FT62F21X_SLEEP.C: 78: IRDataTimer[IRbitNum-1] |= bitdata;
-		LDR 	70H,0 			//003B 	0870
-		ORG		003CH
-		ADDWI 	3FH 			//003C 	273F
-		STR 	FSR 			//003D 	0184
-		LDR 	7AH,0 			//003E 	087A
-		BCR 	STATUS,7 		//003F 	1383
-		IORWR 	INDF,1 		//0040 	0380
-
-		//;TEST_FT62F21X_SLEEP.C: 79: }
-		//;TEST_FT62F21X_SLEEP.C: 80: IRbitTime = 0;
-		CLRR 	71H 			//0041 	0171
-
-		//;TEST_FT62F21X_SLEEP.C: 81: bitdata<<=1;
-		BCR 	STATUS,0 		//0042 	1003
-		RLR 	7AH,1 			//0043 	05FA
-		ORG		0044H
-
-		//;TEST_FT62F21X_SLEEP.C: 82: if(bitdata == 0)
-		LDR 	7AH,1 			//0044 	08FA
-		BTSS 	STATUS,2 		//0045 	1D03
-		LJUMP 	4AH 			//0046 	384A
-
-		//;TEST_FT62F21X_SLEEP.C: 83: {
-		//;TEST_FT62F21X_SLEEP.C: 84: bitdata = 0x01;
-		CLRR 	7AH 			//0047 	017A
-		INCR	7AH,1 			//0048 	09FA
-
-		//;TEST_FT62F21X_SLEEP.C: 85: IRbitNum++;
-		INCR	70H,1 			//0049 	09F0
-
-		//;TEST_FT62F21X_SLEEP.C: 86: }
-		//;TEST_FT62F21X_SLEEP.C: 87: if(IRbitNum > 4)
-		LDWI 	5H 			//004A 	2A05
-		SUBWR 	70H,0 			//004B 	0C70
-		ORG		004CH
-		BTSS 	STATUS,0 		//004C 	1C03
-		LJUMP 	50H 			//004D 	3850
-
-		//;TEST_FT62F21X_SLEEP.C: 88: {
-		//;TEST_FT62F21X_SLEEP.C: 89: IRbitNum = 0;
-		CLRR 	70H 			//004E 	0170
-
-		//;TEST_FT62F21X_SLEEP.C: 91: ReceiveFinish = 1;
-		BCR 	INTCON,5 		//004F 	128B
-		LDR 	77H,0 			//0050 	0877
-		STR 	PCLATH 			//0051 	018A
-		LDR 	76H,0 			//0052 	0876
-		STR 	FSR 			//0053 	0184
-		ORG		0054H
-		SWAPR 	75H,0 			//0054 	0775
-		STR 	STATUS 			//0055 	0183
-		SWAPR 	7EH,1 			//0056 	07FE
-		SWAPR 	7EH,0 			//0057 	077E
-		RETI		 			//0058 	0009
-
-		//;FT_62F21X_pwm.c: 184: unsigned char pwm_value;
-		//;FT_62F21X_pwm.c: 186: if(pwm_rate_value >= 200)
-		LDWI 	C8H 			//0059 	2AC8
-		SUBWR 	74H,0 			//005A 	0C74
-		BTSS 	STATUS,0 		//005B 	1C03
-		ORG		005CH
-		LJUMP 	75H 			//005C 	3875
-		LDWI 	3H 			//005D 	2A03
-
-		//;FT_62F21X_pwm.c: 187: {
-		//;FT_62F21X_pwm.c: 188: pwm_rate_value = 0;
-		CLRR 	74H 			//005E 	0174
-
-		//;FT_62F21X_pwm.c: 189: pwm_colour_value++;
-		INCR	73H,1 			//005F 	09F3
-
-		//;FT_62F21X_pwm.c: 190: pwm_colour_value = pwm_colour_value%4;
-		ANDWR 	73H,1 			//0060 	02F3
-
-		//;FT_62F21X_pwm.c: 191: switch(pwm_colour_value)
-		LJUMP 	6AH 			//0061 	386A
-
-		//;FT_62F21X_pwm.c: 194: PWM1_RED();
-		LCALL 	143H 			//0062 	3143
-
-		//;FT_62F21X_pwm.c: 195: break;
-		LJUMP 	75H 			//0063 	3875
-		ORG		0064H
-
-		//;FT_62F21X_pwm.c: 198: PWM1_GREEN();
-		LCALL 	13DH 			//0064 	313D
-
-		//;FT_62F21X_pwm.c: 199: break;
-		LJUMP 	75H 			//0065 	3875
-
-		//;FT_62F21X_pwm.c: 202: PWM1_BLUE();
-		LCALL 	127H 			//0066 	3127
-
-		//;FT_62F21X_pwm.c: 203: break;
-		LJUMP 	75H 			//0067 	3875
-
-		//;FT_62F21X_pwm.c: 206: PWM1_WHITE();
-		LCALL 	115H 			//0068 	3115
-
-		//;FT_62F21X_pwm.c: 207: break;
-		LJUMP 	75H 			//0069 	3875
-		LDR 	73H,0 			//006A 	0873
-		STR 	FSR 			//006B 	0184
-		ORG		006CH
-		LDWI 	4H 			//006C 	2A04
-		SUBWR 	FSR,0 			//006D 	0C04
-		BTSC 	STATUS,0 		//006E 	1403
-		LJUMP 	75H 			//006F 	3875
-		LDWI 	1H 			//0070 	2A01
-		STR 	PCLATH 			//0071 	018A
-		LDWI 	49H 			//0072 	2A49
-		ADDWR 	FSR,0 			//0073 	0B04
-		ORG		0074H
-		STR 	PCL 			//0074 	0182
-
-		//;FT_62F21X_pwm.c: 213: }
-		//;FT_62F21X_pwm.c: 214: if(pwm_rate_value <=100)
-		LDWI 	65H 			//0075 	2A65
-		SUBWR 	74H,0 			//0076 	0C74
-
-		//;FT_62F21X_pwm.c: 215: {
-		//;FT_62F21X_pwm.c: 216: pwm_value = pwm_rate_value;
-		LDR 	74H,0 			//0077 	0874
-		BTSC 	STATUS,0 		//0078 	1403
-
-		//;FT_62F21X_pwm.c: 218: else
-		//;FT_62F21X_pwm.c: 219: {
-		//;FT_62F21X_pwm.c: 220: pwm_value = 200 - pwm_rate_value;
-		//;FT_62F21X_pwm.c: 217: }
-		SUBWI 	C8H 			//0079 	28C8
-		STR 	78H 			//007A 	01F8
-		LJUMP 	82H 			//007B 	3882
-		ORG		007CH
-
-		//;FT_62F21X_pwm.c: 226: P1CDTL = pwm_value;
-		LDR 	78H,0 			//007C 	0878
-		STR 	10H 			//007D 	0190
-
-		//;FT_62F21X_pwm.c: 227: break;
-		RET		 					//007E 	0004
-
-		//;FT_62F21X_pwm.c: 230: P1DDTL = pwm_value;
-		LDR 	78H,0 			//007F 	0878
-		STR 	8H 			//0080 	0188
-
-		//;FT_62F21X_pwm.c: 231: break;
-		RET		 					//0081 	0004
-		LDR 	73H,0 			//0082 	0873
-		STR 	FSR 			//0083 	0184
-		ORG		0084H
-		LDWI 	4H 			//0084 	2A04
-		SUBWR 	FSR,0 			//0085 	0C04
-		BTSC 	STATUS,0 		//0086 	1403
-		RET		 					//0087 	0004
-		LDWI 	1H 			//0088 	2A01
-		STR 	PCLATH 			//0089 	018A
-		LDWI 	4DH 			//008A 	2A4D
-		ADDWR 	FSR,0 			//008B 	0B04
-		ORG		008CH
-		STR 	PCL 			//008C 	0182
-		RET		 					//008D 	0004
-
-		//;FT_62F21X_pwm.c: 22: T2CON0=0B00000001;
-		LDWI 	1H 			//008E 	2A01
-		BCR 	STATUS,5 		//008F 	1283
-		STR 	12H 			//0090 	0192
-
-		//;FT_62F21X_pwm.c: 28: T2CON1=0B00000000;
-		BSR 	STATUS,5 		//0091 	1A83
-		CLRR 	1EH 			//0092 	011E
-
-		//;FT_62F21X_pwm.c: 33: TMR2H=0;
-		BCR 	STATUS,5 		//0093 	1283
-		ORG		0094H
-		CLRR 	13H 			//0094 	0113
-
-		//;FT_62F21X_pwm.c: 34: TMR2L=100;
-		LDWI 	64H 			//0095 	2A64
-		STR 	11H 			//0096 	0191
-
-		//;FT_62F21X_pwm.c: 36: PR2H=0;
-		BSR 	STATUS,5 		//0097 	1A83
-		CLRR 	12H 			//0098 	0112
-
-		//;FT_62F21X_pwm.c: 37: PR2L=100;
-		STR 	11H 			//0099 	0191
-
-		//;FT_62F21X_pwm.c: 39: P1CDTH=0;
-		BCR 	STATUS,5 		//009A 	1283
-		CLRR 	1AH 			//009B 	011A
-		ORG		009CH
-
-		//;FT_62F21X_pwm.c: 40: P1DDTH=0;
-		CLRR 	9H 			//009C 	0109
-
-		//;FT_62F21X_pwm.c: 41: P1CDTL=0;
-		CLRR 	10H 			//009D 	0110
-
-		//;FT_62F21X_pwm.c: 42: P1DDTL=0;
-		CLRR 	8H 			//009E 	0108
-
-		//;FT_62F21X_pwm.c: 44: P1POL=0B00000000;
-		BSR 	STATUS,5 		//009F 	1A83
-		CLRR 	19H 			//00A0 	0119
-
-		//;FT_62F21X_pwm.c: 51: P1CON=0B00000000;
-		BCR 	STATUS,5 		//00A1 	1283
-		CLRR 	16H 			//00A2 	0116
-
-		//;FT_62F21X_pwm.c: 58: P1AUX=0B00000000;
-		CLRR 	1EH 			//00A3 	011E
-		ORG		00A4H
-
-		//;FT_62F21X_pwm.c: 66: PWM1_RED();
-		LCALL 	143H 			//00A4 	3143
-
-		//;FT_62F21X_pwm.c: 67: pwm_colour_value = 0;
-		CLRR 	73H 			//00A5 	0173
-
-		//;FT_62F21X_pwm.c: 69: TMR2IF=0;
-		BCR 	CH,1 			//00A6 	108C
-
-		//;FT_62F21X_pwm.c: 70: TMR2IE=1;
-		BSR 	STATUS,5 		//00A7 	1A83
-		BSR 	CH,1 			//00A8 	188C
-
-		//;FT_62F21X_pwm.c: 71: TMR2ON=1;
-		BCR 	STATUS,5 		//00A9 	1283
-		BSR 	12H,2 			//00AA 	1912
-
-		//;FT_62F21X_pwm.c: 72: PEIE=1;
-		BSR 	INTCON,6 		//00AB 	1B0B
-		ORG		00ACH
-
-		//;FT_62F21X_pwm.c: 73: GIE=1;
-		BSR 	INTCON,7 		//00AC 	1B8B
-		RET		 					//00AD 	0004
-
-		//;TEST_FT62F21X_SLEEP.C: 175: POWER_INITIAL();
-		LCALL 	106H 			//00AE 	3106
-
-		//;TEST_FT62F21X_SLEEP.C: 176: TIMER0_INITIAL();
-		LCALL 	12FH 			//00AF 	312F
-
-		//;TEST_FT62F21X_SLEEP.C: 177: PA3_Level_Change_INITIAL();
-		LCALL 	11EH 			//00B0 	311E
-
-		//;TEST_FT62F21X_SLEEP.C: 178: PWM1_INITIAL();
-		LCALL 	8EH 			//00B1 	308E
-		CLRWDT	 			//00B2 	0001
-
-		//;TEST_FT62F21X_SLEEP.C: 184: if(ft_user_pwm_mode == 0)
-		LDR 	72H,1 			//00B3 	08F2
-		ORG		00B4H
-		BTSS 	STATUS,2 		//00B4 	1D03
-		LJUMP 	BEH 			//00B5 	38BE
-
-		//;TEST_FT62F21X_SLEEP.C: 185: {
-		//;TEST_FT62F21X_SLEEP.C: 186: if(time_15ms_cnt > 150)
-		LDWI 	97H 			//00B6 	2A97
-		BCR 	STATUS,5 		//00B7 	1283
-		SUBWR 	45H,0 			//00B8 	0C45
-		BTSS 	STATUS,0 		//00B9 	1C03
-		LJUMP 	BEH 			//00BA 	38BE
+		LJUMP 	2FH 			//002C 	382F
 
 		//;TEST_FT62F21X_SLEEP.C: 187: {
-		//;TEST_FT62F21X_SLEEP.C: 188: time_15ms_cnt = 0;
-		CLRR 	45H 			//00BB 	0145
-		ORG		00BCH
+		//;TEST_FT62F21X_SLEEP.C: 188: time_2s_cnt = 0;
+		CLRR 	4BH 			//002D 	014B
 
-		//;TEST_FT62F21X_SLEEP.C: 189: pwm_rate_value++;
-		INCR	74H,1 			//00BC 	09F4
+		//;TEST_FT62F21X_SLEEP.C: 189: JUMP_MODE_CHANGE();
+		LCALL 	1F5H 			//002E 	31F5
 
-		//;TEST_FT62F21X_SLEEP.C: 190: PWM1_RATE_CHANGE();
-		LCALL 	59H 			//00BD 	3059
+		//;TEST_FT62F21X_SLEEP.C: 190: }
+		//;TEST_FT62F21X_SLEEP.C: 191: time_15ms_cnt = 0;
+		CLRR 	4AH 			//002F 	014A
 
-		//;TEST_FT62F21X_SLEEP.C: 191: }
-		//;TEST_FT62F21X_SLEEP.C: 192: }
-		//;TEST_FT62F21X_SLEEP.C: 194: if(PORTA & 0B00010000)
-		BCR 	STATUS,5 		//00BE 	1283
-		BTSS 	5H,4 			//00BF 	1E05
-		LJUMP 	C3H 			//00C0 	38C3
+		//;TEST_FT62F21X_SLEEP.C: 193: }
+		//;TEST_FT62F21X_SLEEP.C: 194: }
+		//;TEST_FT62F21X_SLEEP.C: 195: if(ft_user_pwm_mode == 0x0A)
+		LDR 	77H,0 			//0030 	0877
+		XORWI 	AH 			//0031 	260A
+		BTSS 	STATUS,2 		//0032 	1D03
+		LJUMP 	40H 			//0033 	3840
+		ORG		0034H
 
-		//;TEST_FT62F21X_SLEEP.C: 195: {
-		//;TEST_FT62F21X_SLEEP.C: 196: key_release = 0;
-		CLRR 	44H 			//00C1 	0144
+		//;TEST_FT62F21X_SLEEP.C: 196: {
+		//;TEST_FT62F21X_SLEEP.C: 197: if(time_15ms_cnt>200)
+		LDWI 	C9H 			//0034 	2AC9
+		SUBWR 	4AH,0 			//0035 	0C4A
+		BTSS 	STATUS,0 		//0036 	1C03
+		LJUMP 	40H 			//0037 	3840
+		LDWI 	65H 			//0038 	2A65
 
-		//;TEST_FT62F21X_SLEEP.C: 197: }
-		LJUMP 	B2H 			//00C2 	38B2
+		//;TEST_FT62F21X_SLEEP.C: 198: {
+		//;TEST_FT62F21X_SLEEP.C: 199: time_2s_cnt++;
+		INCR	4BH,1 			//0039 	09CB
 
-		//;TEST_FT62F21X_SLEEP.C: 198: else
-		//;TEST_FT62F21X_SLEEP.C: 199: {
-		//;TEST_FT62F21X_SLEEP.C: 200: if(key_release == 0)
-		LDR 	44H,1 			//00C3 	08C4
-		ORG		00C4H
-		BTSS 	STATUS,2 		//00C4 	1D03
-		LJUMP 	C7H 			//00C5 	38C7
+		//;TEST_FT62F21X_SLEEP.C: 200: if(time_2s_cnt > 100)
+		SUBWR 	4BH,0 			//003A 	0C4B
+		BTSS 	STATUS,0 		//003B 	1C03
+		ORG		003CH
+		LJUMP 	3FH 			//003C 	383F
 
 		//;TEST_FT62F21X_SLEEP.C: 201: {
-		//;TEST_FT62F21X_SLEEP.C: 202: PWM_MODE_CHANGE();
-		LCALL 	E6H 			//00C6 	30E6
+		//;TEST_FT62F21X_SLEEP.C: 202: time_2s_cnt = 0;
+		CLRR 	4BH 			//003D 	014B
 
-		//;TEST_FT62F21X_SLEEP.C: 203: }
-		//;TEST_FT62F21X_SLEEP.C: 204: key_release = 1;
-		CLRR 	44H 			//00C7 	0144
-		INCR	44H,1 			//00C8 	09C4
-		LJUMP 	B2H 			//00C9 	38B2
-		STR 	46H 			//00CA 	01C6
-		LDWI 	8H 			//00CB 	2A08
+		//;TEST_FT62F21X_SLEEP.C: 203: MIX_MODE_CHANGE();
+		LCALL 	198H 			//003E 	3198
+
+		//;TEST_FT62F21X_SLEEP.C: 204: }
+		//;TEST_FT62F21X_SLEEP.C: 205: time_15ms_cnt = 0;
+		CLRR 	4AH 			//003F 	014A
+
+		//;TEST_FT62F21X_SLEEP.C: 207: }
+		//;TEST_FT62F21X_SLEEP.C: 208: }
+		//;TEST_FT62F21X_SLEEP.C: 209: }
+		//;TEST_FT62F21X_SLEEP.C: 212: if(PORTA & 0B00010000)
+		BTSS 	5H,4 			//0040 	1E05
+		LJUMP 	44H 			//0041 	3844
+
+		//;TEST_FT62F21X_SLEEP.C: 213: {
+		//;TEST_FT62F21X_SLEEP.C: 214: key_release = 0;
+		CLRR 	48H 			//0042 	0148
+
+		//;TEST_FT62F21X_SLEEP.C: 215: }
+		LJUMP 	4BH 			//0043 	384B
+		ORG		0044H
+
+		//;TEST_FT62F21X_SLEEP.C: 216: else
+		//;TEST_FT62F21X_SLEEP.C: 217: {
+		//;TEST_FT62F21X_SLEEP.C: 218: if(key_release == 0)
+		LDR 	48H,1 			//0044 	08C8
+		BTSS 	STATUS,2 		//0045 	1D03
+		LJUMP 	49H 			//0046 	3849
+
+		//;TEST_FT62F21X_SLEEP.C: 219: {
+		//;TEST_FT62F21X_SLEEP.C: 220: reset_led_status();
+		LCALL 	2F4H 			//0047 	32F4
+
+		//;TEST_FT62F21X_SLEEP.C: 221: PWM_MODE_CHANGE();
+		LCALL 	2DBH 			//0048 	32DB
+
+		//;TEST_FT62F21X_SLEEP.C: 222: }
+		//;TEST_FT62F21X_SLEEP.C: 223: key_release = 1;
+		CLRR 	48H 			//0049 	0148
+		INCR	48H,1 			//004A 	09C8
+
+		//;TEST_FT62F21X_SLEEP.C: 225: }
+		//;TEST_FT62F21X_SLEEP.C: 227: if(ReceiveFinish)
+		LDR 	46H,0 			//004B 	0846
+		ORG		004CH
+		BTSC 	STATUS,2 		//004C 	1503
+		LJUMP 	11H 			//004D 	3811
+
+		//;TEST_FT62F21X_SLEEP.C: 228: {
+		//;TEST_FT62F21X_SLEEP.C: 229: unsigned char i;
+		//;TEST_FT62F21X_SLEEP.C: 230: unsigned char temp_mode;
+		//;TEST_FT62F21X_SLEEP.C: 232: ReceiveFinish = 0;
+		CLRR 	46H 			//004E 	0146
+
+		//;TEST_FT62F21X_SLEEP.C: 234: for(i = 0;i < 19;i++)
+		CLRR 	75H 			//004F 	0175
+
+		//;TEST_FT62F21X_SLEEP.C: 235: {
+		//;TEST_FT62F21X_SLEEP.C: 236: if(ir_key_value[i*2] == IRDataTimer[3])
+		BCR 	STATUS,0 		//0050 	1003
+		RLR 	75H,0 			//0051 	0575
+		ADDWI 	1H 			//0052 	2701
+		STR 	FSR 			//0053 	0184
+		ORG		0054H
+		LCALL 	1C9H 			//0054 	31C9
+		XORWR 	43H,0 			//0055 	0443
+		BTSS 	STATUS,2 		//0056 	1D03
+		LJUMP 	88H 			//0057 	3888
+
+		//;TEST_FT62F21X_SLEEP.C: 237: {
+		//;TEST_FT62F21X_SLEEP.C: 238: temp_mode = ir_key_value[i*2 + 1];
+		BCR 	STATUS,0 		//0058 	1003
+		RLR 	75H,0 			//0059 	0575
+		ADDWI 	2H 			//005A 	2702
+		STR 	FSR 			//005B 	0184
+		ORG		005CH
+		LCALL 	1C9H 			//005C 	31C9
+		STR 	76H 			//005D 	01F6
+
+		//;TEST_FT62F21X_SLEEP.C: 239: if(temp_mode == 0x12)
+		XORWI 	12H 			//005E 	2612
+		BTSS 	STATUS,2 		//005F 	1D03
+		LJUMP 	6BH 			//0060 	386B
+
+		//;TEST_FT62F21X_SLEEP.C: 240: {
+		//;TEST_FT62F21X_SLEEP.C: 241: if(power_off_mode_backup == 0xff)
+		LDR 	4DH,0 			//0061 	084D
+		XORWI 	FFH 			//0062 	26FF
+		BTSS 	STATUS,2 		//0063 	1D03
+		ORG		0064H
+		LJUMP 	6BH 			//0064 	386B
+
+		//;TEST_FT62F21X_SLEEP.C: 242: {
+		//;TEST_FT62F21X_SLEEP.C: 243: if(ft_user_pwm_mode < 0x0B)
+		LDWI 	BH 			//0065 	2A0B
+		SUBWR 	77H,0 			//0066 	0C77
+		BTSC 	STATUS,0 		//0067 	1403
+		LJUMP 	6BH 			//0068 	386B
+
+		//;TEST_FT62F21X_SLEEP.C: 244: {
+		//;TEST_FT62F21X_SLEEP.C: 245: power_off_mode_backup = ft_user_pwm_mode;
+		LDR 	77H,0 			//0069 	0877
+		STR 	4DH 			//006A 	01CD
+
+		//;TEST_FT62F21X_SLEEP.C: 246: }
+		//;TEST_FT62F21X_SLEEP.C: 247: }
+		//;TEST_FT62F21X_SLEEP.C: 248: }
+		//;TEST_FT62F21X_SLEEP.C: 249: if(temp_mode >= 0x0D && temp_mode <= 0x10)
+		LDWI 	DH 			//006B 	2A0D
+		ORG		006CH
+		SUBWR 	76H,0 			//006C 	0C76
+		BTSS 	STATUS,0 		//006D 	1C03
+		LJUMP 	79H 			//006E 	3879
+		LDWI 	11H 			//006F 	2A11
+		SUBWR 	76H,0 			//0070 	0C76
+
+		//;TEST_FT62F21X_SLEEP.C: 250: {
+		//;TEST_FT62F21X_SLEEP.C: 251: if(ft_user_pwm_mode < 0x0B)
+		LDWI 	BH 			//0071 	2A0B
+		BTSC 	STATUS,0 		//0072 	1403
+		LJUMP 	7AH 			//0073 	387A
+		ORG		0074H
+		SUBWR 	77H,0 			//0074 	0C77
+		BTSC 	STATUS,0 		//0075 	1403
+		LJUMP 	79H 			//0076 	3879
+
+		//;TEST_FT62F21X_SLEEP.C: 252: {
+		//;TEST_FT62F21X_SLEEP.C: 253: set_time_mode_backup = ft_user_pwm_mode;
+		LDR 	77H,0 			//0077 	0877
+		STR 	4EH 			//0078 	01CE
+
+		//;TEST_FT62F21X_SLEEP.C: 254: }
+		//;TEST_FT62F21X_SLEEP.C: 255: }
+		//;TEST_FT62F21X_SLEEP.C: 256: if(temp_mode < 0x0B)
+		LDWI 	BH 			//0079 	2A0B
+		SUBWR 	76H,0 			//007A 	0C76
+		BTSC 	STATUS,0 		//007B 	1403
+		ORG		007CH
+		LJUMP 	85H 			//007C 	3885
+
+		//;TEST_FT62F21X_SLEEP.C: 257: {
+		//;TEST_FT62F21X_SLEEP.C: 258: if(ft_user_pwm_mode != temp_mode)
+		LDR 	77H,0 			//007D 	0877
+		XORWR 	76H,0 			//007E 	0476
+		BTSC 	STATUS,2 		//007F 	1503
+		LJUMP 	88H 			//0080 	3888
+
+		//;TEST_FT62F21X_SLEEP.C: 259: {
+		//;TEST_FT62F21X_SLEEP.C: 260: ft_user_pwm_mode = temp_mode;
+		LDR 	76H,0 			//0081 	0876
+		STR 	77H 			//0082 	01F7
+
+		//;TEST_FT62F21X_SLEEP.C: 261: PWM_MODE_REFRESH();
+		LCALL 	121H 			//0083 	3121
+		ORG		0084H
+		LJUMP 	88H 			//0084 	3888
+
+		//;TEST_FT62F21X_SLEEP.C: 264: else
+		//;TEST_FT62F21X_SLEEP.C: 265: {
+		//;TEST_FT62F21X_SLEEP.C: 266: ft_user_set_mode = temp_mode;
+		LDR 	76H,0 			//0085 	0876
+		STR 	47H 			//0086 	01C7
+
+		//;TEST_FT62F21X_SLEEP.C: 267: SET_MODE_REFRESH();
+		LCALL 	DCH 			//0087 	30DC
+		LDWI 	13H 			//0088 	2A13
+		INCR	75H,1 			//0089 	09F5
+		SUBWR 	75H,0 			//008A 	0C75
+		BTSC 	STATUS,0 		//008B 	1403
+		ORG		008CH
+		LJUMP 	11H 			//008C 	3811
+		LJUMP 	50H 			//008D 	3850
+
+		//;TEST_FT62F21X_SLEEP.C: 63: if(TMR2IE && TMR2IF)
+		BSR 	STATUS,5 		//008E 	1A83
+		BTSS 	CH,1 			//008F 	1C8C
+		LJUMP 	96H 			//0090 	3896
+		BCR 	STATUS,5 		//0091 	1283
+		BTSS 	CH,1 			//0092 	1C8C
+		LJUMP 	96H 			//0093 	3896
+		ORG		0094H
+
+		//;TEST_FT62F21X_SLEEP.C: 64: {
+		//;TEST_FT62F21X_SLEEP.C: 65: TMR2IF = 0;
+		BCR 	CH,1 			//0094 	108C
+
+		//;TEST_FT62F21X_SLEEP.C: 66: time_15ms_cnt++;
+		INCR	4AH,1 			//0095 	09CA
+
+		//;TEST_FT62F21X_SLEEP.C: 68: }
+		//;TEST_FT62F21X_SLEEP.C: 72: if(T0IE && T0IF)
+		BTSC 	INTCON,5 		//0096 	168B
+		BTSS 	INTCON,2 		//0097 	1D0B
+		LJUMP 	A4H 			//0098 	38A4
+
+		//;TEST_FT62F21X_SLEEP.C: 73: {
+		//;TEST_FT62F21X_SLEEP.C: 74: TMR0 = 140;
+		LDWI 	8CH 			//0099 	2A8C
+		BCR 	STATUS,5 		//009A 	1283
+		STR 	1H 			//009B 	0181
+		ORG		009CH
+		LDWI 	33H 			//009C 	2A33
+
+		//;TEST_FT62F21X_SLEEP.C: 76: T0IF = 0;
+		BCR 	INTCON,2 		//009D 	110B
+
+		//;TEST_FT62F21X_SLEEP.C: 77: IRbitTime++;
+		INCR	45H,1 			//009E 	09C5
+
+		//;TEST_FT62F21X_SLEEP.C: 78: if(IRbitTime > 50)
+		SUBWR 	45H,0 			//009F 	0C45
+		BTSS 	STATUS,0 		//00A0 	1C03
+		LJUMP 	A4H 			//00A1 	38A4
+
+		//;TEST_FT62F21X_SLEEP.C: 79: {
+		//;TEST_FT62F21X_SLEEP.C: 80: T0IE = 0;
+		BCR 	INTCON,5 		//00A2 	128B
+
+		//;TEST_FT62F21X_SLEEP.C: 81: IRbitTime = 0;
+		CLRR 	45H 			//00A3 	0145
+		ORG		00A4H
+
+		//;TEST_FT62F21X_SLEEP.C: 82: }
+		//;TEST_FT62F21X_SLEEP.C: 83: }
+		//;TEST_FT62F21X_SLEEP.C: 86: if(PAIE && PAIF)
+		BTSC 	INTCON,3 		//00A4 	158B
+		BTSS 	INTCON,0 		//00A5 	1C0B
+		LJUMP 	D3H 			//00A6 	38D3
+
+		//;TEST_FT62F21X_SLEEP.C: 87: {
+		//;TEST_FT62F21X_SLEEP.C: 88: ReadAPin = PORTA;
+		BCR 	STATUS,5 		//00A7 	1283
+		LDR 	5H,0 			//00A8 	0805
+
+		//;TEST_FT62F21X_SLEEP.C: 89: PAIF = 0;
+		BCR 	INTCON,0 		//00A9 	100B
+
+		//;TEST_FT62F21X_SLEEP.C: 90: if(RA3 == 0)
+		BTSC 	5H,3 			//00AA 	1585
+		LJUMP 	D3H 			//00AB 	38D3
+		ORG		00ACH
+		LDWI 	16H 			//00AC 	2A16
+
+		//;TEST_FT62F21X_SLEEP.C: 91: {
+		//;TEST_FT62F21X_SLEEP.C: 92: T0IE = 1;
+		BSR 	INTCON,5 		//00AD 	1A8B
+
+		//;TEST_FT62F21X_SLEEP.C: 93: if(IRbitTime > 21)
+		SUBWR 	45H,0 			//00AE 	0C45
+		BTSS 	STATUS,0 		//00AF 	1C03
+		LJUMP 	B8H 			//00B0 	38B8
+
+		//;TEST_FT62F21X_SLEEP.C: 94: {
+		//;TEST_FT62F21X_SLEEP.C: 95: IRDataTimer[0] = 0;
+		CLRR 	40H 			//00B1 	0140
+
+		//;TEST_FT62F21X_SLEEP.C: 96: IRDataTimer[1] = 0;
+		CLRR 	41H 			//00B2 	0141
+
+		//;TEST_FT62F21X_SLEEP.C: 97: IRDataTimer[2] = 0;
+		CLRR 	42H 			//00B3 	0142
+		ORG		00B4H
+
+		//;TEST_FT62F21X_SLEEP.C: 98: IRDataTimer[3] = 0;
+		CLRR 	43H 			//00B4 	0143
+
+		//;TEST_FT62F21X_SLEEP.C: 99: IRbitNum = 0;
+		CLRR 	44H 			//00B5 	0144
+
+		//;TEST_FT62F21X_SLEEP.C: 100: bitdata = 0x00;
+		CLRR 	4CH 			//00B6 	014C
+
+		//;TEST_FT62F21X_SLEEP.C: 101: }
+		LJUMP 	C2H 			//00B7 	38C2
+
+		//;TEST_FT62F21X_SLEEP.C: 102: else if(IRbitTime > 3)
+		LDWI 	4H 			//00B8 	2A04
+		SUBWR 	45H,0 			//00B9 	0C45
+		BTSS 	STATUS,0 		//00BA 	1C03
+		LJUMP 	C2H 			//00BB 	38C2
+		ORG		00BCH
+
+		//;TEST_FT62F21X_SLEEP.C: 103: {
+		//;TEST_FT62F21X_SLEEP.C: 104: IRDataTimer[IRbitNum-1] |= bitdata;
+		LDR 	44H,0 			//00BC 	0844
+		ADDWI 	3FH 			//00BD 	273F
+		STR 	FSR 			//00BE 	0184
+		LDR 	4CH,0 			//00BF 	084C
+		BCR 	STATUS,7 		//00C0 	1383
+		IORWR 	INDF,1 		//00C1 	0380
+
+		//;TEST_FT62F21X_SLEEP.C: 105: }
+		//;TEST_FT62F21X_SLEEP.C: 106: IRbitTime = 0;
+		CLRR 	45H 			//00C2 	0145
+
+		//;TEST_FT62F21X_SLEEP.C: 107: bitdata<<=1;
+		BCR 	STATUS,0 		//00C3 	1003
+		ORG		00C4H
+		RLR 	4CH,1 			//00C4 	05CC
+
+		//;TEST_FT62F21X_SLEEP.C: 108: if(bitdata == 0)
+		LDR 	4CH,1 			//00C5 	08CC
+		BTSS 	STATUS,2 		//00C6 	1D03
+		LJUMP 	CBH 			//00C7 	38CB
+
+		//;TEST_FT62F21X_SLEEP.C: 109: {
+		//;TEST_FT62F21X_SLEEP.C: 110: bitdata = 0x01;
+		CLRR 	4CH 			//00C8 	014C
+		INCR	4CH,1 			//00C9 	09CC
+
+		//;TEST_FT62F21X_SLEEP.C: 111: IRbitNum++;
+		INCR	44H,1 			//00CA 	09C4
+
+		//;TEST_FT62F21X_SLEEP.C: 112: }
+		//;TEST_FT62F21X_SLEEP.C: 113: if(IRbitNum > 4)
+		LDWI 	5H 			//00CB 	2A05
 		ORG		00CCH
-		STR 	47H 			//00CC 	01C7
-		CLRR 	48H 			//00CD 	0148
-		LDR 	46H,0 			//00CE 	0846
-		STR 	79H 			//00CF 	01F9
-		LDWI 	7H 			//00D0 	2A07
-		BCR 	STATUS,0 		//00D1 	1003
-		RRR	79H,1 			//00D2 	06F9
-		ADDWI 	FFH 			//00D3 	27FF
+		SUBWR 	44H,0 			//00CC 	0C44
+		BTSS 	STATUS,0 		//00CD 	1C03
+		LJUMP 	D3H 			//00CE 	38D3
+
+		//;TEST_FT62F21X_SLEEP.C: 114: {
+		//;TEST_FT62F21X_SLEEP.C: 115: IRbitNum = 0;
+		CLRR 	44H 			//00CF 	0144
+
+		//;TEST_FT62F21X_SLEEP.C: 116: T0IE = 0;
+		BCR 	INTCON,5 		//00D0 	128B
+
+		//;TEST_FT62F21X_SLEEP.C: 117: ReceiveFinish = 1;
+		CLRR 	46H 			//00D1 	0146
+		INCR	46H,1 			//00D2 	09C6
+		LDR 	72H,0 			//00D3 	0872
 		ORG		00D4H
-		BCR 	STATUS,0 		//00D4 	1003
-		BTSS 	STATUS,2 		//00D5 	1D03
-		LJUMP 	D2H 			//00D6 	38D2
-		RLR 	48H,0 			//00D7 	0548
-		IORWR 	79H,0 			//00D8 	0379
-		STR 	48H 			//00D9 	01C8
-		BCR 	STATUS,0 		//00DA 	1003
-		RLR 	46H,1 			//00DB 	05C6
+		STR 	PCLATH 			//00D4 	018A
+		LDR 	71H,0 			//00D5 	0871
+		STR 	FSR 			//00D6 	0184
+		SWAPR 	70H,0 			//00D7 	0770
+		STR 	STATUS 			//00D8 	0183
+		SWAPR 	7EH,1 			//00D9 	07FE
+		SWAPR 	7EH,0 			//00DA 	077E
+		RETI		 			//00DB 	0009
 		ORG		00DCH
-		LDR 	78H,0 			//00DC 	0878
-		SUBWR 	48H,0 			//00DD 	0C48
-		BTSS 	STATUS,0 		//00DE 	1C03
-		LJUMP 	E2H 			//00DF 	38E2
-		LDR 	78H,0 			//00E0 	0878
-		SUBWR 	48H,1 			//00E1 	0CC8
-		DECRSZ 	47H,1 		//00E2 	0EC7
-		LJUMP 	CEH 			//00E3 	38CE
+
+		//;FT_62F21X_pwm.c: 494: switch(ft_user_set_mode)
+		LJUMP 	112H 			//00DC 	3912
+
+		//;FT_62F21X_pwm.c: 497: if(jump_led_rate > 20)
+		LDWI 	15H 			//00DD 	2A15
+		SUBWR 	7AH,0 			//00DE 	0C7A
+		BTSS 	STATUS,0 		//00DF 	1C03
+		LJUMP 	E3H 			//00E0 	38E3
+
+		//;FT_62F21X_pwm.c: 498: {
+		//;FT_62F21X_pwm.c: 499: jump_led_rate = jump_led_rate - 20;
+		LDWI 	ECH 			//00E1 	2AEC
+		ADDWR 	7AH,1 			//00E2 	0BFA
+
+		//;FT_62F21X_pwm.c: 500: }
+		//;FT_62F21X_pwm.c: 501: if(ft_user_pwm_mode != 0)
+		LDR 	77H,0 			//00E3 	0877
 		ORG		00E4H
-		LDR 	48H,0 			//00E4 	0848
+		BTSC 	STATUS,2 		//00E4 	1503
 		RET		 					//00E5 	0004
-		LDWI 	6H 			//00E6 	2A06
 
-		//;FT_62F21X_pwm.c: 250: ft_user_pwm_mode++;
-		INCR	72H,1 			//00E7 	09F2
+		//;FT_62F21X_pwm.c: 502: {
+		//;FT_62F21X_pwm.c: 503: P1CDTL=jump_led_rate;
+		LDR 	7AH,0 			//00E6 	087A
+		STR 	10H 			//00E7 	0190
 
-		//;FT_62F21X_pwm.c: 251: ft_user_pwm_mode = ft_user_pwm_mode%6;
-		STR 	78H 			//00E8 	01F8
-		LDR 	72H,0 			//00E9 	0872
-		LCALL 	CAH 			//00EA 	30CA
-		STR 	72H 			//00EB 	01F2
+		//;FT_62F21X_pwm.c: 504: P1DDTL=jump_led_rate;
+		LDR 	7AH,0 			//00E8 	087A
+		STR 	8H 			//00E9 	0188
+		RET		 					//00EA 	0004
+
+		//;FT_62F21X_pwm.c: 510: if(jump_led_rate < 100)
+		LDWI 	64H 			//00EB 	2A64
 		ORG		00ECH
+		SUBWR 	7AH,0 			//00EC 	0C7A
+		BTSC 	STATUS,0 		//00ED 	1403
+		LJUMP 	E3H 			//00EE 	38E3
 
-		//;FT_62F21X_pwm.c: 252: switch(ft_user_pwm_mode)
-		STR 	FSR 			//00EC 	0184
-		LDWI 	6H 			//00ED 	2A06
-		SUBWR 	FSR,0 			//00EE 	0C04
-		BTSC 	STATUS,0 		//00EF 	1403
-		RET		 					//00F0 	0004
-		LDWI 	1H 			//00F1 	2A01
-		STR 	PCLATH 			//00F2 	018A
-		LDWI 	37H 			//00F3 	2A37
+		//;FT_62F21X_pwm.c: 511: {
+		//;FT_62F21X_pwm.c: 512: jump_led_rate = jump_led_rate + 20;
+		LDWI 	14H 			//00EF 	2A14
+		LJUMP 	E2H 			//00F0 	38E2
+
+		//;FT_62F21X_pwm.c: 513: }
+		//;FT_62F21X_pwm.c: 514: if(ft_user_pwm_mode != 0)
+		LDWI 	A0H 			//00F1 	2AA0
+		BSR 	STATUS,5 		//00F2 	1A83
+		STR 	10H 			//00F3 	0190
 		ORG		00F4H
-		ADDWR 	FSR,0 			//00F4 	0B04
-		STR 	PCL 			//00F5 	0182
-		RET		 					//00F6 	0004
-		LDWI 	1H 			//00F7 	2A01
-		CLRR 	70H 			//00F8 	0170
-		CLRR 	71H 			//00F9 	0171
-		CLRR 	72H 			//00FA 	0172
-		CLRR 	73H 			//00FB 	0173
+
+		//;FT_62F21X_pwm.c: 526: P1BR1=0B00001100;
+		LDWI 	CH 			//00F4 	2A0C
+		BCR 	STATUS,5 		//00F5 	1283
+		STR 	19H 			//00F6 	0199
+
+		//;FT_62F21X_pwm.c: 527: DelayMs(50);
+		LDWI 	32H 			//00F7 	2A32
+		LCALL 	266H 			//00F8 	3266
+
+		//;FT_62F21X_pwm.c: 528: if(set_time_mode_backup != 0xff)
+		LDR 	4EH,0 			//00F9 	084E
+		XORWI 	FFH 			//00FA 	26FF
+		BTSC 	STATUS,2 		//00FB 	1503
 		ORG		00FCH
-		CLRR 	74H 			//00FC 	0174
-		CLRR 	40H 			//00FD 	0140
-		CLRR 	41H 			//00FE 	0141
-		CLRR 	42H 			//00FF 	0142
-		CLRR 	43H 			//0100 	0143
-		CLRR 	44H 			//0101 	0144
-		CLRR 	45H 			//0102 	0145
-		STR 	7AH 			//0103 	01FA
+		RET		 					//00FC 	0004
+
+		//;FT_62F21X_pwm.c: 529: {
+		//;FT_62F21X_pwm.c: 530: ft_user_pwm_mode = set_time_mode_backup;
+		LDR 	4EH,0 			//00FD 	084E
+		STR 	77H 			//00FE 	01F7
+
+		//;FT_62F21X_pwm.c: 531: PWM_MODE_REFRESH();
+		LJUMP 	121H 			//00FF 	3921
+
+		//;FT_62F21X_pwm.c: 536: if(power_off_mode_backup != 0xff)
+		LDR 	4DH,0 			//0100 	084D
+		XORWI 	FFH 			//0101 	26FF
+		BTSC 	STATUS,2 		//0102 	1503
+		LJUMP 	107H 			//0103 	3907
 		ORG		0104H
-		CLRR 	STATUS 			//0104 	0103
-		LJUMP 	AEH 			//0105 	38AE
 
-		//;TEST_FT62F21X_SLEEP.C: 106: OSCCON = 0X00|0X70|0X00;
-		LDWI 	70H 			//0106 	2A70
-		BSR 	STATUS,5 		//0107 	1A83
-		STR 	FH 			//0108 	018F
+		//;FT_62F21X_pwm.c: 537: {
+		//;FT_62F21X_pwm.c: 538: ft_user_pwm_mode = power_off_mode_backup;
+		LDR 	4DH,0 			//0104 	084D
+		STR 	77H 			//0105 	01F7
 
-		//;TEST_FT62F21X_SLEEP.C: 109: INTCON = 0;
-		CLRR 	INTCON 			//0109 	010B
+		//;FT_62F21X_pwm.c: 539: PWM_MODE_REFRESH();
+		LCALL 	121H 			//0106 	3121
 
-		//;TEST_FT62F21X_SLEEP.C: 111: PORTA = 0B00000000;
-		BCR 	STATUS,5 		//010A 	1283
-		CLRR 	5H 			//010B 	0105
+		//;FT_62F21X_pwm.c: 540: }
+		//;FT_62F21X_pwm.c: 541: power_off_mode_backup = 0xff;
+		LDWI 	FFH 			//0107 	2AFF
+		STR 	4DH 			//0108 	01CD
+
+		//;FT_62F21X_pwm.c: 542: power_off_flag = 0;
+		CLRR 	49H 			//0109 	0149
+
+		//;FT_62F21X_pwm.c: 543: break;
+		RET		 					//010A 	0004
+
+		//;FT_62F21X_pwm.c: 546: P1OE=0B00000000;
+		BSR 	STATUS,5 		//010B 	1A83
 		ORG		010CH
+		CLRR 	10H 			//010C 	0110
 
-		//;TEST_FT62F21X_SLEEP.C: 112: TRISA = 0B00010000;
-		LDWI 	10H 			//010C 	2A10
-		BSR 	STATUS,5 		//010D 	1A83
-		STR 	5H 			//010E 	0185
+		//;FT_62F21X_pwm.c: 547: P1BR1=0B00000000;
+		BCR 	STATUS,5 		//010D 	1283
+		CLRR 	19H 			//010E 	0119
 
-		//;TEST_FT62F21X_SLEEP.C: 113: WPUA = 0B00000000;
-		CLRR 	15H 			//010F 	0115
+		//;FT_62F21X_pwm.c: 548: power_off_flag = 1;
+		CLRR 	49H 			//010F 	0149
+		INCR	49H,1 			//0110 	09C9
 
-		//;TEST_FT62F21X_SLEEP.C: 115: OPTION = 0B00001000;
-		LDWI 	8H 			//0110 	2A08
-		STR 	1H 			//0111 	0181
-
-		//;TEST_FT62F21X_SLEEP.C: 117: MSCON = 0B00000000;
-		BCR 	STATUS,5 		//0112 	1283
-		CLRR 	1BH 			//0113 	011B
+		//;FT_62F21X_pwm.c: 549: break;
+		RET		 					//0111 	0004
+		LDR 	47H,0 			//0112 	0847
+		ADDWI 	F5H 			//0113 	27F5
 		ORG		0114H
-		RET		 					//0114 	0004
-
-		//;FT_62F21X_pwm.c: 165: P1CDTL=0;
-		CLRR 	10H 			//0115 	0110
-
-		//;FT_62F21X_pwm.c: 166: P1DDTL=0;
-		CLRR 	8H 			//0116 	0108
-
-		//;FT_62F21X_pwm.c: 168: P1OE=0B00100000;
-		LDWI 	20H 			//0117 	2A20
-		BSR 	STATUS,5 		//0118 	1A83
-		STR 	10H 			//0119 	0190
-
-		//;FT_62F21X_pwm.c: 176: P1BR1=0B00000100;
-		LDWI 	4H 			//011A 	2A04
-		BCR 	STATUS,5 		//011B 	1283
+		BTSS 	STATUS,0 		//0114 	1C03
+		RET		 					//0115 	0004
+		STR 	FSR 			//0116 	0184
+		LDWI 	8H 			//0117 	2A08
+		SUBWR 	FSR,0 			//0118 	0C04
+		BTSC 	STATUS,0 		//0119 	1403
+		RET		 					//011A 	0004
+		LDWI 	2H 			//011B 	2A02
 		ORG		011CH
-		STR 	19H 			//011C 	0199
-		RET		 					//011D 	0004
+		STR 	PCLATH 			//011C 	018A
+		LDWI 	ABH 			//011D 	2AAB
+		ADDWR 	FSR,0 			//011E 	0B04
+		STR 	PCL 			//011F 	0182
+		RET		 					//0120 	0004
+
+		//;FT_62F21X_pwm.c: 398: reset_led_status();
+		LCALL 	2F4H 			//0121 	32F4
+
+		//;FT_62F21X_pwm.c: 400: jump_led_rate = 100;
+		LDWI 	64H 			//0122 	2A64
+		STR 	7AH 			//0123 	01FA
+		ORG		0124H
+
+		//;FT_62F21X_pwm.c: 401: if(ft_user_pwm_mode != 0)
+		LDR 	77H,0 			//0124 	0877
+		BTSC 	STATUS,2 		//0125 	1503
+		LJUMP 	12BH 			//0126 	392B
+
+		//;FT_62F21X_pwm.c: 402: {
+		//;FT_62F21X_pwm.c: 403: P1CDTL=jump_led_rate;
+		LDR 	7AH,0 			//0127 	087A
+		STR 	10H 			//0128 	0190
+
+		//;FT_62F21X_pwm.c: 404: P1DDTL=jump_led_rate;
+		LDR 	7AH,0 			//0129 	087A
+		STR 	8H 			//012A 	0188
+
+		//;FT_62F21X_pwm.c: 405: }
+		//;FT_62F21X_pwm.c: 407: if(power_off_flag == 1)
+		DECRSZ 	49H,0 		//012B 	0E49
+		ORG		012CH
+		LJUMP 	157H 			//012C 	3957
+		RET		 					//012D 	0004
+
+		//;FT_62F21X_pwm.c: 415: pwm_rate_value = 0;
+		CLRR 	79H 			//012E 	0179
+
+		//;FT_62F21X_pwm.c: 416: pwm_colour_value = 0;
+		CLRR 	78H 			//012F 	0178
+
+		//;FT_62F21X_pwm.c: 417: PWM1_RED();
+		LJUMP 	2CBH 			//0130 	3ACB
+
+		//;FT_62F21X_pwm.c: 430: P1OE=0B00100000;
+		LDWI 	20H 			//0131 	2A20
+		BSR 	STATUS,5 		//0132 	1A83
+		STR 	10H 			//0133 	0190
+		ORG		0134H
+
+		//;FT_62F21X_pwm.c: 431: P1BR1=0B00000000;
+		BCR 	STATUS,5 		//0134 	1283
+		CLRR 	19H 			//0135 	0119
+
+		//;FT_62F21X_pwm.c: 433: break;
+		RET		 					//0136 	0004
+
+		//;FT_62F21X_pwm.c: 436: P1OE=0B10000000;
+		LDWI 	80H 			//0137 	2A80
+		LJUMP 	132H 			//0138 	3932
+
+		//;FT_62F21X_pwm.c: 441: P1OE=0B00000000;
+		BSR 	STATUS,5 		//0139 	1A83
+		CLRR 	10H 			//013A 	0110
+
+		//;FT_62F21X_pwm.c: 442: P1BR1=0B00000100;
+		LDWI 	4H 			//013B 	2A04
+		ORG		013CH
+		BCR 	STATUS,5 		//013C 	1283
+		STR 	19H 			//013D 	0199
+
+		//;FT_62F21X_pwm.c: 443: break;
+		RET		 					//013E 	0004
+
+		//;FT_62F21X_pwm.c: 446: pwm_colour_value = 0;
+		CLRR 	78H 			//013F 	0178
+
+		//;FT_62F21X_pwm.c: 419: break;
+		//;FT_62F21X_pwm.c: 423: P1OE=0B00000000;
+		BSR 	STATUS,5 		//0140 	1A83
+		CLRR 	10H 			//0141 	0110
+
+		//;FT_62F21X_pwm.c: 424: P1BR1=0B00001000;
+		LDWI 	8H 			//0142 	2A08
+		BCR 	STATUS,5 		//0143 	1283
+		ORG		0144H
+		STR 	19H 			//0144 	0199
+
+		//;FT_62F21X_pwm.c: 426: break;
+		RET		 					//0145 	0004
+
+		//;FT_62F21X_pwm.c: 448: P1OE=0B00000000;
+		//;FT_62F21X_pwm.c: 455: P1OE=0B00100000;
+		LDWI 	20H 			//0146 	2A20
+
+		//;FT_62F21X_pwm.c: 456: P1BR1=0B00001000;
+		//;FT_62F21X_pwm.c: 458: break;
+		LJUMP 	1BDH 			//0147 	39BD
+
+		//;FT_62F21X_pwm.c: 462: P1OE=0B10000000;
+		LDWI 	80H 			//0148 	2A80
+
+		//;FT_62F21X_pwm.c: 463: P1BR1=0B00001000;
+		//;FT_62F21X_pwm.c: 466: break;
+		LJUMP 	1BDH 			//0149 	39BD
+
+		//;FT_62F21X_pwm.c: 469: P1OE=0B00000000;
+		BSR 	STATUS,5 		//014A 	1A83
+		CLRR 	10H 			//014B 	0110
+		ORG		014CH
+
+		//;FT_62F21X_pwm.c: 470: P1BR1=0B00001100;
+		LDWI 	CH 			//014C 	2A0C
+		BCR 	STATUS,5 		//014D 	1283
+		STR 	19H 			//014E 	0199
+
+		//;FT_62F21X_pwm.c: 471: break;
+		RET		 					//014F 	0004
+
+		//;FT_62F21X_pwm.c: 474: P1OE=0B10100000;
+		LDWI 	A0H 			//0150 	2AA0
+
+		//;FT_62F21X_pwm.c: 475: P1BR1=0B00001000;
+		//;FT_62F21X_pwm.c: 476: break;
+		LJUMP 	1BDH 			//0151 	39BD
+		LDWI 	20H 			//0152 	2A20
+
+		//;FT_62F21X_pwm.c: 479: pwm_colour_value = 0;
+		CLRR 	78H 			//0153 	0178
+		ORG		0154H
+
+		//;FT_62F21X_pwm.c: 480: P1OE=0B00100000;
+		BSR 	STATUS,5 		//0154 	1A83
+		STR 	10H 			//0155 	0190
+		LJUMP 	142H 			//0156 	3942
+		LDR 	77H,0 			//0157 	0877
+		STR 	FSR 			//0158 	0184
+		LDWI 	BH 			//0159 	2A0B
+		SUBWR 	FSR,0 			//015A 	0C04
+		BTSC 	STATUS,0 		//015B 	1403
+		ORG		015CH
+		RET		 					//015C 	0004
+		LDWI 	2H 			//015D 	2A02
+		STR 	PCLATH 			//015E 	018A
+		LDWI 	86H 			//015F 	2A86
+		ADDWR 	FSR,0 			//0160 	0B04
+		STR 	PCL 			//0161 	0182
+		RET		 					//0162 	0004
+
+		//;FT_62F21X_pwm.c: 190: unsigned char pwm_value;
+		//;FT_62F21X_pwm.c: 192: if(pwm_rate_value >= 200)
+		LDWI 	C8H 			//0163 	2AC8
+		ORG		0164H
+		SUBWR 	79H,0 			//0164 	0C79
+		BTSS 	STATUS,0 		//0165 	1C03
+		LJUMP 	17FH 			//0166 	397F
+		LDWI 	3H 			//0167 	2A03
+
+		//;FT_62F21X_pwm.c: 193: {
+		//;FT_62F21X_pwm.c: 194: pwm_rate_value = 0;
+		CLRR 	79H 			//0168 	0179
+
+		//;FT_62F21X_pwm.c: 195: pwm_colour_value++;
+		INCR	78H,1 			//0169 	09F8
+
+		//;FT_62F21X_pwm.c: 196: pwm_colour_value = pwm_colour_value%4;
+		ANDWR 	78H,1 			//016A 	02F8
+
+		//;FT_62F21X_pwm.c: 197: switch(pwm_colour_value)
+		LJUMP 	174H 			//016B 	3974
+		ORG		016CH
+
+		//;FT_62F21X_pwm.c: 200: PWM1_RED();
+		LCALL 	2CBH 			//016C 	32CB
+
+		//;FT_62F21X_pwm.c: 201: break;
+		LJUMP 	17FH 			//016D 	397F
+
+		//;FT_62F21X_pwm.c: 204: PWM1_GREEN();
+		LCALL 	2C3H 			//016E 	32C3
+
+		//;FT_62F21X_pwm.c: 205: break;
+		LJUMP 	17FH 			//016F 	397F
+
+		//;FT_62F21X_pwm.c: 208: PWM1_BLUE();
+		LCALL 	2BBH 			//0170 	32BB
+
+		//;FT_62F21X_pwm.c: 209: break;
+		LJUMP 	17FH 			//0171 	397F
+
+		//;FT_62F21X_pwm.c: 212: PWM1_WHITE();
+		LCALL 	2B3H 			//0172 	32B3
+
+		//;FT_62F21X_pwm.c: 213: break;
+		LJUMP 	17FH 			//0173 	397F
+		ORG		0174H
+		LDR 	78H,0 			//0174 	0878
+		STR 	FSR 			//0175 	0184
+		LDWI 	4H 			//0176 	2A04
+		SUBWR 	FSR,0 			//0177 	0C04
+		BTSC 	STATUS,0 		//0178 	1403
+		LJUMP 	17FH 			//0179 	397F
+		LDWI 	2H 			//017A 	2A02
+		STR 	PCLATH 			//017B 	018A
+		ORG		017CH
+		LDWI 	E8H 			//017C 	2AE8
+		ADDWR 	FSR,0 			//017D 	0B04
+		STR 	PCL 			//017E 	0182
+
+		//;FT_62F21X_pwm.c: 219: }
+		//;FT_62F21X_pwm.c: 220: if(pwm_rate_value <=100)
+		LDWI 	65H 			//017F 	2A65
+		SUBWR 	79H,0 			//0180 	0C79
+
+		//;FT_62F21X_pwm.c: 221: {
+		//;FT_62F21X_pwm.c: 222: pwm_value = pwm_rate_value;
+		LDR 	79H,0 			//0181 	0879
+		BTSC 	STATUS,0 		//0182 	1403
+
+		//;FT_62F21X_pwm.c: 224: else
+		//;FT_62F21X_pwm.c: 225: {
+		//;FT_62F21X_pwm.c: 226: pwm_value = 200 - pwm_rate_value;
+		//;FT_62F21X_pwm.c: 223: }
+		SUBWI 	C8H 			//0183 	28C8
+		ORG		0184H
+		STR 	73H 			//0184 	01F3
+		LJUMP 	18CH 			//0185 	398C
+
+		//;FT_62F21X_pwm.c: 232: P1CDTL = pwm_value;
+		LDR 	73H,0 			//0186 	0873
+		STR 	10H 			//0187 	0190
+
+		//;FT_62F21X_pwm.c: 233: break;
+		RET		 					//0188 	0004
+
+		//;FT_62F21X_pwm.c: 236: P1DDTL = pwm_value;
+		LDR 	73H,0 			//0189 	0873
+		STR 	8H 			//018A 	0188
+
+		//;FT_62F21X_pwm.c: 237: break;
+		RET		 					//018B 	0004
+		ORG		018CH
+		LDR 	78H,0 			//018C 	0878
+		STR 	FSR 			//018D 	0184
+		LDWI 	4H 			//018E 	2A04
+		SUBWR 	FSR,0 			//018F 	0C04
+		BTSC 	STATUS,0 		//0190 	1403
+		RET		 					//0191 	0004
+		LDWI 	2H 			//0192 	2A02
+		STR 	PCLATH 			//0193 	018A
+		ORG		0194H
+		LDWI 	ECH 			//0194 	2AEC
+		ADDWR 	FSR,0 			//0195 	0B04
+		STR 	PCL 			//0196 	0182
+		RET		 					//0197 	0004
+		LDWI 	6H 			//0198 	2A06
+
+		//;FT_62F21X_pwm.c: 300: pwm_colour_value++;
+		INCR	78H,1 			//0199 	09F8
+
+		//;FT_62F21X_pwm.c: 301: pwm_colour_value = pwm_colour_value%6;
+		STR 	73H 			//019A 	01F3
+		LDR 	78H,0 			//019B 	0878
+		ORG		019CH
+		LCALL 	239H 			//019C 	3239
+		STR 	78H 			//019D 	01F8
+
+		//;FT_62F21X_pwm.c: 303: switch(pwm_colour_value)
+		STR 	FSR 			//019E 	0184
+		LDWI 	6H 			//019F 	2A06
+		SUBWR 	FSR,0 			//01A0 	0C04
+		BTSC 	STATUS,0 		//01A1 	1403
+		RET		 					//01A2 	0004
+		LDWI 	2H 			//01A3 	2A02
+		ORG		01A4H
+		STR 	PCLATH 			//01A4 	018A
+		LDWI 	E2H 			//01A5 	2AE2
+		ADDWR 	FSR,0 			//01A6 	0B04
+		STR 	PCL 			//01A7 	0182
+		RET		 					//01A8 	0004
+
+		//;FT_62F21X_pwm.c: 306: P1OE=0B00100000;
+		LDWI 	20H 			//01A9 	2A20
+
+		//;FT_62F21X_pwm.c: 307: P1BR1=0B00001000;
+		//;FT_62F21X_pwm.c: 308: break;
+		LJUMP 	1BDH 			//01AA 	39BD
+
+		//;FT_62F21X_pwm.c: 311: P1OE=0B10000000;
+		LDWI 	80H 			//01AB 	2A80
+		ORG		01ACH
+
+		//;FT_62F21X_pwm.c: 312: P1BR1=0B00001000;
+		//;FT_62F21X_pwm.c: 314: break;
+		LJUMP 	1BDH 			//01AC 	39BD
+
+		//;FT_62F21X_pwm.c: 317: P1OE=0B00000000;
+		BSR 	STATUS,5 		//01AD 	1A83
+		CLRR 	10H 			//01AE 	0110
+
+		//;FT_62F21X_pwm.c: 318: P1BR1=0B00001100;
+		LDWI 	CH 			//01AF 	2A0C
+		BCR 	STATUS,5 		//01B0 	1283
+		STR 	19H 			//01B1 	0199
+
+		//;FT_62F21X_pwm.c: 320: break;
+		RET		 					//01B2 	0004
+
+		//;FT_62F21X_pwm.c: 323: P1OE=0B10100000;
+		LDWI 	A0H 			//01B3 	2AA0
+		ORG		01B4H
+		BSR 	STATUS,5 		//01B4 	1A83
+		STR 	10H 			//01B5 	0190
+
+		//;FT_62F21X_pwm.c: 324: P1BR1=0B00000000;
+		BCR 	STATUS,5 		//01B6 	1283
+		CLRR 	19H 			//01B7 	0119
+
+		//;FT_62F21X_pwm.c: 325: break;
+		RET		 					//01B8 	0004
+
+		//;FT_62F21X_pwm.c: 328: P1OE=0B00100000;
+		LDWI 	20H 			//01B9 	2A20
+
+		//;FT_62F21X_pwm.c: 329: P1BR1=0B00000100;
+		//;FT_62F21X_pwm.c: 330: break;
+		LJUMP 	1C3H 			//01BA 	39C3
+
+		//;FT_62F21X_pwm.c: 333: P1OE=0B10000000;
+		LDWI 	80H 			//01BB 	2A80
+		ORG		01BCH
+
+		//;FT_62F21X_pwm.c: 334: P1BR1=0B00000100;
+		//;FT_62F21X_pwm.c: 335: break;
+		LJUMP 	1C3H 			//01BC 	39C3
+		BSR 	STATUS,5 		//01BD 	1A83
+		STR 	10H 			//01BE 	0190
+		LDWI 	8H 			//01BF 	2A08
+		BCR 	STATUS,5 		//01C0 	1283
+		STR 	19H 			//01C1 	0199
+		RET		 					//01C2 	0004
+		BSR 	STATUS,5 		//01C3 	1A83
+		ORG		01C4H
+		STR 	10H 			//01C4 	0190
+		LDWI 	4H 			//01C5 	2A04
+		BCR 	STATUS,5 		//01C6 	1283
+		STR 	19H 			//01C7 	0199
+		RET		 					//01C8 	0004
+		LDWI 	1H 			//01C9 	2A01
+		STR 	PCLATH 			//01CA 	018A
+		LDR 	FSR,0 			//01CB 	0804
+		ORG		01CCH
+		INCR	FSR,1 			//01CC 	0984
+		ADDWR 	PCL,1 			//01CD 	0B82
+		RETW 	0H 			//01CE 	2100
+		RETW 	FBH 			//01CF 	21FB
+		RETW 	0H 			//01D0 	2100
+		RETW 	B2H 			//01D1 	21B2
+		RETW 	5H 			//01D2 	2105
+		RETW 	FFH 			//01D3 	21FF
+		ORG		01D4H
+		RETW 	1H 			//01D4 	2101
+		RETW 	F5H 			//01D5 	21F5
+		RETW 	2H 			//01D6 	2102
+		RETW 	EDH 			//01D7 	21ED
+		RETW 	3H 			//01D8 	2103
+		RETW 	F6H 			//01D9 	21F6
+		RETW 	4H 			//01DA 	2104
+		RETW 	EAH 			//01DB 	21EA
+		ORG		01DCH
+		RETW 	6H 			//01DC 	2106
+		RETW 	BFH 			//01DD 	21BF
+		RETW 	7H 			//01DE 	2107
+		RETW 	E1H 			//01DF 	21E1
+		RETW 	8H 			//01E0 	2108
+		RETW 	E4H 			//01E1 	21E4
+		RETW 	9H 			//01E2 	2109
+		RETW 	E2H 			//01E3 	21E2
+		ORG		01E4H
+		RETW 	AH 			//01E4 	210A
+		RETW 	E5H 			//01E5 	21E5
+		RETW 	BH 			//01E6 	210B
+		RETW 	E0H 			//01E7 	21E0
+		RETW 	CH 			//01E8 	210C
+		RETW 	F2H 			//01E9 	21F2
+		RETW 	DH 			//01EA 	210D
+		RETW 	E8H 			//01EB 	21E8
+		ORG		01ECH
+		RETW 	EH 			//01EC 	210E
+		RETW 	B3H 			//01ED 	21B3
+		RETW 	FH 			//01EE 	210F
+		RETW 	E6H 			//01EF 	21E6
+		RETW 	10H 			//01F0 	2110
+		RETW 	F1H 			//01F1 	21F1
+		RETW 	11H 			//01F2 	2111
+		RETW 	F0H 			//01F3 	21F0
+		ORG		01F4H
+		RETW 	12H 			//01F4 	2112
+		LDWI 	3H 			//01F5 	2A03
+
+		//;FT_62F21X_pwm.c: 256: pwm_colour_value++;
+		INCR	78H,1 			//01F6 	09F8
+
+		//;FT_62F21X_pwm.c: 257: pwm_colour_value = pwm_colour_value%4;
+		ANDWR 	78H,1 			//01F7 	02F8
+
+		//;FT_62F21X_pwm.c: 258: switch(pwm_colour_value)
+		LJUMP 	20DH 			//01F8 	3A0D
+
+		//;FT_62F21X_pwm.c: 262: P1OE=0B00000000;
+		BSR 	STATUS,5 		//01F9 	1A83
+		CLRR 	10H 			//01FA 	0110
+
+		//;FT_62F21X_pwm.c: 263: P1BR1=0B00001000;
+		LDWI 	8H 			//01FB 	2A08
+		ORG		01FCH
+		BCR 	STATUS,5 		//01FC 	1283
+		STR 	19H 			//01FD 	0199
+
+		//;FT_62F21X_pwm.c: 265: break;
+		RET		 					//01FE 	0004
+
+		//;FT_62F21X_pwm.c: 269: P1OE=0B00100000;
+		LDWI 	20H 			//01FF 	2A20
+		BSR 	STATUS,5 		//0200 	1A83
+		STR 	10H 			//0201 	0190
+
+		//;FT_62F21X_pwm.c: 270: P1BR1=0B00000000;
+		BCR 	STATUS,5 		//0202 	1283
+		CLRR 	19H 			//0203 	0119
+		ORG		0204H
+
+		//;FT_62F21X_pwm.c: 272: break;
+		RET		 					//0204 	0004
+
+		//;FT_62F21X_pwm.c: 275: P1OE=0B10000000;
+		LDWI 	80H 			//0205 	2A80
+		LJUMP 	200H 			//0206 	3A00
+
+		//;FT_62F21X_pwm.c: 280: P1OE=0B00000000;
+		BSR 	STATUS,5 		//0207 	1A83
+		CLRR 	10H 			//0208 	0110
+
+		//;FT_62F21X_pwm.c: 281: P1BR1=0B00000100;
+		LDWI 	4H 			//0209 	2A04
+		BCR 	STATUS,5 		//020A 	1283
+		STR 	19H 			//020B 	0199
+		ORG		020CH
+
+		//;FT_62F21X_pwm.c: 282: break;
+		RET		 					//020C 	0004
+		LDR 	78H,0 			//020D 	0878
+		STR 	FSR 			//020E 	0184
+		LDWI 	4H 			//020F 	2A04
+		SUBWR 	FSR,0 			//0210 	0C04
+		BTSC 	STATUS,0 		//0211 	1403
+		RET		 					//0212 	0004
+		LDWI 	2H 			//0213 	2A02
+		ORG		0214H
+		STR 	PCLATH 			//0214 	018A
+		LDWI 	F0H 			//0215 	2AF0
+		ADDWR 	FSR,0 			//0216 	0B04
+		STR 	PCL 			//0217 	0182
+		RET		 					//0218 	0004
+
+		//;FT_62F21X_pwm.c: 28: T2CON0=0B00000001;
+		LDWI 	1H 			//0219 	2A01
+		BCR 	STATUS,5 		//021A 	1283
+		STR 	12H 			//021B 	0192
+		ORG		021CH
+
+		//;FT_62F21X_pwm.c: 34: T2CON1=0B00000000;
+		BSR 	STATUS,5 		//021C 	1A83
+		CLRR 	1EH 			//021D 	011E
+
+		//;FT_62F21X_pwm.c: 39: TMR2H=0;
+		BCR 	STATUS,5 		//021E 	1283
+		CLRR 	13H 			//021F 	0113
+
+		//;FT_62F21X_pwm.c: 40: TMR2L=100;
+		LDWI 	64H 			//0220 	2A64
+		STR 	11H 			//0221 	0191
+
+		//;FT_62F21X_pwm.c: 42: PR2H=0;
+		BSR 	STATUS,5 		//0222 	1A83
+		CLRR 	12H 			//0223 	0112
+		ORG		0224H
+
+		//;FT_62F21X_pwm.c: 43: PR2L=100;
+		STR 	11H 			//0224 	0191
+
+		//;FT_62F21X_pwm.c: 45: P1CDTH=0;
+		BCR 	STATUS,5 		//0225 	1283
+		CLRR 	1AH 			//0226 	011A
+
+		//;FT_62F21X_pwm.c: 46: P1DDTH=0;
+		CLRR 	9H 			//0227 	0109
+
+		//;FT_62F21X_pwm.c: 47: P1CDTL=0;
+		CLRR 	10H 			//0228 	0110
+
+		//;FT_62F21X_pwm.c: 48: P1DDTL=0;
+		CLRR 	8H 			//0229 	0108
+
+		//;FT_62F21X_pwm.c: 50: P1POL=0B00000000;
+		BSR 	STATUS,5 		//022A 	1A83
+		CLRR 	19H 			//022B 	0119
+		ORG		022CH
+
+		//;FT_62F21X_pwm.c: 57: P1CON=0B00000000;
+		BCR 	STATUS,5 		//022C 	1283
+		CLRR 	16H 			//022D 	0116
+
+		//;FT_62F21X_pwm.c: 64: P1AUX=0B00000000;
+		CLRR 	1EH 			//022E 	011E
+
+		//;FT_62F21X_pwm.c: 72: PWM1_RED();
+		LCALL 	2CBH 			//022F 	32CB
+
+		//;FT_62F21X_pwm.c: 73: pwm_colour_value = 0;
+		CLRR 	78H 			//0230 	0178
+
+		//;FT_62F21X_pwm.c: 75: TMR2IF=0;
+		BCR 	CH,1 			//0231 	108C
+
+		//;FT_62F21X_pwm.c: 76: TMR2IE=1;
+		BSR 	STATUS,5 		//0232 	1A83
+		BSR 	CH,1 			//0233 	188C
+		ORG		0234H
+
+		//;FT_62F21X_pwm.c: 77: TMR2ON=1;
+		BCR 	STATUS,5 		//0234 	1283
+		BSR 	12H,2 			//0235 	1912
+
+		//;FT_62F21X_pwm.c: 78: PEIE=1;
+		BSR 	INTCON,6 		//0236 	1B0B
+
+		//;FT_62F21X_pwm.c: 79: GIE=1;
+		BSR 	INTCON,7 		//0237 	1B8B
+		RET		 					//0238 	0004
+		STR 	4FH 			//0239 	01CF
+		LDWI 	8H 			//023A 	2A08
+		STR 	50H 			//023B 	01D0
+		ORG		023CH
+		CLRR 	51H 			//023C 	0151
+		LDR 	4FH,0 			//023D 	084F
+		STR 	74H 			//023E 	01F4
+		LDWI 	7H 			//023F 	2A07
+		BCR 	STATUS,0 		//0240 	1003
+		RRR	74H,1 			//0241 	06F4
+		ADDWI 	FFH 			//0242 	27FF
+		BCR 	STATUS,0 		//0243 	1003
+		ORG		0244H
+		BTSS 	STATUS,2 		//0244 	1D03
+		LJUMP 	241H 			//0245 	3A41
+		RLR 	51H,0 			//0246 	0551
+		IORWR 	74H,0 			//0247 	0374
+		STR 	51H 			//0248 	01D1
+		BCR 	STATUS,0 		//0249 	1003
+		RLR 	4FH,1 			//024A 	05CF
+		LDR 	73H,0 			//024B 	0873
+		ORG		024CH
+		SUBWR 	51H,0 			//024C 	0C51
+		BTSS 	STATUS,0 		//024D 	1C03
+		LJUMP 	251H 			//024E 	3A51
+		LDR 	73H,0 			//024F 	0873
+		SUBWR 	51H,1 			//0250 	0CD1
+		DECRSZ 	50H,1 		//0251 	0ED0
+		LJUMP 	23DH 			//0252 	3A3D
+		LDR 	51H,0 			//0253 	0851
+		ORG		0254H
+		RET		 					//0254 	0004
+		LDWI 	40H 			//0255 	2A40
+		CLRR 	77H 			//0256 	0177
+		CLRR 	78H 			//0257 	0178
+		CLRR 	79H 			//0258 	0179
+		BCR 	STATUS,7 		//0259 	1383
+		STR 	FSR 			//025A 	0184
+		LDWI 	4CH 			//025B 	2A4C
+		ORG		025CH
+		LCALL 	2A3H 			//025C 	32A3
+		LDWI 	1H 			//025D 	2A01
+		STR 	4CH 			//025E 	01CC
+		LDWI 	FFH 			//025F 	2AFF
+		STR 	4DH 			//0260 	01CD
+		STR 	4EH 			//0261 	01CE
+		LDWI 	64H 			//0262 	2A64
+		STR 	7AH 			//0263 	01FA
+		ORG		0264H
+		CLRR 	STATUS 			//0264 	0103
+		LJUMP 	0DH 			//0265 	380D
+		STR 	4FH 			//0266 	01CF
+
+		//;FT_62F21X_pwm.c: 366: unsigned char a,b;
+		//;FT_62F21X_pwm.c: 367: for(a=0;a<Time;a++)
+		CLRR 	50H 			//0267 	0150
+		LDR 	4FH,0 			//0268 	084F
+		SUBWR 	50H,0 			//0269 	0C50
+		BTSC 	STATUS,0 		//026A 	1403
+		RET		 					//026B 	0004
+		ORG		026CH
+
+		//;FT_62F21X_pwm.c: 368: {
+		//;FT_62F21X_pwm.c: 369: for(b=0;b<5;b++)
+		CLRR 	51H 			//026C 	0151
+
+		//;FT_62F21X_pwm.c: 370: {
+		//;FT_62F21X_pwm.c: 371: DelayUs(98);
+		LDWI 	62H 			//026D 	2A62
+		LCALL 	291H 			//026E 	3291
+		LDWI 	5H 			//026F 	2A05
+		BCR 	STATUS,5 		//0270 	1283
+		INCR	51H,1 			//0271 	09D1
+		SUBWR 	51H,0 			//0272 	0C51
+		BTSS 	STATUS,0 		//0273 	1C03
+		ORG		0274H
+		LJUMP 	26DH 			//0274 	3A6D
+		INCR	50H,1 			//0275 	09D0
+		LJUMP 	268H 			//0276 	3A68
+
+		//;TEST_FT62F21X_SLEEP.C: 132: OSCCON = 0X00|0X70|0X00;
+		LDWI 	70H 			//0277 	2A70
+		BSR 	STATUS,5 		//0278 	1A83
+		STR 	FH 			//0279 	018F
+
+		//;TEST_FT62F21X_SLEEP.C: 135: INTCON = 0;
+		CLRR 	INTCON 			//027A 	010B
+
+		//;TEST_FT62F21X_SLEEP.C: 137: PORTA = 0B00000000;
+		BCR 	STATUS,5 		//027B 	1283
+		ORG		027CH
+		CLRR 	5H 			//027C 	0105
+
+		//;TEST_FT62F21X_SLEEP.C: 138: TRISA = 0B00010000;
+		LDWI 	10H 			//027D 	2A10
+		BSR 	STATUS,5 		//027E 	1A83
+		STR 	5H 			//027F 	0185
+
+		//;TEST_FT62F21X_SLEEP.C: 139: WPUA = 0B00000000;
+		CLRR 	15H 			//0280 	0115
+
+		//;TEST_FT62F21X_SLEEP.C: 141: OPTION = 0B00001000;
+		LDWI 	8H 			//0281 	2A08
+		STR 	1H 			//0282 	0181
+
+		//;TEST_FT62F21X_SLEEP.C: 143: MSCON = 0B00000000;
+		BCR 	STATUS,5 		//0283 	1283
+		ORG		0284H
+		CLRR 	1BH 			//0284 	011B
+		RET		 					//0285 	0004
+		LJUMP 	12EH 			//0286 	392E
+		LJUMP 	140H 			//0287 	3940
+		LJUMP 	131H 			//0288 	3931
+		LJUMP 	137H 			//0289 	3937
+		LJUMP 	139H 			//028A 	3939
+		LJUMP 	13FH 			//028B 	393F
+		ORG		028CH
+		LJUMP 	146H 			//028C 	3946
+		LJUMP 	148H 			//028D 	3948
+		LJUMP 	14AH 			//028E 	394A
+		LJUMP 	150H 			//028F 	3950
+		LJUMP 	152H 			//0290 	3952
+		STR 	73H 			//0291 	01F3
+
+		//;FT_62F21X_pwm.c: 352: unsigned char a;
+		//;FT_62F21X_pwm.c: 353: for(a=0;a<Time;a++)
+		CLRR 	74H 			//0292 	0174
+		LDR 	73H,0 			//0293 	0873
+		ORG		0294H
+		SUBWR 	74H,0 			//0294 	0C74
+		BTSC 	STATUS,0 		//0295 	1403
+		RET		 					//0296 	0004
+
+		//;FT_62F21X_pwm.c: 354: {
+		//;FT_62F21X_pwm.c: 355: _nop();
+		NOP		 					//0297 	0000
+		INCR	74H,1 			//0298 	09F4
+		LJUMP 	293H 			//0299 	3A93
 
 		//;FT_62F21x_IR.c: 38: TRISA3 =1;
-		BSR 	STATUS,5 		//011E 	1A83
-		BSR 	5H,3 			//011F 	1985
+		BSR 	STATUS,5 		//029A 	1A83
+		BSR 	5H,3 			//029B 	1985
+		ORG		029CH
 
 		//;FT_62F21x_IR.c: 39: ReadAPin = PORTA;
-		BCR 	STATUS,5 		//0120 	1283
-		LDR 	5H,0 			//0121 	0805
+		BCR 	STATUS,5 		//029C 	1283
+		LDR 	5H,0 			//029D 	0805
 
 		//;FT_62F21x_IR.c: 40: PAIF =0;
-		BCR 	INTCON,0 		//0122 	100B
+		BCR 	INTCON,0 		//029E 	100B
 
 		//;FT_62F21x_IR.c: 41: IOCA3 =1;
-		BSR 	STATUS,5 		//0123 	1A83
-		ORG		0124H
-		BSR 	16H,3 			//0124 	1996
+		BSR 	STATUS,5 		//029F 	1A83
+		BSR 	16H,3 			//02A0 	1996
 
 		//;FT_62F21x_IR.c: 42: PAIE =1;
-		BSR 	INTCON,3 		//0125 	198B
-		RET		 					//0126 	0004
+		BSR 	INTCON,3 		//02A1 	198B
+		RET		 					//02A2 	0004
+		CLRWDT	 			//02A3 	0001
+		ORG		02A4H
+		CLRR 	INDF 			//02A4 	0100
+		INCR	FSR,1 			//02A5 	0984
+		XORWR 	FSR,0 			//02A6 	0404
+		BTSC 	STATUS,2 		//02A7 	1503
+		RETW 	0H 			//02A8 	2100
+		XORWR 	FSR,0 			//02A9 	0404
+		LJUMP 	2A4H 			//02AA 	3AA4
+		LJUMP 	DDH 			//02AB 	38DD
+		ORG		02ACH
+		LJUMP 	EBH 			//02AC 	38EB
+		LJUMP 	F1H 			//02AD 	38F1
+		LJUMP 	F1H 			//02AE 	38F1
+		LJUMP 	F1H 			//02AF 	38F1
+		LJUMP 	F1H 			//02B0 	38F1
+		LJUMP 	100H 			//02B1 	3900
+		LJUMP 	10BH 			//02B2 	390B
 
-		//;FT_62F21X_pwm.c: 146: P1CDTL=0;
-		CLRR 	10H 			//0127 	0110
+		//;FT_62F21X_pwm.c: 171: P1CDTL=0;
+		CLRR 	10H 			//02B3 	0110
+		ORG		02B4H
 
-		//;FT_62F21X_pwm.c: 147: P1DDTL=0;
-		CLRR 	8H 			//0128 	0108
+		//;FT_62F21X_pwm.c: 172: P1DDTL=0;
+		CLRR 	8H 			//02B4 	0108
 
-		//;FT_62F21X_pwm.c: 149: P1OE=0B10000000;
-		LDWI 	80H 			//0129 	2A80
-		BSR 	STATUS,5 		//012A 	1A83
-		STR 	10H 			//012B 	0190
-		ORG		012CH
+		//;FT_62F21X_pwm.c: 174: P1OE=0B00000000;
+		BSR 	STATUS,5 		//02B5 	1A83
+		CLRR 	10H 			//02B6 	0110
 
-		//;FT_62F21X_pwm.c: 157: P1BR1=0B00000000;
-		BCR 	STATUS,5 		//012C 	1283
-		CLRR 	19H 			//012D 	0119
-		RET		 					//012E 	0004
+		//;FT_62F21X_pwm.c: 182: P1BR1=0B00000100;
+		LDWI 	4H 			//02B7 	2A04
+		BCR 	STATUS,5 		//02B8 	1283
+		STR 	19H 			//02B9 	0199
+		RET		 					//02BA 	0004
+
+		//;FT_62F21X_pwm.c: 152: P1CDTL=0;
+		CLRR 	10H 			//02BB 	0110
+		ORG		02BCH
+
+		//;FT_62F21X_pwm.c: 153: P1DDTL=0;
+		CLRR 	8H 			//02BC 	0108
+
+		//;FT_62F21X_pwm.c: 155: P1OE=0B10000000;
+		LDWI 	80H 			//02BD 	2A80
+		BSR 	STATUS,5 		//02BE 	1A83
+		STR 	10H 			//02BF 	0190
+
+		//;FT_62F21X_pwm.c: 163: P1BR1=0B00000000;
+		BCR 	STATUS,5 		//02C0 	1283
+		CLRR 	19H 			//02C1 	0119
+		RET		 					//02C2 	0004
+
+		//;FT_62F21X_pwm.c: 120: P1CDTL=0;
+		CLRR 	10H 			//02C3 	0110
+		ORG		02C4H
+
+		//;FT_62F21X_pwm.c: 121: P1DDTL=0;
+		CLRR 	8H 			//02C4 	0108
+
+		//;FT_62F21X_pwm.c: 123: P1OE=0B00100000;
+		LDWI 	20H 			//02C5 	2A20
+		BSR 	STATUS,5 		//02C6 	1A83
+		STR 	10H 			//02C7 	0190
+
+		//;FT_62F21X_pwm.c: 131: P1BR1=0B00000000;
+		BCR 	STATUS,5 		//02C8 	1283
+		CLRR 	19H 			//02C9 	0119
+		RET		 					//02CA 	0004
+
+		//;FT_62F21X_pwm.c: 87: P1CDTL=0;
+		CLRR 	10H 			//02CB 	0110
+		ORG		02CCH
+
+		//;FT_62F21X_pwm.c: 88: P1DDTL=0;
+		CLRR 	8H 			//02CC 	0108
+
+		//;FT_62F21X_pwm.c: 90: P1OE=0B00000000;
+		BSR 	STATUS,5 		//02CD 	1A83
+		CLRR 	10H 			//02CE 	0110
+
+		//;FT_62F21X_pwm.c: 98: P1BR1=0B00001000;
+		LDWI 	8H 			//02CF 	2A08
+		BCR 	STATUS,5 		//02D0 	1283
+		STR 	19H 			//02D1 	0199
+		RET		 					//02D2 	0004
 
 		//;FT_62F21x_IR.c: 20: OPTION = 0B00000011;
-		LDWI 	3H 			//012F 	2A03
-		BSR 	STATUS,5 		//0130 	1A83
-		STR 	1H 			//0131 	0181
+		LDWI 	3H 			//02D3 	2A03
+		ORG		02D4H
+		BSR 	STATUS,5 		//02D4 	1A83
+		STR 	1H 			//02D5 	0181
 
 		//;FT_62F21x_IR.c: 27: TMR0 = 140;
-		LDWI 	8CH 			//0132 	2A8C
-		BCR 	STATUS,5 		//0133 	1283
-		ORG		0134H
-		STR 	1H 			//0134 	0181
+		LDWI 	8CH 			//02D6 	2A8C
+		BCR 	STATUS,5 		//02D7 	1283
+		STR 	1H 			//02D8 	0181
 
 		//;FT_62F21x_IR.c: 28: T0IF = 0;
-		BCR 	INTCON,2 		//0135 	110B
-		RET		 					//0136 	0004
-		LJUMP 	F6H 			//0137 	38F6
-		LJUMP 	F6H 			//0138 	38F6
-		LJUMP 	F6H 			//0139 	38F6
-		LJUMP 	F6H 			//013A 	38F6
-		LJUMP 	F6H 			//013B 	38F6
-		ORG		013CH
-		LJUMP 	F6H 			//013C 	38F6
+		BCR 	INTCON,2 		//02D9 	110B
+		RET		 					//02DA 	0004
+		LDWI 	6H 			//02DB 	2A06
+		ORG		02DCH
 
-		//;FT_62F21X_pwm.c: 129: P1CDTL=0;
-		CLRR 	10H 			//013D 	0110
+		//;FT_62F21X_pwm.c: 292: ft_user_pwm_mode++;
+		INCR	77H,1 			//02DC 	09F7
 
-		//;FT_62F21X_pwm.c: 131: P1OE=0B00000000;
-		BSR 	STATUS,5 		//013E 	1A83
-		CLRR 	10H 			//013F 	0110
+		//;FT_62F21X_pwm.c: 293: ft_user_pwm_mode = ft_user_pwm_mode%6;
+		STR 	73H 			//02DD 	01F3
+		LDR 	77H,0 			//02DE 	0877
+		LCALL 	239H 			//02DF 	3239
+		STR 	77H 			//02E0 	01F7
 
-		//;FT_62F21X_pwm.c: 139: P1BR1=0B00000000;
-		BCR 	STATUS,5 		//0140 	1283
-		CLRR 	19H 			//0141 	0119
-		RET		 					//0142 	0004
+		//;FT_62F21X_pwm.c: 294: PWM_MODE_REFRESH();
+		LJUMP 	121H 			//02E1 	3921
+		LJUMP 	1A9H 			//02E2 	39A9
+		LJUMP 	1ABH 			//02E3 	39AB
+		ORG		02E4H
+		LJUMP 	1ADH 			//02E4 	39AD
+		LJUMP 	1B3H 			//02E5 	39B3
+		LJUMP 	1B9H 			//02E6 	39B9
+		LJUMP 	1BBH 			//02E7 	39BB
+		LJUMP 	16CH 			//02E8 	396C
+		LJUMP 	16EH 			//02E9 	396E
+		LJUMP 	170H 			//02EA 	3970
+		LJUMP 	172H 			//02EB 	3972
+		ORG		02ECH
+		LJUMP 	186H 			//02EC 	3986
+		LJUMP 	189H 			//02ED 	3989
+		LJUMP 	186H 			//02EE 	3986
+		LJUMP 	189H 			//02EF 	3989
+		LJUMP 	1F9H 			//02F0 	39F9
+		LJUMP 	1FFH 			//02F1 	39FF
+		LJUMP 	205H 			//02F2 	3A05
+		LJUMP 	207H 			//02F3 	3A07
+		ORG		02F4H
 
-		//;FT_62F21X_pwm.c: 96: P1CDTL=0;
-		CLRR 	10H 			//0143 	0110
-		ORG		0144H
+		//;TEST_FT62F21X_SLEEP.C: 149: time_15ms_cnt = 0;
+		CLRR 	4AH 			//02F4 	014A
 
-		//;FT_62F21X_pwm.c: 98: P1OE=0B00000000;
-		BSR 	STATUS,5 		//0144 	1A83
-		CLRR 	10H 			//0145 	0110
-
-		//;FT_62F21X_pwm.c: 106: P1BR1=0B00000000;
-		BCR 	STATUS,5 		//0146 	1283
-		CLRR 	19H 			//0147 	0119
-		RET		 					//0148 	0004
-		LJUMP 	62H 			//0149 	3862
-		LJUMP 	64H 			//014A 	3864
-		LJUMP 	66H 			//014B 	3866
-		ORG		014CH
-		LJUMP 	68H 			//014C 	3868
-		LJUMP 	7CH 			//014D 	387C
-		LJUMP 	7FH 			//014E 	387F
-		LJUMP 	7CH 			//014F 	387C
-		LJUMP 	7FH 			//0150 	387F
+		//;TEST_FT62F21X_SLEEP.C: 150: time_2s_cnt = 0;
+		CLRR 	4BH 			//02F5 	014B
+		RET		 					//02F6 	0004
 			END

@@ -24,63 +24,89 @@ startup.obj     end_init                              C        C        1       
                 reset_vec                             0        0        1        0       0
 test_ft62f21x_sleep.obj
                 intentry                              4        4        8        8       0
-                text381                               D        D       4C        8       0
-                text380                             106      106        F        8       0
-                text379                             12F      12F        8        8       0
-                text378                             11E      11E        9        8       0
-                text377                             143      143        6      27A       0
-                text376                             13D      13D        6      27A       0
-                text375                             127      127        8        8       0
-                text374                             115      115        9        8       0
-                text373                              CA       CA       1C        8       0
-                text372                              8E       8E       20        8       0
-                swtext3                             14D      14D        4      292       0
-                swtext2                             149      149        4      292       0
-                text371                              59       59       35        8       0
-                swtext1                             137      137        6      26E       0
-                text370                              E6       E6       11        8       0
-                maintext                             AE       AE       1C        8       0
-                cstackBANK0                          46       46        3       40       1
-                cstackCOMMON                         75       75        5       70       1
-                bssBANK0                             40       40        6       40       1
+                text634                              8E       8E       4E        8       0
+                text633                             277      277        F      3EA       0
+                text632                             2F4      2F4        3      5E8       0
+                text631                             2D3      2D3        8      566       0
+                text630                             29A      29A        9      522       0
+                swtext6                             2F0      2F0        4      5C4       0
+                text629                             1F5      1F5       24      3EA       0
+                text628                             2CB      2CB        8      566       0
+                text627                             2C3      2C3        8      566       0
+                text626                             2BB      2BB        8      566       0
+                text625                             2B3      2B3        8      566       0
+                text624                             239      239       1C      3EA       0
+                text623                             219      219       20      3EA       0
+                swtext5                             2EC      2EC        4      5C4       0
+                swtext4                             2E8      2E8        4      5C4       0
+                text622                             163      163       35        8       0
+                swtext3                             2E2      2E2        6      5C4       0
+                text621                             198      198       31        8       0
+                swtext2                             286      286        B      50C       0
+                text620                             121      121       42        8       0
+                text619                             291      291        9      522       0
+                text618                             2DB      2DB        7      566       0
+                text617                             266      266       11      3EA       0
+                swtext1                             2AB      2AB        8      556       0
+                text616                              DC       DC       45        8       0
+                maintext                              D        D       81        8       0
+                cstackBANK0                          4F       4F        3       40       1
+                cstackCOMMON                         70       70        7       70       1
+                clrtext                             2A3      2A3        8      522       0
+                dataBANK0                            4C       4C        3       40       1
+                bssBANK0                             40       40        C       40       1
                 dataCOMMON                           7A       7A        1       70       1
-                bssCOMMON                            70       70        5       70       1
-                cinit                                F7       F7        F        8       0
+                bssCOMMON                            77       77        3       70       1
+                cinit                               255      255       11      3EA       0
+                strings                             1C9      1C9       2C      392       0
 
 TOTAL           Name                               Link     Load   Length     Space
         CLASS   CONST          
-                swtext3                             14D      14D        4         0
-                swtext2                             149      149        4         0
-                swtext1                             137      137        6         0
+                swtext6                             2F0      2F0        4         0
+                swtext5                             2EC      2EC        4         0
+                swtext4                             2E8      2E8        4         0
+                swtext3                             2E2      2E2        6         0
+                swtext2                             286      286        B         0
+                swtext1                             2AB      2AB        8         0
 
         CLASS   CODE           
                 end_init                              C        C        1         0
                 intentry                              4        4        8         0
                 reset_vec                             0        0        1         0
-                text381                               D        D       4C         0
-                text380                             106      106        F         0
-                text379                             12F      12F        8         0
-                text378                             11E      11E        9         0
-                text377                             143      143        6         0
-                text376                             13D      13D        6         0
-                text375                             127      127        8         0
-                text374                             115      115        9         0
-                text373                              CA       CA       1C         0
-                text372                              8E       8E       20         0
-                text371                              59       59       35         0
-                text370                              E6       E6       11         0
-                maintext                             AE       AE       1C         0
-                cinit                                F7       F7        F         0
+                text634                              8E       8E       4E         0
+                text633                             277      277        F         0
+                text632                             2F4      2F4        3         0
+                text631                             2D3      2D3        8         0
+                text630                             29A      29A        9         0
+                text629                             1F5      1F5       24         0
+                text628                             2CB      2CB        8         0
+                text627                             2C3      2C3        8         0
+                text626                             2BB      2BB        8         0
+                text625                             2B3      2B3        8         0
+                text624                             239      239       1C         0
+                text623                             219      219       20         0
+                text622                             163      163       35         0
+                text621                             198      198       31         0
+                text620                             121      121       42         0
+                text619                             291      291        9         0
+                text618                             2DB      2DB        7         0
+                text617                             266      266       11         0
+                text616                              DC       DC       45         0
+                maintext                              D        D       81         0
+                clrtext                             2A3      2A3        8         0
+                cinit                               255      255       11         0
 
         CLASS   STRCODE        
 
         CLASS   ENTRY          
 
         CLASS   STRING         
+                strings                             1C9      1C9       2C         0
 
         CLASS   BANK0          
-                cstackBANK0                          46       46        3         1
-                bssBANK0                             40       40        6         1
+                cstackBANK0                          4F       4F        3         1
+                dataBANK0                            4C       4C        3         1
+                bssBANK0                             40       40        C         1
 
         CLASS   RAM            
 
@@ -88,9 +114,9 @@ TOTAL           Name                               Link     Load   Length     Sp
                 abs_s1                               7E       7E        2         1
 
         CLASS   COMMON         
-                cstackCOMMON                         75       75        5         1
+                cstackCOMMON                         70       70        7         1
                 dataCOMMON                           7A       7A        1         1
-                bssCOMMON                            70       70        5         1
+                bssCOMMON                            77       77        3         1
 
         CLASS   SFR0           
 
@@ -109,72 +135,100 @@ TOTAL           Name                               Link     Load   Length     Sp
 SEGMENTS        Name                           Load    Length   Top    Selector   Space  Class     Delta
 
                 reset_vec                      000000  000001  000001         0       0  CODE        2
-                intentry                       000004  000133  000137         8       0  CODE        2
-                bssBANK0                       000040  000009  000049        40       1  BANK0       1
-                bssCOMMON                      000070  00000B  00007B        70       1  COMMON      1
-                swtext1                        000137  000006  00013D       26E       0  CONST       2
-                text376                        00013D  00000C  000149       27A       0  CODE        2
-                swtext2                        000149  000008  000151       292       0  CONST       2
+                intentry                       000004  0001C5  0001C9         8       0  CODE        2
+                bssBANK0                       000040  000012  000052        40       1  BANK0       1
+                cstackCOMMON                   000070  00000B  00007B        70       1  COMMON      1
+                strings                        0001C9  00002C  0001F5       392       0  STRING      2
+                text629                        0001F5  000091  000286       3EA       0  CODE        2
+                swtext2                        000286  00000B  000291       50C       0  CONST       2
+                text619                        000291  00001A  0002AB       522       0  CODE        2
+                swtext1                        0002AB  000008  0002B3       556       0  CONST       2
+                text625                        0002B3  00002F  0002E2       566       0  CODE        2
+                swtext3                        0002E2  000012  0002F4       5C4       0  CONST       2
+                text632                        0002F4  000003  0002F7       5E8       0  CODE        2
 
 
 UNUSED ADDRESS RANGES
 
         Name                Unused          Largest block    Delta
-        BANK0            049-06F            27           1
+        BANK0            052-06F            1E           1
         CODE             001-003             3           2
-                         151-3FF           2AF
+                         2F7-3FF           109
         COMMON           07B-07D             3           1
         CONFIG           2007-2007             1           2
         CONST            001-003             3           2
-                         151-3FF           100
+                         2F7-3FF             9
         EEDATA           2100-217F            80           2
         ENTRY            001-003             3           2
-                         151-3FF           100
+                         2F7-3FF             9
         IDLOC            2000-2003             4           2
-        RAM              049-06F            27           1
+        RAM              052-06F            1E           1
         SFR0             000-03F            40           1
         SFR1             080-0EF            70           1
         STRCODE          001-003             3           2
-                         151-3FF           2AF
+                         2F7-3FF           109
         STRING           001-003             3           2
-                         151-3FF           100
+                         2F7-3FF             9
 
                                   Symbol Table
 
-??_ISR                             cstackCOMMON 075
-??_PA3_Level_Change_INITIAL        cstackCOMMON 078
-??_POWER_INITIAL                   cstackCOMMON 078
-??_PWM1_BLUE                       cstackCOMMON 078
-??_PWM1_GREEN                      cstackCOMMON 078
-??_PWM1_INITIAL                    cstackCOMMON 078
-??_PWM1_RATE_CHANGE                cstackCOMMON 078
-??_PWM1_RED                        cstackCOMMON 078
-??_PWM1_WHITE                      cstackCOMMON 078
-??_PWM_MODE_CHANGE                 cstackCOMMON 07A
-??_TIMER0_INITIAL                  cstackCOMMON 078
-??___lbmod                         cstackCOMMON 079
-??_main                            cstackCOMMON 07A
-?_ISR                              cstackCOMMON 075
-?_PA3_Level_Change_INITIAL         cstackCOMMON 075
-?_POWER_INITIAL                    cstackCOMMON 075
-?_PWM1_BLUE                        cstackCOMMON 075
-?_PWM1_GREEN                       cstackCOMMON 075
-?_PWM1_INITIAL                     cstackCOMMON 075
-?_PWM1_RATE_CHANGE                 cstackCOMMON 075
-?_PWM1_RED                         cstackCOMMON 075
-?_PWM1_WHITE                       cstackCOMMON 075
-?_PWM_MODE_CHANGE                  cstackCOMMON 075
-?_TIMER0_INITIAL                   cstackCOMMON 075
-?___lbmod                          cstackCOMMON 078
-?_main                             cstackCOMMON 075
-PWM1_RATE_CHANGE@pwm_value         cstackCOMMON 078
+??_DelayMs                         cstackCOMMON 075
+??_DelayUs                         cstackCOMMON 073
+??_ISR                             cstackCOMMON 070
+??_JUMP_MODE_CHANGE                cstackCOMMON 073
+??_MIX_MODE_CHANGE                 cstackCOMMON 075
+??_PA3_Level_Change_INITIAL        cstackCOMMON 073
+??_POWER_INITIAL                   cstackCOMMON 073
+??_PWM1_BLUE                       cstackCOMMON 073
+??_PWM1_GREEN                      cstackCOMMON 073
+??_PWM1_INITIAL                    cstackCOMMON 073
+??_PWM1_RATE_CHANGE                cstackCOMMON 073
+??_PWM1_RED                        cstackCOMMON 073
+??_PWM1_WHITE                      cstackCOMMON 073
+??_PWM_MODE_CHANGE                 cstackCOMMON 075
+??_PWM_MODE_REFRESH                cstackCOMMON 073
+??_SET_MODE_REFRESH                cstackCOMMON 075
+??_TIMER0_INITIAL                  cstackCOMMON 073
+??___lbmod                         cstackCOMMON 074
+??_main                            cstackCOMMON 075
+??_reset_led_status                cstackCOMMON 073
+?_DelayMs                          cstackCOMMON 070
+?_DelayUs                          cstackCOMMON 070
+?_ISR                              cstackCOMMON 070
+?_JUMP_MODE_CHANGE                 cstackCOMMON 070
+?_MIX_MODE_CHANGE                  cstackCOMMON 070
+?_PA3_Level_Change_INITIAL         cstackCOMMON 070
+?_POWER_INITIAL                    cstackCOMMON 070
+?_PWM1_BLUE                        cstackCOMMON 070
+?_PWM1_GREEN                       cstackCOMMON 070
+?_PWM1_INITIAL                     cstackCOMMON 070
+?_PWM1_RATE_CHANGE                 cstackCOMMON 070
+?_PWM1_RED                         cstackCOMMON 070
+?_PWM1_WHITE                       cstackCOMMON 070
+?_PWM_MODE_CHANGE                  cstackCOMMON 070
+?_PWM_MODE_REFRESH                 cstackCOMMON 070
+?_SET_MODE_REFRESH                 cstackCOMMON 070
+?_TIMER0_INITIAL                   cstackCOMMON 070
+?___lbmod                          cstackCOMMON 073
+?_main                             cstackCOMMON 070
+?_reset_led_status                 cstackCOMMON 070
+DelayMs@Time                       cstackBANK0  04F
+DelayMs@a                          cstackBANK0  050
+DelayMs@b                          cstackBANK0  051
+DelayUs@Time                       cstackCOMMON 073
+DelayUs@a                          cstackCOMMON 074
+PWM1_RATE_CHANGE@pwm_value         cstackCOMMON 073
+_DelayMs                           text617      266
+_DelayUs                           text619      291
 _GIE                               (abs)        05F
 _INTCON                            (abs)        00B
 _IOCA3                             (abs)        4B3
 _IRDataTimer                       bssBANK0     040
-_IRbitNum                          bssCOMMON    070
-_IRbitTime                         bssCOMMON    071
-_ISR                               text381      00D
+_IRbitNum                          bssBANK0     044
+_IRbitTime                         bssBANK0     045
+_ISR                               text634      08E
+_JUMP_MODE_CHANGE                  text629      1F5
+_MIX_MODE_CHANGE                   text621      198
 _MSCON                             (abs)        01B
 _OPTION                            (abs)        081
 _OSCCON                            (abs)        08F
@@ -187,27 +241,30 @@ _P1DDTH                            (abs)        009
 _P1DDTL                            (abs)        008
 _P1OE                              (abs)        090
 _P1POL                             (abs)        099
-_PA3_Level_Change_INITIAL          text378      11E
+_PA3_Level_Change_INITIAL          text630      29A
 _PAIE                              (abs)        05B
 _PAIF                              (abs)        058
 _PEIE                              (abs)        05E
 _PORTA                             (abs)        005
-_POWER_INITIAL                     text380      106
+_POWER_INITIAL                     text633      277
 _PR2H                              (abs)        092
 _PR2L                              (abs)        091
-_PWM1_BLUE                         text375      127
-_PWM1_GREEN                        text376      13D
-_PWM1_INITIAL                      text372      08E
-_PWM1_RATE_CHANGE                  text371      059
-_PWM1_RED                          text377      143
-_PWM1_WHITE                        text374      115
-_PWM_MODE_CHANGE                   text370      0E6
+_PWM1_BLUE                         text626      2BB
+_PWM1_GREEN                        text627      2C3
+_PWM1_INITIAL                      text623      219
+_PWM1_RATE_CHANGE                  text622      163
+_PWM1_RED                          text628      2CB
+_PWM1_WHITE                        text625      2B3
+_PWM_MODE_CHANGE                   text618      2DB
+_PWM_MODE_REFRESH                  text620      121
 _RA3                               (abs)        02B
+_ReceiveFinish                     bssBANK0     046
+_SET_MODE_REFRESH                  text616      0DC
 _T0IE                              (abs)        05D
 _T0IF                              (abs)        05A
 _T2CON0                            (abs)        012
 _T2CON1                            (abs)        09E
-_TIMER0_INITIAL                    text379      12F
+_TIMER0_INITIAL                    text631      2D3
 _TMR0                              (abs)        001
 _TMR2H                             (abs)        013
 _TMR2IE                            (abs)        461
@@ -229,10 +286,12 @@ __Hcommon                          common       000
 __Hconfig                          config       000
 __HcstackBANK0                     cstackBANK0  000
 __HcstackCOMMON                    cstackCOMMON 000
+__HdataBANK0                       dataBANK0    000
 __HdataCOMMON                      dataCOMMON   000
 __Heeprom_data                     eeprom_data  000
 __Hend_init                        end_init     00D
 __Hfunctab                         functab      000
+__HidataBANK0                      idataBANK0   000
 __HidataCOMMON                     idataCOMMON  000
 __Hidloc                           idloc        000
 __Hinit                            init         00C
@@ -258,10 +317,12 @@ __Lcommon                          common       000
 __Lconfig                          config       000
 __LcstackBANK0                     cstackBANK0  000
 __LcstackCOMMON                    cstackCOMMON 000
+__LdataBANK0                       dataBANK0    000
 __LdataCOMMON                      dataCOMMON   000
 __Leeprom_data                     eeprom_data  000
 __Lend_init                        end_init     00C
 __Lfunctab                         functab      000
+__LidataBANK0                      idataBANK0   000
 __LidataCOMMON                     idataCOMMON  000
 __Lidloc                           idloc        000
 __Linit                            init         00C
@@ -275,52 +336,76 @@ __Lsfr0                            sfr0         000
 __Lsfr1                            sfr1         000
 __Lstrings                         strings      000
 __Ltext                            text         000
-__S0                               (abs)        151
+__S0                               (abs)        2F7
 __S1                               (abs)        07B
 __S2                               (abs)        000
-___lbmod                           text373      0CA
-___lbmod@counter                   cstackBANK0  047
-___lbmod@dividend                  cstackBANK0  046
-___lbmod@divisor                   cstackCOMMON 078
-___lbmod@rem                       cstackBANK0  048
-__end_of_ISR                       text381      059
-__end_of_PA3_Level_Change_INITIAL  text378      127
-__end_of_POWER_INITIAL             text380      115
-__end_of_PWM1_BLUE                 text375      12F
-__end_of_PWM1_GREEN                text376      143
-__end_of_PWM1_INITIAL              text372      0AE
-__end_of_PWM1_RATE_CHANGE          text371      08E
-__end_of_PWM1_RED                  text377      149
-__end_of_PWM1_WHITE                text374      11E
-__end_of_PWM_MODE_CHANGE           text370      0F7
-__end_of_TIMER0_INITIAL            text379      137
-__end_of___lbmod                   text373      0E6
-__end_of_main                      maintext     0CA
+___lbmod                           text624      239
+___lbmod@counter                   cstackBANK0  050
+___lbmod@dividend                  cstackBANK0  04F
+___lbmod@divisor                   cstackCOMMON 073
+___lbmod@rem                       cstackBANK0  051
+__end_of_DelayMs                   text617      277
+__end_of_DelayUs                   text619      29A
+__end_of_ISR                       text634      0DC
+__end_of_JUMP_MODE_CHANGE          text629      219
+__end_of_MIX_MODE_CHANGE           text621      1BD
+__end_of_PA3_Level_Change_INITIAL  text630      2A3
+__end_of_POWER_INITIAL             text633      286
+__end_of_PWM1_BLUE                 text626      2C3
+__end_of_PWM1_GREEN                text627      2CB
+__end_of_PWM1_INITIAL              text623      239
+__end_of_PWM1_RATE_CHANGE          text622      198
+__end_of_PWM1_RED                  text628      2D3
+__end_of_PWM1_WHITE                text625      2BB
+__end_of_PWM_MODE_CHANGE           text618      2E2
+__end_of_PWM_MODE_REFRESH          text620      163
+__end_of_SET_MODE_REFRESH          text616      121
+__end_of_TIMER0_INITIAL            text631      2DB
+__end_of___lbmod                   text624      255
+__end_of_main                      maintext     08E
+__end_of_reset_led_status          text632      2F7
 __pbssBANK0                        bssBANK0     040
-__pbssCOMMON                       bssCOMMON    070
-__pcstackBANK0                     cstackBANK0  046
-__pcstackCOMMON                    cstackCOMMON 075
+__pbssCOMMON                       bssCOMMON    077
+__pcstackBANK0                     cstackBANK0  04F
+__pcstackCOMMON                    cstackCOMMON 070
+__pdataBANK0                       dataBANK0    04C
 __pdataCOMMON                      dataCOMMON   07A
+__pidataBANK0                      idataBANK0   000
 __pidataCOMMON                     idataCOMMON  000
 __pintentry                        intentry     004
-__pmaintext                        maintext     0AE
-__pswtext1                         swtext1      137
-__pswtext2                         swtext2      149
-__pswtext3                         swtext3      14D
-__ptext370                         text370      0E6
-__ptext371                         text371      059
-__ptext372                         text372      08E
-__ptext373                         text373      0CA
-__ptext374                         text374      115
-__ptext375                         text375      127
-__ptext376                         text376      13D
-__ptext377                         text377      143
-__ptext378                         text378      11E
-__ptext379                         text379      12F
-__ptext380                         text380      106
-__ptext381                         text381      00D
-__ptext382                         text382      000
+__pmaintext                        maintext     00D
+__pstrings                         strings      1C9
+__pswtext1                         swtext1      2AB
+__pswtext2                         swtext2      286
+__pswtext3                         swtext3      2E2
+__pswtext4                         swtext4      2E8
+__pswtext5                         swtext5      2EC
+__pswtext6                         swtext6      2F0
+__ptext616                         text616      0DC
+__ptext617                         text617      266
+__ptext618                         text618      2DB
+__ptext619                         text619      291
+__ptext620                         text620      121
+__ptext621                         text621      198
+__ptext622                         text622      163
+__ptext623                         text623      219
+__ptext624                         text624      239
+__ptext625                         text625      2B3
+__ptext626                         text626      2BB
+__ptext627                         text627      2C3
+__ptext628                         text628      2CB
+__ptext629                         text629      1F5
+__ptext630                         text630      29A
+__ptext631                         text631      2D3
+__ptext632                         text632      2F4
+__ptext633                         text633      277
+__ptext634                         text634      08E
+__ptext635                         text635      000
+__size_of_DelayMs                  (abs)        000
+__size_of_DelayUs                  (abs)        000
 __size_of_ISR                      (abs)        000
+__size_of_JUMP_MODE_CHANGE         (abs)        000
+__size_of_MIX_MODE_CHANGE          (abs)        000
 __size_of_PA3_Level_Change_INITIAL (abs)        000
 __size_of_POWER_INITIAL            (abs)        000
 __size_of_PWM1_BLUE                (abs)        000
@@ -330,32 +415,45 @@ __size_of_PWM1_RATE_CHANGE         (abs)        000
 __size_of_PWM1_RED                 (abs)        000
 __size_of_PWM1_WHITE               (abs)        000
 __size_of_PWM_MODE_CHANGE          (abs)        000
+__size_of_PWM_MODE_REFRESH         (abs)        000
+__size_of_SET_MODE_REFRESH         (abs)        000
 __size_of_TIMER0_INITIAL           (abs)        000
 __size_of___lbmod                  (abs)        000
 __size_of_main                     (abs)        000
-_bitdata                           dataCOMMON   07A
+__size_of_reset_led_status         (abs)        000
+_bitdata                           dataBANK0    04C
 _exit                              init         00C
-_ft_user_pwm_mode                  bssCOMMON    072
-_key_release                       bssBANK0     044
-_main                              maintext     0AE
-_pwm_colour_value                  bssCOMMON    073
-_pwm_rate_value                    bssCOMMON    074
-_time_15ms_cnt                     bssBANK0     045
+_ft_user_pwm_mode                  bssCOMMON    077
+_ft_user_set_mode                  bssBANK0     047
+_ir_key_value                      strings      1CF
+_jump_led_rate                     dataCOMMON   07A
+_key_release                       bssBANK0     048
+_main                              maintext     00D
+_power_off_flag                    bssBANK0     049
+_power_off_mode_backup             dataBANK0    04D
+_pwm_colour_value                  bssCOMMON    078
+_pwm_rate_value                    bssCOMMON    079
+_reset_led_status                  text632      2F4
+_set_time_mode_backup              dataBANK0    04E
+_time_15ms_cnt                     bssBANK0     04A
+_time_2s_cnt                       bssBANK0     04B
 btemp                              (abs)        07E
-end_of_initialization              cinit        104
-i1l3333                                            
-i1l3339                                            
-i1l3347                                            
-i1l3349                                            
-i1l3351                                            
-i1l3355                                            
-i1l3363                                            
-i1l3365                                            
-i1l3369                                            
-i1l3379                                            
-i1l3381                                            
-i1l3385                                            
-i1l3391                                            
+clear_ram                          clrtext      2A3
+end_of_initialization              cinit        264
+i1l3783                                            
+i1l3789                                            
+i1l3797                                            
+i1l3799                                            
+i1l3801                                            
+i1l3805                                            
+i1l3813                                            
+i1l3815                                            
+i1l3819                                            
+i1l3829                                            
+i1l3831                                            
+i1l3835                                            
+i1l3841                                            
+i1l3843                                            
 interrupt_function                 intentry     004
 intlevel0                          functab      000
 intlevel1                          functab      000
@@ -363,64 +461,109 @@ intlevel2                          functab      000
 intlevel3                          functab      000
 intlevel4                          functab      000
 intlevel5                          functab      000
-l1400                                              
-l1403                                              
-l1406                                              
-l1409                                              
-l1412                                              
-l2117                                              
-l2120                                              
-l2720                                              
-l3393                                              
-l3395                                              
-l3397                                              
-l3399                                              
-l3401                                              
-l3403                                              
-l3405                                              
-l3407                                              
-l3409                                              
-l3411                                              
-l3413                                              
-l3415                                              
-l3417                                              
-l3419                                              
-l3421                                              
-l3423                                              
-l3425                                              
-l3427                                              
-l3429                                              
-l3431                                              
-l3451                                              
-l3453                                              
-l3455                                              
-l3457                                              
-l3459                                              
-l3461                                              
-l3463                                              
-l3465                                              
-l3467                                              
-l3469                                              
-l3471                                              
-l3473                                              
-l3475                                              
-l3479                                              
-l3481                                              
-l3587                                              
-l3589                                              
-l3593                                              
-l3595                                              
-l3601                                              
-l3605                                              
-l3607                                              
-l3611                                              
-l3615                                              
-l3619                                              
-l3625                                              
-l3627                                              
-l702                                               
+l1434                                              
+l1437                                              
+l1440                                              
+l1443                                              
+l1446                                              
+l1479                                              
+l1497                                              
+l1505                                              
+l2217                                              
+l2220                                              
+l2820                                              
+l3845                                              
+l3847                                              
+l3849                                              
+l3851                                              
+l3853                                              
+l3855                                              
+l3857                                              
+l3859                                              
+l3861                                              
+l3863                                              
+l3865                                              
+l3867                                              
+l3869                                              
+l3871                                              
+l3873                                              
+l3877                                              
+l3889                                              
+l3901                                              
+l3903                                              
+l3905                                              
+l3907                                              
+l3909                                              
+l3911                                              
+l3913                                              
+l3915                                              
+l3917                                              
+l3937                                              
+l3939                                              
+l3941                                              
+l3943                                              
+l3945                                              
+l3947                                              
+l3949                                              
+l3951                                              
+l3953                                              
+l3955                                              
+l3957                                              
+l3959                                              
+l3961                                              
+l3965                                              
+l3967                                              
+l4037                                              
+l4039                                              
+l4041                                              
+l4047                                              
+l4063                                              
+l4075                                              
+l4081                                              
+l4377                                              
+l4379                                              
+l4383                                              
+l4385                                              
+l4391                                              
+l4395                                              
+l4397                                              
+l4405                                              
+l4409                                              
+l4423                                              
+l4425                                              
+l4429                                              
+l4431                                              
+l4433                                              
+l4435                                              
+l4445                                              
+l4447                                              
+l4453                                              
+l4473                                              
+l4475                                              
+l4479                                              
+l4485                                              
+l4489                                              
+l4493                                              
+l4501                                              
+l4505                                              
+l4513                                              
+l4515                                              
+l4523                                              
+l4527                                              
+l4537                                              
+l4541                                              
+l4553                                              
+l4559                                              
+l4569                                              
+l4587                                              
+l4591                                              
+l4595                                              
+l720                                               
+l723                                               
+main@i                             cstackCOMMON 075
+main@temp_mode                     cstackCOMMON 076
 reset_vec                          reset_vec    000
 saved_w                            (abs)        07E
 start                              init         00C
-start_initialization               cinit        0F7
+start_initialization               cinit        255
 wtemp0                             (abs)        07E

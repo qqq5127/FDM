@@ -22,7 +22,33 @@
 #include 	"FT_USER_CONFIG.h";
 
 unchar time_15ms_cnt = 0;
+unchar time_2s_cnt = 0;
 unchar key_release = 0;
+
+const unchar ir_key_value[]=
+{
+	0xFB,0x00,		// fade mode
+	0xB2,0x05,		// jump mode
+	0xFF,0x01,		// RED  mode
+	0xF5,0x02,		// GREEN mode
+	0xED,0x03,      // BLUE mode
+	0xF6,0x04,      // WHITE mode
+	0xEA,0x06,		// RG mode
+	0xBF,0x07,		// RB  mode
+	0xE1,0x08,		// RY mode
+	0xE4,0x09,		// RGB mode	
+	0xE2,0x0A,		// MIX COLOR MODE
+	0xE5,0x0B,		// - rate
+	0xE0,0x0C,		// + rate
+
+	0xF2,0x0D,		// 0.5H
+	0xE8,0x0E,		// 1.0H
+	0xB3,0x0F,		// 1.5H
+	0xE6,0x10,		// 2.0H
+	
+	0xF1,0x11,		// POWER ON
+	0xF0,0x12,		// POWER OFF
+};
 
  /*-------------------------------------------------
   *  函数名：中断处理程序
@@ -116,53 +142,13 @@ void POWER_INITIAL (void)
 													//Bit7(PAPU)=0 由WPUA决定是否上拉
 	MSCON = 0B00000000;		                             
 }
- /*-------------------------------------------------
- *  函数名称：DelayUs
- *  功能：    短延时函数 --16M-4T--大概快1%左右.
- *  输入参数：Time 延时时间长度 延时时长Time*2 Us
- * 	返回参数：无 
- -------------------------------------------------*/
-void DelayUs(unsigned char Time)
+
+
+void reset_led_status(void)
 {
-	unsigned char a;
-	for(a=0;a<Time;a++)
-	{
-		NOP();
-	}
-}                  
-/*------------------------------------------------- 
- * 	函数名称： DelayMs
- * 	功能：    短延时函数
- * 	输入参数：Time 延时时间长度 延时时长Time ms
- * 	返回参数：无 
- -------------------------------------------------*/
-void DelayMs(unsigned char Time)
-{
-	unsigned char a,b;
-	for(a=0;a<Time;a++)
-	{
-		for(b=0;b<5;b++)
-		{
-		 	DelayUs(98);               //快1%
-		}
-	}
-}
-/*------------------------------------------------- 
- * 	函数名称：DelayS
- * 	功能：   短延时函数
- * 	输入参数：Time 延时时间长度 延时时长Time S
- * 	返回参数：无 
- -------------------------------------------------*/
-void DelayS(unsigned char Time)
-{
-	unsigned char a,b;
-	for(a=0;a<Time;a++)
-	{
-		for(b=0;b<10;b++)
-		{
-		 	DelayMs(100); 
-		}
-	}
+	time_15ms_cnt = 0;
+	time_2s_cnt = 0;
+
 }
 /*-------------------------------------------------
  *	函数名: main 
@@ -180,20 +166,49 @@ void main(void)
     while(1)
 	{
     	CLRWDT();  		    //清看门狗
-    	
-		if(ft_user_pwm_mode == 0)
+
+		if(power_off_flag == 0)
 		{
-			if(time_15ms_cnt > 150)
+			if(ft_user_pwm_mode == 0)
 			{
-				time_15ms_cnt = 0;
-				pwm_rate_value++;
-				PWM1_RATE_CHANGE();
+				if(time_15ms_cnt > 150)
+				{
+					time_15ms_cnt = 0;
+					pwm_rate_value++;
+					PWM1_RATE_CHANGE();
+				}
+			}
+			if(ft_user_pwm_mode == 5)
+			{
+				if(time_15ms_cnt>200)
+				{
+					time_2s_cnt++;
+					if(time_2s_cnt > 100)
+					{
+						time_2s_cnt = 0;
+						JUMP_MODE_CHANGE();
+					}
+					time_15ms_cnt = 0;
+			
+				}
+			}
+			if(ft_user_pwm_mode == 0x0A)
+			{
+				if(time_15ms_cnt>200)
+				{
+					time_2s_cnt++;
+					if(time_2s_cnt > 100)
+					{
+						time_2s_cnt = 0;
+						MIX_MODE_CHANGE();
+					}
+					time_15ms_cnt = 0;
+			
+				}
 			}
 		}
-		if(ft_user_pwm_mode == 5)
-		{
 
-		}
+		
 		if(PORTA & 0B00010000)
 		{
 			key_release = 0;
@@ -202,9 +217,57 @@ void main(void)
 		{
 			if(key_release == 0)
 			{
+				reset_led_status();
 				PWM_MODE_CHANGE();
 			}
 			key_release = 1;
+			
+		}
+
+		if(ReceiveFinish)
+		{
+			unchar i;
+			unchar temp_mode;
+			
+			ReceiveFinish = 0;
+
+			for(i = 0;i < 19;i++)
+			{
+				if(ir_key_value[i*2] == IRDataTimer[3])
+				{
+					temp_mode = ir_key_value[i*2 + 1];					
+					if(temp_mode == 0x12)
+					{
+						if(power_off_mode_backup == 0xff)
+						{
+							if(ft_user_pwm_mode < 0x0B)
+							{
+								power_off_mode_backup = ft_user_pwm_mode;
+							}
+						}
+					}
+					if(temp_mode >= 0x0D && temp_mode <= 0x10)
+					{
+						if(ft_user_pwm_mode < 0x0B)
+						{
+							set_time_mode_backup = ft_user_pwm_mode;
+						}
+					}
+					if(temp_mode < 0x0B)
+					{
+						if(ft_user_pwm_mode != temp_mode)
+						{
+							ft_user_pwm_mode = temp_mode;
+							PWM_MODE_REFRESH();
+						}
+					}
+					else
+					{
+						ft_user_set_mode = temp_mode;
+						SET_MODE_REFRESH();
+					}
+				}
+			}
 			
 		}
 	}

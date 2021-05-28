@@ -1,7 +1,7 @@
 #ifndef _FT_USR_CONFIG_H_
 #define _FT_USR_CONFIG_H_
 
-#define	DEBUG_MODE	1
+//#define	DEBUG_MODE
 
 //*********************************************************
 #define OSC_16M		0X70

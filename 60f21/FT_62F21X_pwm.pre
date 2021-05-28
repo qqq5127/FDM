@@ -949,6 +949,10 @@ extern void _delay(unsigned long);
 
 extern unsigned char ft_user_pwm_mode;
 extern unsigned char pwm_rate_value;
+extern unsigned char power_off_mode_backup;
+extern unsigned char set_time_mode_backup;
+extern unsigned char ft_user_set_mode;
+extern unsigned char power_off_flag;
 
 
 extern void PWM1_INITIAL(void);
@@ -958,22 +962,33 @@ extern void PWM1_BLUE(void);
 extern void PWM1_WHITE(void);
 extern void PWM1_RATE_CHANGE(void);
 extern void PWM_MODE_CHANGE(void);
+extern void JUMP_MODE_CHANGE(void);
+extern void PWM_MODE_REFRESH(void);
+extern void MIX_MODE_CHANGE(void);
+extern void SET_MODE_REFRESH(void);
 
 # 1 "FT_62F21X_pwm.c"
 ;
 
-unsigned char ft_user_pwm_mode = 0;
+extern void reset_led_status(void);
 
-# 11
+unsigned char ft_user_pwm_mode = 0;
+unsigned char ft_user_set_mode = 0;
+
+# 14
 unsigned char pwm_rate_value = 0;
 unsigned char pwm_colour_value = 0;
+unsigned char jump_led_rate = 100;
+unsigned char power_off_mode_backup = 0xff;
+unsigned char set_time_mode_backup = 0xff;
+unsigned char power_off_flag = 0;
 
-# 20
+# 26
 void PWM1_INITIAL(void)
 {
 T2CON0=0B00000001;
 
-# 28
+# 34
 T2CON1=0B00000000;
 
 
@@ -992,13 +1007,13 @@ P1DDTL=0;
 
 P1POL=0B00000000;
 
-# 51
+# 57
 P1CON=0B00000000;
 
-# 58
+# 64
 P1AUX=0B00000000;
 
-# 66
+# 72
 PWM1_RED();
 pwm_colour_value = 0;
 
@@ -1014,29 +1029,29 @@ GIE=1;
 void PWM1_RED(void)
 {
 
-# 96
 P1CDTL=0;
+P1DDTL=0;
 
 P1OE=0B00000000;
 
-# 106
-P1BR1=0B00000000;
+# 98
+P1BR1=0B00001000;
 
-
+# 115
 }
 
 void PWM1_GREEN(void)
 {
 
-# 129
 P1CDTL=0;
+P1DDTL=0;
 
-P1OE=0B00000000;
+P1OE=0B00100000;
 
-# 139
+# 131
 P1BR1=0B00000000;
 
-
+# 148
 }
 
 void PWM1_BLUE(void)
@@ -1046,7 +1061,7 @@ P1DDTL=0;
 
 P1OE=0B10000000;
 
-# 157
+# 163
 P1BR1=0B00000000;
 
 
@@ -1058,9 +1073,9 @@ void PWM1_WHITE(void)
 P1CDTL=0;
 P1DDTL=0;
 
-P1OE=0B00100000;
+P1OE=0B00000000;
 
-# 176
+# 182
 P1BR1=0B00000100;
 
 
@@ -1133,34 +1148,34 @@ break;
 
 }
 
-void PWM_MODE_CHANGE(void)
+void JUMP_MODE_CHANGE(void)
 {
-ft_user_pwm_mode++;
-ft_user_pwm_mode = ft_user_pwm_mode%6;
-switch(ft_user_pwm_mode)
+pwm_colour_value++;
+pwm_colour_value = pwm_colour_value%4;
+switch(pwm_colour_value)
 {
 case 0:
+
+P1OE=0B00000000;
+P1BR1=0B00001000;
 
 break;
 
 case 1:
 
+P1OE=0B00100000;
+P1BR1=0B00000000;
+
 break;
 
 case 2:
-
+P1OE=0B10000000;
+P1BR1=0B00000000;
 break;
 
 case 3:
-
-break;
-
-case 4:
-
-break;
-
-case 5:
-
+P1OE=0B00000000;
+P1BR1=0B00000100;
 break;
 
 default:
@@ -1169,3 +1184,242 @@ break;
 }
 }
 
+void PWM_MODE_CHANGE(void)
+{
+ft_user_pwm_mode++;
+ft_user_pwm_mode = ft_user_pwm_mode%6;
+PWM_MODE_REFRESH();
+
+}
+
+void MIX_MODE_CHANGE(void)
+{
+pwm_colour_value++;
+pwm_colour_value = pwm_colour_value%6;
+
+switch(pwm_colour_value)
+{
+case 0:
+P1OE=0B00100000;
+P1BR1=0B00001000;
+break;
+
+case 1:
+P1OE=0B10000000;
+P1BR1=0B00001000;
+
+break;
+
+case 2:
+P1OE=0B00000000;
+P1BR1=0B00001100;
+
+break;
+
+case 3:
+P1OE=0B10100000;
+P1BR1=0B00000000;
+break;
+
+case 4:
+P1OE=0B00100000;
+P1BR1=0B00000100;
+break;
+
+case 5:
+P1OE=0B10000000;
+P1BR1=0B00000100;
+break;
+
+default:
+
+break;
+}
+}
+
+# 350
+void DelayUs(unsigned char Time)
+{
+unsigned char a;
+for(a=0;a<Time;a++)
+{
+_nop();
+}
+}
+
+# 364
+void DelayMs(unsigned char Time)
+{
+unsigned char a,b;
+for(a=0;a<Time;a++)
+{
+for(b=0;b<5;b++)
+{
+DelayUs(98);
+}
+}
+}
+
+# 396
+void PWM_MODE_REFRESH(void)
+{
+reset_led_status();
+
+jump_led_rate = 100;
+if(ft_user_pwm_mode != 0)
+{
+P1CDTL=jump_led_rate;
+P1DDTL=jump_led_rate;
+}
+
+if(power_off_flag == 1)
+{
+return;
+}
+
+switch(ft_user_pwm_mode)
+{
+case 0x00:
+pwm_rate_value = 0;
+pwm_colour_value = 0;
+PWM1_RED();
+
+break;
+
+case 0x01:
+
+P1OE=0B00000000;
+P1BR1=0B00001000;
+
+break;
+
+case 0x02:
+
+P1OE=0B00100000;
+P1BR1=0B00000000;
+
+break;
+
+case 0x03:
+P1OE=0B10000000;
+P1BR1=0B00000000;
+break;
+
+case 0x04:
+P1OE=0B00000000;
+P1BR1=0B00000100;
+break;
+
+case 0x05:
+pwm_colour_value = 0;
+
+P1OE=0B00000000;
+P1BR1=0B00001000;
+
+break;
+
+case 0x06:
+
+P1OE=0B00100000;
+P1BR1=0B00001000;
+
+break;
+
+case 0x07:
+
+P1OE=0B10000000;
+P1BR1=0B00001000;
+
+
+break;
+
+case 0x08:
+P1OE=0B00000000;
+P1BR1=0B00001100;
+break;
+
+case 0x09:
+P1OE=0B10100000;
+P1BR1=0B00001000;
+break;
+
+case 0x0A:
+pwm_colour_value = 0;
+P1OE=0B00100000;
+P1BR1=0B00001000;
+
+break;
+default:
+
+break;
+}
+
+}
+
+void SET_MODE_REFRESH(void)
+{
+
+switch(ft_user_set_mode)
+{
+case 0x0B:
+if(jump_led_rate > 20)
+{
+jump_led_rate = jump_led_rate - 20;
+}
+if(ft_user_pwm_mode != 0)
+{
+P1CDTL=jump_led_rate;
+P1DDTL=jump_led_rate;
+}
+break;
+
+
+case 0x0C:
+if(jump_led_rate < 100)
+{
+jump_led_rate = jump_led_rate + 20;
+}
+if(ft_user_pwm_mode != 0)
+{
+P1CDTL=jump_led_rate;
+P1DDTL=jump_led_rate;
+}
+break;
+
+case 0x0D:
+case 0x0E:
+case 0x0F:
+case 0x10:
+P1OE=0B10100000;
+P1BR1=0B00001100;
+DelayMs(50);
+if(set_time_mode_backup != 0xff)
+{
+ft_user_pwm_mode = set_time_mode_backup;
+PWM_MODE_REFRESH();
+}
+break;
+
+case 0x11:
+if(power_off_mode_backup != 0xff)
+{
+ft_user_pwm_mode = power_off_mode_backup;
+PWM_MODE_REFRESH();
+}
+power_off_mode_backup = 0xff;
+power_off_flag = 0;
+break;
+
+case 0x12:
+P1OE=0B00000000;
+P1BR1=0B00000000;
+power_off_flag = 1;
+break;
+
+
+default:
+
+break;
+}
+
+}
