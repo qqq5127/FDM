@@ -17,6 +17,12 @@ unchar jump_led_rate = 100;
 unchar power_off_mode_backup = 0xff;
 unchar set_time_mode_backup = 0xff;
 unchar power_off_flag = 0;
+
+unchar auto_power_off_timer_L = 0;
+
+
+unlong  auto_power_off_timer_H = 0;
+
 /*-------------------------------------------------
  *	函数名: PWM1_INITIAL 
  *	功能：  PWM1初始化函数
@@ -290,7 +296,14 @@ void JUMP_MODE_CHANGE(void)
 void PWM_MODE_CHANGE(void)
 {
 	ft_user_pwm_mode++;
-	ft_user_pwm_mode = ft_user_pwm_mode%6;
+	if(ft_user_pwm_mode == 6)
+	{
+		ft_user_pwm_mode = 0;
+	}
+	if(ft_user_pwm_mode > 6)
+	{
+		ft_user_pwm_mode = 1;
+	}
 	PWM_MODE_REFRESH();
 
 }
@@ -397,11 +410,15 @@ void PWM_MODE_REFRESH(void)
 {
 	reset_led_status();
 
-	jump_led_rate = 100;
 	if(ft_user_pwm_mode != 0)
 	{
 		P1CDTL=jump_led_rate;
 		P1DDTL=jump_led_rate;
+	}
+	else
+	{
+		P1CDTL=0;
+		P1DDTL=0;
 	}
 
 	if(power_off_flag == 1)
@@ -490,7 +507,14 @@ void PWM_MODE_REFRESH(void)
 
 void SET_MODE_REFRESH(void)
 {
-
+	if(power_off_flag == 1)
+	{
+		if(ft_user_set_mode != 0x11)
+		{
+			return;
+		}
+	}
+	
 	switch(ft_user_set_mode)
 		{
 		case 0x0B:
@@ -522,6 +546,10 @@ void SET_MODE_REFRESH(void)
 		case 0x0E:
 		case 0x0F:
 		case 0x10:
+			auto_power_off_timer_H = (ft_user_set_mode - 0x0C);
+		    auto_power_off_timer_H = auto_power_off_timer_H*180000;
+			P1CDTL=100;
+			P1DDTL=100;
 			P1OE=0B10100000;
 			P1BR1=0B00001100;
 			DelayMs(50);
@@ -533,19 +561,26 @@ void SET_MODE_REFRESH(void)
 		break;
 		
 		case 0x11:
-			if(power_off_mode_backup != 0xff)
+			power_off_flag = 0;
+			//jump_led_rate = 100;		//cuixu test
+			if(power_off_mode_backup < 0x0B)
 			{
 				ft_user_pwm_mode = power_off_mode_backup;
 				PWM_MODE_REFRESH();
 			}
+			else
+			{
+				ft_user_pwm_mode = 0;	// cuixu test
+				PWM_MODE_REFRESH();
+			}
 			power_off_mode_backup = 0xff;			
-			power_off_flag = 0;
 		break;
 
 		case 0x12:
 			P1OE=0B00000000;
 			P1BR1=0B00000000;
 			power_off_flag = 1;
+			auto_power_off_timer_H = 0;
 		break;
 
 		

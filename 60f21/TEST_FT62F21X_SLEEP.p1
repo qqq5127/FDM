@@ -829,8 +829,12 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _time_2s_cnt `uc  1 e ]
 "26 TEST_FT62F21X_SLEEP.C
 [v _key_release `uc  1 e ]
-"28 TEST_FT62F21X_SLEEP.C
+"27 TEST_FT62F21X_SLEEP.C
+[v _temp_mode `uc  1 e ]
+"29 TEST_FT62F21X_SLEEP.C
 [v _ir_key_value `Cuc  -> 0 `x e ]
+"15 FT_62F21X_pwm.h
+[v _auto_power_off_timer_L `uc  0 e ]
 "15 FT_62F21X_IR.h
 [v _IRbitTime `uc  0 e ]
 "19 FT_62F21X_IR.h
@@ -848,7 +852,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _TIMER0_INITIAL `(v  0 ef ]
 "12 FT_62F21X_IR.h
 [v _PA3_Level_Change_INITIAL `(v  0 ef ]
-"17 FT_62F21X_pwm.h
+"19 FT_62F21X_pwm.h
 [v _PWM1_INITIAL `(v  0 ef ]
 "14 FT_62F21X_pwm.h
 [v _power_off_flag `uc  0 e ]
@@ -856,24 +860,26 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _ft_user_pwm_mode `uc  0 e ]
 "10 FT_62F21X_pwm.h
 [v _pwm_rate_value `uc  0 e ]
-"22 FT_62F21X_pwm.h
-[v _PWM1_RATE_CHANGE `(v  0 ef ]
 "24 FT_62F21X_pwm.h
-[v _JUMP_MODE_CHANGE `(v  0 ef ]
+[v _PWM1_RATE_CHANGE `(v  0 ef ]
 "26 FT_62F21X_pwm.h
+[v _JUMP_MODE_CHANGE `(v  0 ef ]
+"28 FT_62F21X_pwm.h
 [v _MIX_MODE_CHANGE `(v  0 ef ]
-"23 FT_62F21X_pwm.h
+"16 FT_62F21X_pwm.h
+[v _auto_power_off_timer_H `ul  0 e ]
+"13 FT_62F21X_pwm.h
+[v _ft_user_set_mode `uc  0 e ]
+"29 FT_62F21X_pwm.h
+[v _SET_MODE_REFRESH `(v  0 ef ]
+"25 FT_62F21X_pwm.h
 [v _PWM_MODE_CHANGE `(v  0 ef ]
 "11 FT_62F21X_pwm.h
 [v _power_off_mode_backup `uc  0 e ]
 "12 FT_62F21X_pwm.h
 [v _set_time_mode_backup `uc  0 e ]
-"25 FT_62F21X_pwm.h
-[v _PWM_MODE_REFRESH `(v  0 ef ]
-"13 FT_62F21X_pwm.h
-[v _ft_user_set_mode `uc  0 e ]
 "27 FT_62F21X_pwm.h
-[v _SET_MODE_REFRESH `(v  0 ef ]
+[v _PWM_MODE_REFRESH `(v  0 ef ]
 [; ;DEVICE.h: 6: volatile unsigned char INDF @ 0x000;
 [; ;DEVICE.h: 10: volatile unsigned char TMR0 @ 0x001;
 [; ;DEVICE.h: 14: volatile unsigned char PCL @ 0x002;
@@ -1585,17 +1591,19 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;FT_62F21X_pwm.h: 12: extern unsigned char set_time_mode_backup;
 [; ;FT_62F21X_pwm.h: 13: extern unsigned char ft_user_set_mode;
 [; ;FT_62F21X_pwm.h: 14: extern unsigned char power_off_flag;
-[; ;FT_62F21X_pwm.h: 17: extern void PWM1_INITIAL(void);
-[; ;FT_62F21X_pwm.h: 18: extern void PWM1_RED(void);
-[; ;FT_62F21X_pwm.h: 19: extern void PWM1_GREEN(void);
-[; ;FT_62F21X_pwm.h: 20: extern void PWM1_BLUE(void);
-[; ;FT_62F21X_pwm.h: 21: extern void PWM1_WHITE(void);
-[; ;FT_62F21X_pwm.h: 22: extern void PWM1_RATE_CHANGE(void);
-[; ;FT_62F21X_pwm.h: 23: extern void PWM_MODE_CHANGE(void);
-[; ;FT_62F21X_pwm.h: 24: extern void JUMP_MODE_CHANGE(void);
-[; ;FT_62F21X_pwm.h: 25: extern void PWM_MODE_REFRESH(void);
-[; ;FT_62F21X_pwm.h: 26: extern void MIX_MODE_CHANGE(void);
-[; ;FT_62F21X_pwm.h: 27: extern void SET_MODE_REFRESH(void);
+[; ;FT_62F21X_pwm.h: 15: extern unsigned char auto_power_off_timer_L;
+[; ;FT_62F21X_pwm.h: 16: extern unsigned long auto_power_off_timer_H;
+[; ;FT_62F21X_pwm.h: 19: extern void PWM1_INITIAL(void);
+[; ;FT_62F21X_pwm.h: 20: extern void PWM1_RED(void);
+[; ;FT_62F21X_pwm.h: 21: extern void PWM1_GREEN(void);
+[; ;FT_62F21X_pwm.h: 22: extern void PWM1_BLUE(void);
+[; ;FT_62F21X_pwm.h: 23: extern void PWM1_WHITE(void);
+[; ;FT_62F21X_pwm.h: 24: extern void PWM1_RATE_CHANGE(void);
+[; ;FT_62F21X_pwm.h: 25: extern void PWM_MODE_CHANGE(void);
+[; ;FT_62F21X_pwm.h: 26: extern void JUMP_MODE_CHANGE(void);
+[; ;FT_62F21X_pwm.h: 27: extern void PWM_MODE_REFRESH(void);
+[; ;FT_62F21X_pwm.h: 28: extern void MIX_MODE_CHANGE(void);
+[; ;FT_62F21X_pwm.h: 29: extern void SET_MODE_REFRESH(void);
 [; ;TEST_FT62F21X_SLEEP.C: 20: ;
 [; ;FT_62F21X_IR.h: 4: ;
 [; ;FT_62F21X_IR.h: 5: ;
@@ -1627,665 +1635,678 @@ Version 3.2 HI-TECH Software Intermediate Code
 -> -> 0 `i `uc
 ]
 [; ;TEST_FT62F21X_SLEEP.C: 26: unsigned char key_release = 0;
-"28
+[; ;TEST_FT62F21X_SLEEP.C: 27: unsigned char temp_mode;
+"29
 [i _ir_key_value
 :U ..
-"30
+"31
 -> -> 251 `i `uc
 -> -> 0 `i `uc
-"31
+"32
 -> -> 178 `i `uc
 -> -> 5 `i `uc
-"32
+"33
 -> -> 255 `i `uc
 -> -> 1 `i `uc
-"33
+"34
 -> -> 245 `i `uc
 -> -> 2 `i `uc
-"34
+"35
 -> -> 237 `i `uc
 -> -> 3 `i `uc
-"35
+"36
 -> -> 246 `i `uc
 -> -> 4 `i `uc
-"36
+"37
 -> -> 234 `i `uc
 -> -> 6 `i `uc
-"37
+"38
 -> -> 191 `i `uc
 -> -> 7 `i `uc
-"38
+"39
 -> -> 225 `i `uc
 -> -> 8 `i `uc
-"39
+"40
 -> -> 228 `i `uc
 -> -> 9 `i `uc
-"40
+"41
 -> -> 226 `i `uc
 -> -> 10 `i `uc
-"41
+"42
 -> -> 229 `i `uc
 -> -> 11 `i `uc
-"42
+"43
 -> -> 224 `i `uc
 -> -> 12 `i `uc
-"44
+"45
 -> -> 242 `i `uc
 -> -> 13 `i `uc
-"45
+"46
 -> -> 232 `i `uc
 -> -> 14 `i `uc
-"46
+"47
 -> -> 179 `i `uc
 -> -> 15 `i `uc
-"47
+"48
 -> -> 230 `i `uc
 -> -> 16 `i `uc
-"49
+"50
 -> -> 241 `i `uc
 -> -> 17 `i `uc
-"50
+"51
 -> -> 240 `i `uc
 -> -> 18 `i `uc
 ..
 ]
-[; ;TEST_FT62F21X_SLEEP.C: 28: const unsigned char ir_key_value[]=
-[; ;TEST_FT62F21X_SLEEP.C: 29: {
-[; ;TEST_FT62F21X_SLEEP.C: 30: 0xFB,0x00,
-[; ;TEST_FT62F21X_SLEEP.C: 31: 0xB2,0x05,
-[; ;TEST_FT62F21X_SLEEP.C: 32: 0xFF,0x01,
-[; ;TEST_FT62F21X_SLEEP.C: 33: 0xF5,0x02,
-[; ;TEST_FT62F21X_SLEEP.C: 34: 0xED,0x03,
-[; ;TEST_FT62F21X_SLEEP.C: 35: 0xF6,0x04,
-[; ;TEST_FT62F21X_SLEEP.C: 36: 0xEA,0x06,
-[; ;TEST_FT62F21X_SLEEP.C: 37: 0xBF,0x07,
-[; ;TEST_FT62F21X_SLEEP.C: 38: 0xE1,0x08,
-[; ;TEST_FT62F21X_SLEEP.C: 39: 0xE4,0x09,
-[; ;TEST_FT62F21X_SLEEP.C: 40: 0xE2,0x0A,
-[; ;TEST_FT62F21X_SLEEP.C: 41: 0xE5,0x0B,
-[; ;TEST_FT62F21X_SLEEP.C: 42: 0xE0,0x0C,
-[; ;TEST_FT62F21X_SLEEP.C: 44: 0xF2,0x0D,
-[; ;TEST_FT62F21X_SLEEP.C: 45: 0xE8,0x0E,
-[; ;TEST_FT62F21X_SLEEP.C: 46: 0xB3,0x0F,
-[; ;TEST_FT62F21X_SLEEP.C: 47: 0xE6,0x10,
-[; ;TEST_FT62F21X_SLEEP.C: 49: 0xF1,0x11,
-[; ;TEST_FT62F21X_SLEEP.C: 50: 0xF0,0x12,
-[; ;TEST_FT62F21X_SLEEP.C: 51: };
-"60
-[v F940 `(v  1 tf ]
-[v _ISR `IF940  1 e ]
+[; ;TEST_FT62F21X_SLEEP.C: 29: const unsigned char ir_key_value[]=
+[; ;TEST_FT62F21X_SLEEP.C: 30: {
+[; ;TEST_FT62F21X_SLEEP.C: 31: 0xFB,0x00,
+[; ;TEST_FT62F21X_SLEEP.C: 32: 0xB2,0x05,
+[; ;TEST_FT62F21X_SLEEP.C: 33: 0xFF,0x01,
+[; ;TEST_FT62F21X_SLEEP.C: 34: 0xF5,0x02,
+[; ;TEST_FT62F21X_SLEEP.C: 35: 0xED,0x03,
+[; ;TEST_FT62F21X_SLEEP.C: 36: 0xF6,0x04,
+[; ;TEST_FT62F21X_SLEEP.C: 37: 0xEA,0x06,
+[; ;TEST_FT62F21X_SLEEP.C: 38: 0xBF,0x07,
+[; ;TEST_FT62F21X_SLEEP.C: 39: 0xE1,0x08,
+[; ;TEST_FT62F21X_SLEEP.C: 40: 0xE4,0x09,
+[; ;TEST_FT62F21X_SLEEP.C: 41: 0xE2,0x0A,
+[; ;TEST_FT62F21X_SLEEP.C: 42: 0xE5,0x0B,
+[; ;TEST_FT62F21X_SLEEP.C: 43: 0xE0,0x0C,
+[; ;TEST_FT62F21X_SLEEP.C: 45: 0xF2,0x0D,
+[; ;TEST_FT62F21X_SLEEP.C: 46: 0xE8,0x0E,
+[; ;TEST_FT62F21X_SLEEP.C: 47: 0xB3,0x0F,
+[; ;TEST_FT62F21X_SLEEP.C: 48: 0xE6,0x10,
+[; ;TEST_FT62F21X_SLEEP.C: 50: 0xF1,0x11,
+[; ;TEST_FT62F21X_SLEEP.C: 51: 0xF0,0x12,
+[; ;TEST_FT62F21X_SLEEP.C: 52: };
+"61
+[v F943 `(v  1 tf ]
+[v _ISR `IF943  1 e ]
 {
-[; ;TEST_FT62F21X_SLEEP.C: 59: void interrupt ISR(void)
-[; ;TEST_FT62F21X_SLEEP.C: 60: {
+[; ;TEST_FT62F21X_SLEEP.C: 60: void interrupt ISR(void)
+[; ;TEST_FT62F21X_SLEEP.C: 61: {
 [e :U _ISR ]
 [f ]
-[; ;TEST_FT62F21X_SLEEP.C: 63: if(TMR2IE && TMR2IF)
-"63
-[e $ ! && _TMR2IE _TMR2IF 87  ]
-[; ;TEST_FT62F21X_SLEEP.C: 64: {
+[; ;TEST_FT62F21X_SLEEP.C: 64: if(TMR2IE && TMR2IF)
 "64
-{
-[; ;TEST_FT62F21X_SLEEP.C: 65: TMR2IF = 0;
+[e $ ! && _TMR2IE _TMR2IF 87  ]
+[; ;TEST_FT62F21X_SLEEP.C: 65: {
 "65
-[e = _TMR2IF -> -> 0 `i `b ]
-[; ;TEST_FT62F21X_SLEEP.C: 66: time_15ms_cnt++;
+{
+[; ;TEST_FT62F21X_SLEEP.C: 66: TMR2IF = 0;
 "66
+[e = _TMR2IF -> -> 0 `i `b ]
+[; ;TEST_FT62F21X_SLEEP.C: 67: time_15ms_cnt++;
+"67
 [e ++ _time_15ms_cnt -> -> 1 `i `uc ]
+[; ;TEST_FT62F21X_SLEEP.C: 68: auto_power_off_timer_L++;
 "68
+[e ++ _auto_power_off_timer_L -> -> 1 `i `uc ]
+"70
 }
 [e :U 87 ]
-[; ;TEST_FT62F21X_SLEEP.C: 68: }
-[; ;TEST_FT62F21X_SLEEP.C: 72: if(T0IE && T0IF)
-"72
-[e $ ! && _T0IE _T0IF 88  ]
-[; ;TEST_FT62F21X_SLEEP.C: 73: {
-"73
-{
-[; ;TEST_FT62F21X_SLEEP.C: 74: TMR0 = 140;
+[; ;TEST_FT62F21X_SLEEP.C: 70: }
+[; ;TEST_FT62F21X_SLEEP.C: 74: if(T0IE && T0IF)
 "74
-[e = _TMR0 -> -> 140 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 76: T0IF = 0;
-"76
-[e = _T0IF -> -> 0 `i `b ]
-[; ;TEST_FT62F21X_SLEEP.C: 77: IRbitTime++;
-"77
-[e ++ _IRbitTime -> -> 1 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 78: if(IRbitTime > 50)
-"78
-[e $ ! > -> _IRbitTime `i -> 50 `i 89  ]
-[; ;TEST_FT62F21X_SLEEP.C: 79: {
-"79
+[e $ ! && _T0IE _T0IF 88  ]
+[; ;TEST_FT62F21X_SLEEP.C: 75: {
+"75
 {
-[; ;TEST_FT62F21X_SLEEP.C: 80: T0IE = 0;
+[; ;TEST_FT62F21X_SLEEP.C: 76: TMR0 = 140;
+"76
+[e = _TMR0 -> -> 140 `i `uc ]
+[; ;TEST_FT62F21X_SLEEP.C: 78: T0IF = 0;
+"78
+[e = _T0IF -> -> 0 `i `b ]
+[; ;TEST_FT62F21X_SLEEP.C: 79: IRbitTime++;
+"79
+[e ++ _IRbitTime -> -> 1 `i `uc ]
+[; ;TEST_FT62F21X_SLEEP.C: 80: if(IRbitTime > 50)
 "80
-[e = _T0IE -> -> 0 `i `b ]
-[; ;TEST_FT62F21X_SLEEP.C: 81: IRbitTime = 0;
+[e $ ! > -> _IRbitTime `i -> 50 `i 89  ]
+[; ;TEST_FT62F21X_SLEEP.C: 81: {
 "81
-[e = _IRbitTime -> -> 0 `i `uc ]
+{
+[; ;TEST_FT62F21X_SLEEP.C: 82: T0IE = 0;
 "82
+[e = _T0IE -> -> 0 `i `b ]
+[; ;TEST_FT62F21X_SLEEP.C: 83: IRbitTime = 0;
+"83
+[e = _IRbitTime -> -> 0 `i `uc ]
+"84
 }
 [e :U 89 ]
-"83
+"85
 }
 [e :U 88 ]
-[; ;TEST_FT62F21X_SLEEP.C: 82: }
-[; ;TEST_FT62F21X_SLEEP.C: 83: }
-[; ;TEST_FT62F21X_SLEEP.C: 86: if(PAIE && PAIF)
-"86
-[e $ ! && _PAIE _PAIF 90  ]
-[; ;TEST_FT62F21X_SLEEP.C: 87: {
-"87
-{
-[; ;TEST_FT62F21X_SLEEP.C: 88: ReadAPin = PORTA;
+[; ;TEST_FT62F21X_SLEEP.C: 84: }
+[; ;TEST_FT62F21X_SLEEP.C: 85: }
+[; ;TEST_FT62F21X_SLEEP.C: 88: if(PAIE && PAIF)
 "88
-[e = _ReadAPin _PORTA ]
-[; ;TEST_FT62F21X_SLEEP.C: 89: PAIF = 0;
+[e $ ! && _PAIE _PAIF 90  ]
+[; ;TEST_FT62F21X_SLEEP.C: 89: {
 "89
-[e = _PAIF -> -> 0 `i `b ]
-[; ;TEST_FT62F21X_SLEEP.C: 90: if(RA3 == 0)
+{
+[; ;TEST_FT62F21X_SLEEP.C: 90: ReadAPin = PORTA;
 "90
-[e $ ! == -> _RA3 `i -> 0 `i 91  ]
-[; ;TEST_FT62F21X_SLEEP.C: 91: {
+[e = _ReadAPin _PORTA ]
+[; ;TEST_FT62F21X_SLEEP.C: 91: PAIF = 0;
 "91
-{
-[; ;TEST_FT62F21X_SLEEP.C: 92: T0IE = 1;
+[e = _PAIF -> -> 0 `i `b ]
+[; ;TEST_FT62F21X_SLEEP.C: 92: if(RA3 == 0)
 "92
-[e = _T0IE -> -> 1 `i `b ]
-[; ;TEST_FT62F21X_SLEEP.C: 93: if(IRbitTime > 21)
+[e $ ! == -> _RA3 `i -> 0 `i 91  ]
+[; ;TEST_FT62F21X_SLEEP.C: 93: {
 "93
-[e $ ! > -> _IRbitTime `i -> 21 `i 92  ]
-[; ;TEST_FT62F21X_SLEEP.C: 94: {
+{
+[; ;TEST_FT62F21X_SLEEP.C: 94: T0IE = 1;
 "94
-{
-[; ;TEST_FT62F21X_SLEEP.C: 95: IRDataTimer[0] = 0;
+[e = _T0IE -> -> 1 `i `b ]
+[; ;TEST_FT62F21X_SLEEP.C: 95: if(IRbitTime > 21)
 "95
-[e = *U + &U _IRDataTimer * -> -> -> 0 `i `ui `ux -> -> # *U &U _IRDataTimer `ui `ux -> -> 0 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 96: IRDataTimer[1] = 0;
+[e $ ! > -> _IRbitTime `i -> 21 `i 92  ]
+[; ;TEST_FT62F21X_SLEEP.C: 96: {
 "96
-[e = *U + &U _IRDataTimer * -> -> -> 1 `i `ui `ux -> -> # *U &U _IRDataTimer `ui `ux -> -> 0 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 97: IRDataTimer[2] = 0;
-"97
-[e = *U + &U _IRDataTimer * -> -> -> 2 `i `ui `ux -> -> # *U &U _IRDataTimer `ui `ux -> -> 0 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 98: IRDataTimer[3] = 0;
-"98
-[e = *U + &U _IRDataTimer * -> -> -> 3 `i `ui `ux -> -> # *U &U _IRDataTimer `ui `ux -> -> 0 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 99: IRbitNum = 0;
-"99
-[e = _IRbitNum -> -> 0 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 100: bitdata = 0x00;
-"100
-[e = _bitdata -> -> 0 `i `uc ]
-"101
-}
-[; ;TEST_FT62F21X_SLEEP.C: 101: }
-[e $U 93  ]
-"102
-[e :U 92 ]
-[; ;TEST_FT62F21X_SLEEP.C: 102: else if(IRbitTime > 3)
-[e $ ! > -> _IRbitTime `i -> 3 `i 94  ]
-[; ;TEST_FT62F21X_SLEEP.C: 103: {
-"103
 {
-[; ;TEST_FT62F21X_SLEEP.C: 104: IRDataTimer[IRbitNum-1] |= bitdata;
+[; ;TEST_FT62F21X_SLEEP.C: 97: IRDataTimer[0] = 0;
+"97
+[e = *U + &U _IRDataTimer * -> -> -> 0 `i `ui `ux -> -> # *U &U _IRDataTimer `ui `ux -> -> 0 `i `uc ]
+[; ;TEST_FT62F21X_SLEEP.C: 98: IRDataTimer[1] = 0;
+"98
+[e = *U + &U _IRDataTimer * -> -> -> 1 `i `ui `ux -> -> # *U &U _IRDataTimer `ui `ux -> -> 0 `i `uc ]
+[; ;TEST_FT62F21X_SLEEP.C: 99: IRDataTimer[2] = 0;
+"99
+[e = *U + &U _IRDataTimer * -> -> -> 2 `i `ui `ux -> -> # *U &U _IRDataTimer `ui `ux -> -> 0 `i `uc ]
+[; ;TEST_FT62F21X_SLEEP.C: 100: IRDataTimer[3] = 0;
+"100
+[e = *U + &U _IRDataTimer * -> -> -> 3 `i `ui `ux -> -> # *U &U _IRDataTimer `ui `ux -> -> 0 `i `uc ]
+[; ;TEST_FT62F21X_SLEEP.C: 101: IRbitNum = 0;
+"101
+[e = _IRbitNum -> -> 0 `i `uc ]
+[; ;TEST_FT62F21X_SLEEP.C: 102: bitdata = 0x00;
+"102
+[e = _bitdata -> -> 0 `i `uc ]
+"103
+}
+[; ;TEST_FT62F21X_SLEEP.C: 103: }
+[e $U 93  ]
 "104
-[e =| *U + &U _IRDataTimer * -> -> - -> _IRbitNum `i -> 1 `i `ui `ux -> -> # *U &U _IRDataTimer `ui `ux _bitdata ]
+[e :U 92 ]
+[; ;TEST_FT62F21X_SLEEP.C: 104: else if(IRbitTime > 3)
+[e $ ! > -> _IRbitTime `i -> 3 `i 94  ]
+[; ;TEST_FT62F21X_SLEEP.C: 105: {
 "105
+{
+[; ;TEST_FT62F21X_SLEEP.C: 106: IRDataTimer[IRbitNum-1] |= bitdata;
+"106
+[e =| *U + &U _IRDataTimer * -> -> - -> _IRbitNum `i -> 1 `i `ui `ux -> -> # *U &U _IRDataTimer `ui `ux _bitdata ]
+"107
 }
 [e :U 94 ]
-"106
-[e :U 93 ]
-[; ;TEST_FT62F21X_SLEEP.C: 105: }
-[; ;TEST_FT62F21X_SLEEP.C: 106: IRbitTime = 0;
-[e = _IRbitTime -> -> 0 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 107: bitdata<<=1;
-"107
-[e =<< _bitdata -> 1 `i ]
-[; ;TEST_FT62F21X_SLEEP.C: 108: if(bitdata == 0)
 "108
-[e $ ! == -> _bitdata `i -> 0 `i 95  ]
-[; ;TEST_FT62F21X_SLEEP.C: 109: {
+[e :U 93 ]
+[; ;TEST_FT62F21X_SLEEP.C: 107: }
+[; ;TEST_FT62F21X_SLEEP.C: 108: IRbitTime = 0;
+[e = _IRbitTime -> -> 0 `i `uc ]
+[; ;TEST_FT62F21X_SLEEP.C: 109: bitdata<<=1;
 "109
-{
-[; ;TEST_FT62F21X_SLEEP.C: 110: bitdata = 0x01;
+[e =<< _bitdata -> 1 `i ]
+[; ;TEST_FT62F21X_SLEEP.C: 110: if(bitdata == 0)
 "110
-[e = _bitdata -> -> 1 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 111: IRbitNum++;
+[e $ ! == -> _bitdata `i -> 0 `i 95  ]
+[; ;TEST_FT62F21X_SLEEP.C: 111: {
 "111
-[e ++ _IRbitNum -> -> 1 `i `uc ]
+{
+[; ;TEST_FT62F21X_SLEEP.C: 112: bitdata = 0x01;
 "112
+[e = _bitdata -> -> 1 `i `uc ]
+[; ;TEST_FT62F21X_SLEEP.C: 113: IRbitNum++;
+"113
+[e ++ _IRbitNum -> -> 1 `i `uc ]
+"114
 }
 [e :U 95 ]
-[; ;TEST_FT62F21X_SLEEP.C: 112: }
-[; ;TEST_FT62F21X_SLEEP.C: 113: if(IRbitNum > 4)
-"113
-[e $ ! > -> _IRbitNum `i -> 4 `i 96  ]
-[; ;TEST_FT62F21X_SLEEP.C: 114: {
-"114
-{
-[; ;TEST_FT62F21X_SLEEP.C: 115: IRbitNum = 0;
+[; ;TEST_FT62F21X_SLEEP.C: 114: }
+[; ;TEST_FT62F21X_SLEEP.C: 115: if(IRbitNum > 4)
 "115
-[e = _IRbitNum -> -> 0 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 116: T0IE = 0;
+[e $ ! > -> _IRbitNum `i -> 4 `i 96  ]
+[; ;TEST_FT62F21X_SLEEP.C: 116: {
 "116
-[e = _T0IE -> -> 0 `i `b ]
-[; ;TEST_FT62F21X_SLEEP.C: 117: ReceiveFinish = 1;
+{
+[; ;TEST_FT62F21X_SLEEP.C: 117: IRbitNum = 0;
 "117
-[e = _ReceiveFinish -> -> 1 `i `uc ]
+[e = _IRbitNum -> -> 0 `i `uc ]
+[; ;TEST_FT62F21X_SLEEP.C: 118: T0IE = 0;
 "118
-}
-[e :U 96 ]
+[e = _T0IE -> -> 0 `i `b ]
+[; ;TEST_FT62F21X_SLEEP.C: 119: ReceiveFinish = 1;
+"119
+[e = _ReceiveFinish -> -> 1 `i `uc ]
 "120
 }
+[e :U 96 ]
+"122
+}
 [e :U 91 ]
-"121
+"123
 }
 [e :U 90 ]
-[; ;TEST_FT62F21X_SLEEP.C: 118: }
 [; ;TEST_FT62F21X_SLEEP.C: 120: }
-[; ;TEST_FT62F21X_SLEEP.C: 121: }
 [; ;TEST_FT62F21X_SLEEP.C: 122: }
-"122
+[; ;TEST_FT62F21X_SLEEP.C: 123: }
+[; ;TEST_FT62F21X_SLEEP.C: 124: }
+"124
 [e :UE 86 ]
 }
-"131
+"133
 [v _POWER_INITIAL `(v  1 ef ]
 {
-[; ;TEST_FT62F21X_SLEEP.C: 130: void POWER_INITIAL (void)
-[; ;TEST_FT62F21X_SLEEP.C: 131: {
+[; ;TEST_FT62F21X_SLEEP.C: 132: void POWER_INITIAL (void)
+[; ;TEST_FT62F21X_SLEEP.C: 133: {
 [e :U _POWER_INITIAL ]
 [f ]
-[; ;TEST_FT62F21X_SLEEP.C: 132: OSCCON = 0X00|0X70|0X00;
-"132
+[; ;TEST_FT62F21X_SLEEP.C: 134: OSCCON = 0X00|0X70|0X00;
+"134
 [e = _OSCCON -> | | -> 0 `i -> 112 `i -> 0 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 135: INTCON = 0;
-"135
-[e = _INTCON -> -> 0 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 137: PORTA = 0B00000000;
+[; ;TEST_FT62F21X_SLEEP.C: 137: INTCON = 0;
 "137
-[e = _PORTA -> -> 0 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 138: TRISA = 0B00010000;
-"138
-[e = _TRISA -> -> 16 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 139: WPUA = 0B00000000;
+[e = _INTCON -> -> 0 `i `uc ]
+[; ;TEST_FT62F21X_SLEEP.C: 139: PORTA = 0B00000000;
 "139
-[e = _WPUA -> -> 0 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 141: OPTION = 0B00001000;
+[e = _PORTA -> -> 0 `i `uc ]
+[; ;TEST_FT62F21X_SLEEP.C: 140: TRISA = 0B00010000;
+"140
+[e = _TRISA -> -> 16 `i `uc ]
+[; ;TEST_FT62F21X_SLEEP.C: 141: WPUA = 0B00000000;
 "141
-[e = _OPTION -> -> 8 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 143: MSCON = 0B00000000;
+[e = _WPUA -> -> 0 `i `uc ]
+[; ;TEST_FT62F21X_SLEEP.C: 143: OPTION = 0B00001000;
 "143
+[e = _OPTION -> -> 8 `i `uc ]
+[; ;TEST_FT62F21X_SLEEP.C: 145: MSCON = 0B00000000;
+"145
 [e = _MSCON -> -> 0 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 144: }
-"144
+[; ;TEST_FT62F21X_SLEEP.C: 146: }
+"146
 [e :UE 97 ]
 }
-"148
+"150
 [v _reset_led_status `(v  1 ef ]
 {
-[; ;TEST_FT62F21X_SLEEP.C: 147: void reset_led_status(void)
-[; ;TEST_FT62F21X_SLEEP.C: 148: {
+[; ;TEST_FT62F21X_SLEEP.C: 149: void reset_led_status(void)
+[; ;TEST_FT62F21X_SLEEP.C: 150: {
 [e :U _reset_led_status ]
 [f ]
-[; ;TEST_FT62F21X_SLEEP.C: 149: time_15ms_cnt = 0;
-"149
+[; ;TEST_FT62F21X_SLEEP.C: 151: time_15ms_cnt = 0;
+"151
 [e = _time_15ms_cnt -> -> 0 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 150: time_2s_cnt = 0;
-"150
-[e = _time_2s_cnt -> -> 0 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 152: }
+[; ;TEST_FT62F21X_SLEEP.C: 152: time_2s_cnt = 0;
 "152
+[e = _time_2s_cnt -> -> 0 `i `uc ]
+[; ;TEST_FT62F21X_SLEEP.C: 154: }
+"154
 [e :UE 98 ]
 }
-"160
+"162
 [v _main `(v  1 ef ]
 {
-[; ;TEST_FT62F21X_SLEEP.C: 159: void main(void)
-[; ;TEST_FT62F21X_SLEEP.C: 160: {
+[; ;TEST_FT62F21X_SLEEP.C: 161: void main(void)
+[; ;TEST_FT62F21X_SLEEP.C: 162: {
 [e :U _main ]
 [f ]
-[; ;TEST_FT62F21X_SLEEP.C: 161: POWER_INITIAL();
-"161
-[e ( _POWER_INITIAL ..  ]
-[; ;TEST_FT62F21X_SLEEP.C: 162: TIMER0_INITIAL();
-"162
-[e ( _TIMER0_INITIAL ..  ]
-[; ;TEST_FT62F21X_SLEEP.C: 163: PA3_Level_Change_INITIAL();
+[; ;TEST_FT62F21X_SLEEP.C: 163: POWER_INITIAL();
 "163
-[e ( _PA3_Level_Change_INITIAL ..  ]
-[; ;TEST_FT62F21X_SLEEP.C: 164: PWM1_INITIAL();
+[e ( _POWER_INITIAL ..  ]
+[; ;TEST_FT62F21X_SLEEP.C: 164: TIMER0_INITIAL();
 "164
-[e ( _PWM1_INITIAL ..  ]
-[; ;TEST_FT62F21X_SLEEP.C: 166: while(1)
+[e ( _TIMER0_INITIAL ..  ]
+[; ;TEST_FT62F21X_SLEEP.C: 165: PA3_Level_Change_INITIAL();
+"165
+[e ( _PA3_Level_Change_INITIAL ..  ]
+[; ;TEST_FT62F21X_SLEEP.C: 166: PWM1_INITIAL();
 "166
-[e :U 101 ]
-[; ;TEST_FT62F21X_SLEEP.C: 167: {
-"167
-{
-[; ;TEST_FT62F21X_SLEEP.C: 168: asm("clrwdt");
+[e ( _PWM1_INITIAL ..  ]
+[; ;TEST_FT62F21X_SLEEP.C: 168: while(1)
 "168
-[; clrwdt ;#
-[; ;TEST_FT62F21X_SLEEP.C: 170: if(power_off_flag == 0)
-"170
-[e $ ! == -> _power_off_flag `i -> 0 `i 103  ]
-[; ;TEST_FT62F21X_SLEEP.C: 171: {
-"171
+[e :U 101 ]
+[; ;TEST_FT62F21X_SLEEP.C: 169: {
+"169
 {
-[; ;TEST_FT62F21X_SLEEP.C: 172: if(ft_user_pwm_mode == 0)
+[; ;TEST_FT62F21X_SLEEP.C: 170: asm("clrwdt");
+"170
+[; clrwdt ;#
+[; ;TEST_FT62F21X_SLEEP.C: 172: if(power_off_flag == 0)
 "172
-[e $ ! == -> _ft_user_pwm_mode `i -> 0 `i 104  ]
+[e $ ! == -> _power_off_flag `i -> 0 `i 103  ]
 [; ;TEST_FT62F21X_SLEEP.C: 173: {
 "173
 {
-[; ;TEST_FT62F21X_SLEEP.C: 174: if(time_15ms_cnt > 150)
+[; ;TEST_FT62F21X_SLEEP.C: 174: if(ft_user_pwm_mode == 0)
 "174
-[e $ ! > -> _time_15ms_cnt `i -> 150 `i 105  ]
+[e $ ! == -> _ft_user_pwm_mode `i -> 0 `i 104  ]
 [; ;TEST_FT62F21X_SLEEP.C: 175: {
 "175
 {
-[; ;TEST_FT62F21X_SLEEP.C: 176: time_15ms_cnt = 0;
+[; ;TEST_FT62F21X_SLEEP.C: 176: if(time_15ms_cnt > 150)
 "176
-[e = _time_15ms_cnt -> -> 0 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 177: pwm_rate_value++;
+[e $ ! > -> _time_15ms_cnt `i -> 150 `i 105  ]
+[; ;TEST_FT62F21X_SLEEP.C: 177: {
 "177
-[e ++ _pwm_rate_value -> -> 1 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 178: PWM1_RATE_CHANGE();
+{
+[; ;TEST_FT62F21X_SLEEP.C: 178: time_15ms_cnt = 0;
 "178
-[e ( _PWM1_RATE_CHANGE ..  ]
+[e = _time_15ms_cnt -> -> 0 `i `uc ]
+[; ;TEST_FT62F21X_SLEEP.C: 179: pwm_rate_value++;
 "179
+[e ++ _pwm_rate_value -> -> 1 `i `uc ]
+[; ;TEST_FT62F21X_SLEEP.C: 180: PWM1_RATE_CHANGE();
+"180
+[e ( _PWM1_RATE_CHANGE ..  ]
+"181
 }
 [e :U 105 ]
-"180
+"182
 }
 [e :U 104 ]
-[; ;TEST_FT62F21X_SLEEP.C: 179: }
-[; ;TEST_FT62F21X_SLEEP.C: 180: }
-[; ;TEST_FT62F21X_SLEEP.C: 181: if(ft_user_pwm_mode == 5)
-"181
-[e $ ! == -> _ft_user_pwm_mode `i -> 5 `i 106  ]
-[; ;TEST_FT62F21X_SLEEP.C: 182: {
-"182
-{
-[; ;TEST_FT62F21X_SLEEP.C: 183: if(time_15ms_cnt>200)
+[; ;TEST_FT62F21X_SLEEP.C: 181: }
+[; ;TEST_FT62F21X_SLEEP.C: 182: }
+[; ;TEST_FT62F21X_SLEEP.C: 183: if(ft_user_pwm_mode == 5)
 "183
-[e $ ! > -> _time_15ms_cnt `i -> 200 `i 107  ]
+[e $ ! == -> _ft_user_pwm_mode `i -> 5 `i 106  ]
 [; ;TEST_FT62F21X_SLEEP.C: 184: {
 "184
 {
-[; ;TEST_FT62F21X_SLEEP.C: 185: time_2s_cnt++;
+[; ;TEST_FT62F21X_SLEEP.C: 185: if(time_15ms_cnt>200)
 "185
-[e ++ _time_2s_cnt -> -> 1 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 186: if(time_2s_cnt > 100)
+[e $ ! > -> _time_15ms_cnt `i -> 200 `i 107  ]
+[; ;TEST_FT62F21X_SLEEP.C: 186: {
 "186
-[e $ ! > -> _time_2s_cnt `i -> 100 `i 108  ]
-[; ;TEST_FT62F21X_SLEEP.C: 187: {
-"187
 {
-[; ;TEST_FT62F21X_SLEEP.C: 188: time_2s_cnt = 0;
+[; ;TEST_FT62F21X_SLEEP.C: 187: time_2s_cnt++;
+"187
+[e ++ _time_2s_cnt -> -> 1 `i `uc ]
+[; ;TEST_FT62F21X_SLEEP.C: 188: if(time_2s_cnt > 100)
 "188
-[e = _time_2s_cnt -> -> 0 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 189: JUMP_MODE_CHANGE();
+[e $ ! > -> _time_2s_cnt `i -> 100 `i 108  ]
+[; ;TEST_FT62F21X_SLEEP.C: 189: {
 "189
-[e ( _JUMP_MODE_CHANGE ..  ]
+{
+[; ;TEST_FT62F21X_SLEEP.C: 190: time_2s_cnt = 0;
 "190
+[e = _time_2s_cnt -> -> 0 `i `uc ]
+[; ;TEST_FT62F21X_SLEEP.C: 191: JUMP_MODE_CHANGE();
+"191
+[e ( _JUMP_MODE_CHANGE ..  ]
+"192
 }
 [e :U 108 ]
-[; ;TEST_FT62F21X_SLEEP.C: 190: }
-[; ;TEST_FT62F21X_SLEEP.C: 191: time_15ms_cnt = 0;
-"191
-[e = _time_15ms_cnt -> -> 0 `i `uc ]
+[; ;TEST_FT62F21X_SLEEP.C: 192: }
+[; ;TEST_FT62F21X_SLEEP.C: 193: time_15ms_cnt = 0;
 "193
+[e = _time_15ms_cnt -> -> 0 `i `uc ]
+"195
 }
 [e :U 107 ]
-"194
+"196
 }
 [e :U 106 ]
-[; ;TEST_FT62F21X_SLEEP.C: 193: }
-[; ;TEST_FT62F21X_SLEEP.C: 194: }
-[; ;TEST_FT62F21X_SLEEP.C: 195: if(ft_user_pwm_mode == 0x0A)
-"195
-[e $ ! == -> _ft_user_pwm_mode `i -> 10 `i 109  ]
-[; ;TEST_FT62F21X_SLEEP.C: 196: {
-"196
-{
-[; ;TEST_FT62F21X_SLEEP.C: 197: if(time_15ms_cnt>200)
+[; ;TEST_FT62F21X_SLEEP.C: 195: }
+[; ;TEST_FT62F21X_SLEEP.C: 196: }
+[; ;TEST_FT62F21X_SLEEP.C: 197: if(ft_user_pwm_mode == 0x0A)
 "197
-[e $ ! > -> _time_15ms_cnt `i -> 200 `i 110  ]
+[e $ ! == -> _ft_user_pwm_mode `i -> 10 `i 109  ]
 [; ;TEST_FT62F21X_SLEEP.C: 198: {
 "198
 {
-[; ;TEST_FT62F21X_SLEEP.C: 199: time_2s_cnt++;
+[; ;TEST_FT62F21X_SLEEP.C: 199: if(time_15ms_cnt>200)
 "199
-[e ++ _time_2s_cnt -> -> 1 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 200: if(time_2s_cnt > 100)
+[e $ ! > -> _time_15ms_cnt `i -> 200 `i 110  ]
+[; ;TEST_FT62F21X_SLEEP.C: 200: {
 "200
-[e $ ! > -> _time_2s_cnt `i -> 100 `i 111  ]
-[; ;TEST_FT62F21X_SLEEP.C: 201: {
-"201
 {
-[; ;TEST_FT62F21X_SLEEP.C: 202: time_2s_cnt = 0;
+[; ;TEST_FT62F21X_SLEEP.C: 201: time_2s_cnt++;
+"201
+[e ++ _time_2s_cnt -> -> 1 `i `uc ]
+[; ;TEST_FT62F21X_SLEEP.C: 202: if(time_2s_cnt > 100)
 "202
-[e = _time_2s_cnt -> -> 0 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 203: MIX_MODE_CHANGE();
+[e $ ! > -> _time_2s_cnt `i -> 100 `i 111  ]
+[; ;TEST_FT62F21X_SLEEP.C: 203: {
 "203
-[e ( _MIX_MODE_CHANGE ..  ]
+{
+[; ;TEST_FT62F21X_SLEEP.C: 204: time_2s_cnt = 0;
 "204
+[e = _time_2s_cnt -> -> 0 `i `uc ]
+[; ;TEST_FT62F21X_SLEEP.C: 205: MIX_MODE_CHANGE();
+"205
+[e ( _MIX_MODE_CHANGE ..  ]
+"206
 }
 [e :U 111 ]
-[; ;TEST_FT62F21X_SLEEP.C: 204: }
-[; ;TEST_FT62F21X_SLEEP.C: 205: time_15ms_cnt = 0;
-"205
-[e = _time_15ms_cnt -> -> 0 `i `uc ]
+[; ;TEST_FT62F21X_SLEEP.C: 206: }
+[; ;TEST_FT62F21X_SLEEP.C: 207: time_15ms_cnt = 0;
 "207
-}
-[e :U 110 ]
-"208
-}
-[e :U 109 ]
+[e = _time_15ms_cnt -> -> 0 `i `uc ]
 "209
 }
-[e :U 103 ]
-[; ;TEST_FT62F21X_SLEEP.C: 207: }
-[; ;TEST_FT62F21X_SLEEP.C: 208: }
-[; ;TEST_FT62F21X_SLEEP.C: 209: }
-[; ;TEST_FT62F21X_SLEEP.C: 212: if(PORTA & 0B00010000)
-"212
-[e $ ! != & -> _PORTA `i -> 16 `i -> 0 `i 112  ]
-[; ;TEST_FT62F21X_SLEEP.C: 213: {
-"213
-{
-[; ;TEST_FT62F21X_SLEEP.C: 214: key_release = 0;
-"214
-[e = _key_release -> -> 0 `i `uc ]
-"215
+[e :U 110 ]
+"210
 }
-[; ;TEST_FT62F21X_SLEEP.C: 215: }
-[e $U 113  ]
+[e :U 109 ]
+"211
+}
+[e :U 103 ]
+[; ;TEST_FT62F21X_SLEEP.C: 209: }
+[; ;TEST_FT62F21X_SLEEP.C: 210: }
+[; ;TEST_FT62F21X_SLEEP.C: 211: }
+[; ;TEST_FT62F21X_SLEEP.C: 213: if(auto_power_off_timer_H)
+"213
+[e $ ! != _auto_power_off_timer_H -> -> 0 `i `ul 112  ]
+[; ;TEST_FT62F21X_SLEEP.C: 214: {
+"214
+{
+[; ;TEST_FT62F21X_SLEEP.C: 215: if(auto_power_off_timer_L > 100)
+"215
+[e $ ! > -> _auto_power_off_timer_L `i -> 100 `i 113  ]
+[; ;TEST_FT62F21X_SLEEP.C: 216: {
 "216
-[e :U 112 ]
-[; ;TEST_FT62F21X_SLEEP.C: 216: else
-[; ;TEST_FT62F21X_SLEEP.C: 217: {
+{
+[; ;TEST_FT62F21X_SLEEP.C: 217: auto_power_off_timer_L = 0;
 "217
-{
-[; ;TEST_FT62F21X_SLEEP.C: 218: if(key_release == 0)
+[e = _auto_power_off_timer_L -> -> 0 `i `uc ]
+[; ;TEST_FT62F21X_SLEEP.C: 218: auto_power_off_timer_H--;
 "218
-[e $ ! == -> _key_release `i -> 0 `i 114  ]
-[; ;TEST_FT62F21X_SLEEP.C: 219: {
+[e -- _auto_power_off_timer_H -> -> -> 1 `i `l `ul ]
+[; ;TEST_FT62F21X_SLEEP.C: 219: if(!auto_power_off_timer_H)
 "219
-{
-[; ;TEST_FT62F21X_SLEEP.C: 220: reset_led_status();
+[e $ ! ! != _auto_power_off_timer_H -> -> 0 `i `ul 114  ]
+[; ;TEST_FT62F21X_SLEEP.C: 220: {
 "220
-[e ( _reset_led_status ..  ]
-[; ;TEST_FT62F21X_SLEEP.C: 221: PWM_MODE_CHANGE();
+{
+[; ;TEST_FT62F21X_SLEEP.C: 221: ft_user_set_mode = 0x12;
 "221
-[e ( _PWM_MODE_CHANGE ..  ]
+[e = _ft_user_set_mode -> -> 18 `i `uc ]
+[; ;TEST_FT62F21X_SLEEP.C: 222: SET_MODE_REFRESH();
 "222
+[e ( _SET_MODE_REFRESH ..  ]
+"223
 }
 [e :U 114 ]
-[; ;TEST_FT62F21X_SLEEP.C: 222: }
-[; ;TEST_FT62F21X_SLEEP.C: 223: key_release = 1;
-"223
-[e = _key_release -> -> 1 `i `uc ]
-"225
+"224
 }
 [e :U 113 ]
+"225
+}
+[e :U 112 ]
+[; ;TEST_FT62F21X_SLEEP.C: 223: }
+[; ;TEST_FT62F21X_SLEEP.C: 224: }
 [; ;TEST_FT62F21X_SLEEP.C: 225: }
-[; ;TEST_FT62F21X_SLEEP.C: 227: if(ReceiveFinish)
+[; ;TEST_FT62F21X_SLEEP.C: 227: if(PORTA & 0B00010000)
 "227
-[e $ ! != -> _ReceiveFinish `i -> -> -> 0 `i `uc `i 115  ]
+[e $ ! != & -> _PORTA `i -> 16 `i -> 0 `i 115  ]
 [; ;TEST_FT62F21X_SLEEP.C: 228: {
 "228
 {
+[; ;TEST_FT62F21X_SLEEP.C: 229: key_release = 0;
 "229
-[v _i `uc  1 a ]
+[e = _key_release -> -> 0 `i `uc ]
 "230
-[v _temp_mode `uc  1 a ]
-[; ;TEST_FT62F21X_SLEEP.C: 229: unsigned char i;
-[; ;TEST_FT62F21X_SLEEP.C: 230: unsigned char temp_mode;
-[; ;TEST_FT62F21X_SLEEP.C: 232: ReceiveFinish = 0;
+}
+[; ;TEST_FT62F21X_SLEEP.C: 230: }
+[e $U 116  ]
+"231
+[e :U 115 ]
+[; ;TEST_FT62F21X_SLEEP.C: 231: else
+[; ;TEST_FT62F21X_SLEEP.C: 232: {
 "232
-[e = _ReceiveFinish -> -> 0 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 234: for(i = 0;i < 19;i++)
+{
+[; ;TEST_FT62F21X_SLEEP.C: 233: if(key_release == 0)
+"233
+[e $ ! == -> _key_release `i -> 0 `i 117  ]
+[; ;TEST_FT62F21X_SLEEP.C: 234: {
 "234
+{
+[; ;TEST_FT62F21X_SLEEP.C: 235: reset_led_status();
+"235
+[e ( _reset_led_status ..  ]
+[; ;TEST_FT62F21X_SLEEP.C: 236: PWM_MODE_CHANGE();
+"236
+[e ( _PWM_MODE_CHANGE ..  ]
+"237
+}
+[e :U 117 ]
+[; ;TEST_FT62F21X_SLEEP.C: 237: }
+[; ;TEST_FT62F21X_SLEEP.C: 238: key_release = 1;
+"238
+[e = _key_release -> -> 1 `i `uc ]
+"240
+}
+[e :U 116 ]
+[; ;TEST_FT62F21X_SLEEP.C: 240: }
+[; ;TEST_FT62F21X_SLEEP.C: 242: if(ReceiveFinish)
+"242
+[e $ ! != -> _ReceiveFinish `i -> -> -> 0 `i `uc `i 118  ]
+[; ;TEST_FT62F21X_SLEEP.C: 243: {
+"243
+{
+"244
+[v _i `uc  1 a ]
+[; ;TEST_FT62F21X_SLEEP.C: 244: unsigned char i;
+[; ;TEST_FT62F21X_SLEEP.C: 246: ReceiveFinish = 0;
+"246
+[e = _ReceiveFinish -> -> 0 `i `uc ]
+[; ;TEST_FT62F21X_SLEEP.C: 248: for(i = 0;i < 19;i++)
+"248
 {
 [e = _i -> -> 0 `i `uc ]
-[e $ < -> _i `i -> 19 `i 116  ]
-[e $U 117  ]
-"235
-[e :U 116 ]
-[; ;TEST_FT62F21X_SLEEP.C: 235: {
-{
-[; ;TEST_FT62F21X_SLEEP.C: 236: if(ir_key_value[i*2] == IRDataTimer[3])
-"236
-[e $ ! == -> *U + &U _ir_key_value * -> -> * -> _i `i -> 2 `i `ui `ux -> -> # *U &U _ir_key_value `ui `ux `i -> *U + &U _IRDataTimer * -> -> -> 3 `i `ui `ux -> -> # *U &U _IRDataTimer `ui `ux `i 119  ]
-[; ;TEST_FT62F21X_SLEEP.C: 237: {
-"237
-{
-[; ;TEST_FT62F21X_SLEEP.C: 238: temp_mode = ir_key_value[i*2 + 1];
-"238
-[e = _temp_mode *U + &U _ir_key_value * -> -> + * -> _i `i -> 2 `i -> 1 `i `ui `ux -> -> # *U &U _ir_key_value `ui `ux ]
-[; ;TEST_FT62F21X_SLEEP.C: 239: if(temp_mode == 0x12)
-"239
-[e $ ! == -> _temp_mode `i -> 18 `i 120  ]
-[; ;TEST_FT62F21X_SLEEP.C: 240: {
-"240
-{
-[; ;TEST_FT62F21X_SLEEP.C: 241: if(power_off_mode_backup == 0xff)
-"241
-[e $ ! == -> _power_off_mode_backup `i -> 255 `i 121  ]
-[; ;TEST_FT62F21X_SLEEP.C: 242: {
-"242
-{
-[; ;TEST_FT62F21X_SLEEP.C: 243: if(ft_user_pwm_mode < 0x0B)
-"243
-[e $ ! < -> _ft_user_pwm_mode `i -> 11 `i 122  ]
-[; ;TEST_FT62F21X_SLEEP.C: 244: {
-"244
-{
-[; ;TEST_FT62F21X_SLEEP.C: 245: power_off_mode_backup = ft_user_pwm_mode;
-"245
-[e = _power_off_mode_backup _ft_user_pwm_mode ]
-"246
-}
-[e :U 122 ]
-"247
-}
-[e :U 121 ]
-"248
-}
-[e :U 120 ]
-[; ;TEST_FT62F21X_SLEEP.C: 246: }
-[; ;TEST_FT62F21X_SLEEP.C: 247: }
-[; ;TEST_FT62F21X_SLEEP.C: 248: }
-[; ;TEST_FT62F21X_SLEEP.C: 249: if(temp_mode >= 0x0D && temp_mode <= 0x10)
+[e $ < -> _i `i -> 19 `i 119  ]
+[e $U 120  ]
 "249
-[e $ ! && >= -> _temp_mode `i -> 13 `i <= -> _temp_mode `i -> 16 `i 123  ]
-[; ;TEST_FT62F21X_SLEEP.C: 250: {
+[e :U 119 ]
+[; ;TEST_FT62F21X_SLEEP.C: 249: {
+{
+[; ;TEST_FT62F21X_SLEEP.C: 250: if(ir_key_value[i*2] == IRDataTimer[3])
 "250
-{
-[; ;TEST_FT62F21X_SLEEP.C: 251: if(ft_user_pwm_mode < 0x0B)
+[e $ ! == -> *U + &U _ir_key_value * -> -> * -> _i `i -> 2 `i `ui `ux -> -> # *U &U _ir_key_value `ui `ux `i -> *U + &U _IRDataTimer * -> -> -> 3 `i `ui `ux -> -> # *U &U _IRDataTimer `ui `ux `i 122  ]
+[; ;TEST_FT62F21X_SLEEP.C: 251: {
 "251
-[e $ ! < -> _ft_user_pwm_mode `i -> 11 `i 124  ]
-[; ;TEST_FT62F21X_SLEEP.C: 252: {
-"252
 {
-[; ;TEST_FT62F21X_SLEEP.C: 253: set_time_mode_backup = ft_user_pwm_mode;
+[; ;TEST_FT62F21X_SLEEP.C: 252: temp_mode = ir_key_value[i*2 + 1];
+"252
+[e = _temp_mode *U + &U _ir_key_value * -> -> + * -> _i `i -> 2 `i -> 1 `i `ui `ux -> -> # *U &U _ir_key_value `ui `ux ]
+[; ;TEST_FT62F21X_SLEEP.C: 253: if(temp_mode == 0x12)
 "253
-[e = _set_time_mode_backup _ft_user_pwm_mode ]
+[e $ ! == -> _temp_mode `i -> 18 `i 123  ]
+[; ;TEST_FT62F21X_SLEEP.C: 254: {
 "254
-}
-[e :U 124 ]
+{
+[; ;TEST_FT62F21X_SLEEP.C: 255: power_off_mode_backup = ft_user_pwm_mode;
 "255
+[e = _power_off_mode_backup _ft_user_pwm_mode ]
+"256
 }
 [e :U 123 ]
-[; ;TEST_FT62F21X_SLEEP.C: 254: }
-[; ;TEST_FT62F21X_SLEEP.C: 255: }
-[; ;TEST_FT62F21X_SLEEP.C: 256: if(temp_mode < 0x0B)
-"256
-[e $ ! < -> _temp_mode `i -> 11 `i 125  ]
-[; ;TEST_FT62F21X_SLEEP.C: 257: {
+[; ;TEST_FT62F21X_SLEEP.C: 256: }
+[; ;TEST_FT62F21X_SLEEP.C: 257: if(temp_mode >= 0x0D && temp_mode <= 0x10)
 "257
-{
-[; ;TEST_FT62F21X_SLEEP.C: 258: if(ft_user_pwm_mode != temp_mode)
+[e $ ! && >= -> _temp_mode `i -> 13 `i <= -> _temp_mode `i -> 16 `i 124  ]
+[; ;TEST_FT62F21X_SLEEP.C: 258: {
 "258
-[e $ ! != -> _ft_user_pwm_mode `i -> _temp_mode `i 126  ]
-[; ;TEST_FT62F21X_SLEEP.C: 259: {
-"259
 {
-[; ;TEST_FT62F21X_SLEEP.C: 260: ft_user_pwm_mode = temp_mode;
+[; ;TEST_FT62F21X_SLEEP.C: 259: set_time_mode_backup = ft_user_pwm_mode;
+"259
+[e = _set_time_mode_backup _ft_user_pwm_mode ]
 "260
-[e = _ft_user_pwm_mode _temp_mode ]
-[; ;TEST_FT62F21X_SLEEP.C: 261: PWM_MODE_REFRESH();
+}
+[e :U 124 ]
+[; ;TEST_FT62F21X_SLEEP.C: 260: }
+[; ;TEST_FT62F21X_SLEEP.C: 261: if(temp_mode < 0x0B)
 "261
-[e ( _PWM_MODE_REFRESH ..  ]
+[e $ ! < -> _temp_mode `i -> 11 `i 125  ]
+[; ;TEST_FT62F21X_SLEEP.C: 262: {
 "262
+{
+[; ;TEST_FT62F21X_SLEEP.C: 263: if(ft_user_pwm_mode != temp_mode)
+"263
+[e $ ! != -> _ft_user_pwm_mode `i -> _temp_mode `i 126  ]
+[; ;TEST_FT62F21X_SLEEP.C: 264: {
+"264
+{
+[; ;TEST_FT62F21X_SLEEP.C: 265: ft_user_pwm_mode = temp_mode;
+"265
+[e = _ft_user_pwm_mode _temp_mode ]
+[; ;TEST_FT62F21X_SLEEP.C: 266: PWM_MODE_REFRESH();
+"266
+[e ( _PWM_MODE_REFRESH ..  ]
+"267
 }
 [e :U 126 ]
-"263
-}
-[; ;TEST_FT62F21X_SLEEP.C: 262: }
-[; ;TEST_FT62F21X_SLEEP.C: 263: }
-[e $U 127  ]
-"264
-[e :U 125 ]
-[; ;TEST_FT62F21X_SLEEP.C: 264: else
-[; ;TEST_FT62F21X_SLEEP.C: 265: {
-"265
-{
-[; ;TEST_FT62F21X_SLEEP.C: 266: ft_user_set_mode = temp_mode;
-"266
-[e = _ft_user_set_mode _temp_mode ]
-[; ;TEST_FT62F21X_SLEEP.C: 267: SET_MODE_REFRESH();
-"267
-[e ( _SET_MODE_REFRESH ..  ]
 "268
 }
-[e :U 127 ]
+[; ;TEST_FT62F21X_SLEEP.C: 267: }
+[; ;TEST_FT62F21X_SLEEP.C: 268: }
+[e $U 127  ]
 "269
-}
-[e :U 119 ]
+[e :U 125 ]
+[; ;TEST_FT62F21X_SLEEP.C: 269: else
+[; ;TEST_FT62F21X_SLEEP.C: 270: {
 "270
-}
-"234
-[e ++ _i -> -> 1 `i `uc ]
-[e $ < -> _i `i -> 19 `i 116  ]
-[e :U 117 ]
-"270
-}
+{
+[; ;TEST_FT62F21X_SLEEP.C: 271: ft_user_set_mode = temp_mode;
+"271
+[e = _ft_user_set_mode _temp_mode ]
+[; ;TEST_FT62F21X_SLEEP.C: 272: SET_MODE_REFRESH();
 "272
-}
-[e :U 115 ]
+[e ( _SET_MODE_REFRESH ..  ]
 "273
 }
+[e :U 127 ]
+"274
+}
+[e :U 122 ]
+"275
+}
+"248
+[e ++ _i -> -> 1 `i `uc ]
+[e $ < -> _i `i -> 19 `i 119  ]
+[e :U 120 ]
+"275
+}
+"277
+}
+[e :U 118 ]
+"278
+}
 [e :U 100 ]
-"166
+"168
 [e $U 101  ]
 [e :U 102 ]
-[; ;TEST_FT62F21X_SLEEP.C: 268: }
-[; ;TEST_FT62F21X_SLEEP.C: 269: }
-[; ;TEST_FT62F21X_SLEEP.C: 270: }
-[; ;TEST_FT62F21X_SLEEP.C: 272: }
 [; ;TEST_FT62F21X_SLEEP.C: 273: }
 [; ;TEST_FT62F21X_SLEEP.C: 274: }
-"274
+[; ;TEST_FT62F21X_SLEEP.C: 275: }
+[; ;TEST_FT62F21X_SLEEP.C: 277: }
+[; ;TEST_FT62F21X_SLEEP.C: 278: }
+[; ;TEST_FT62F21X_SLEEP.C: 279: }
+"279
 [e :UE 99 ]
 }

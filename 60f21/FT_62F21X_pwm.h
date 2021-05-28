@@ -12,6 +12,8 @@ extern unchar power_off_mode_backup;
 extern unchar set_time_mode_backup;
 extern unchar ft_user_set_mode;
 extern unchar power_off_flag;
+extern unchar auto_power_off_timer_L;
+extern unlong  auto_power_off_timer_H;
 
 
 extern void PWM1_INITIAL(void);

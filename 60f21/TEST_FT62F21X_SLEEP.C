@@ -24,6 +24,7 @@
 unchar time_15ms_cnt = 0;
 unchar time_2s_cnt = 0;
 unchar key_release = 0;
+unchar temp_mode;
 
 const unchar ir_key_value[]=
 {
@@ -63,7 +64,8 @@ const unchar ir_key_value[]=
 	 if(TMR2IE && TMR2IF)			 //100us中断一次 
 	 {
 		 TMR2IF = 0;
-		 time_15ms_cnt++;
+		 time_15ms_cnt++;		 
+		 auto_power_off_timer_L++;
 		 //DemoPortOut = ~DemoPortOut; //翻转电平
 	 } 
 
@@ -208,6 +210,19 @@ void main(void)
 			}
 		}
 
+		if(auto_power_off_timer_H)
+		{
+			if(auto_power_off_timer_L > 100)
+			{
+				auto_power_off_timer_L = 0;
+				auto_power_off_timer_H--;
+				if(!auto_power_off_timer_H)
+				{
+					ft_user_set_mode = 0x12;
+					SET_MODE_REFRESH();
+				}
+			}
+		}
 		
 		if(PORTA & 0B00010000)
 		{
@@ -227,7 +242,6 @@ void main(void)
 		if(ReceiveFinish)
 		{
 			unchar i;
-			unchar temp_mode;
 			
 			ReceiveFinish = 0;
 
@@ -238,20 +252,11 @@ void main(void)
 					temp_mode = ir_key_value[i*2 + 1];					
 					if(temp_mode == 0x12)
 					{
-						if(power_off_mode_backup == 0xff)
-						{
-							if(ft_user_pwm_mode < 0x0B)
-							{
-								power_off_mode_backup = ft_user_pwm_mode;
-							}
-						}
+						power_off_mode_backup = ft_user_pwm_mode;
 					}
 					if(temp_mode >= 0x0D && temp_mode <= 0x10)
 					{
-						if(ft_user_pwm_mode < 0x0B)
-						{
-							set_time_mode_backup = ft_user_pwm_mode;
-						}
+						set_time_mode_backup = ft_user_pwm_mode;
 					}
 					if(temp_mode < 0x0B)
 					{

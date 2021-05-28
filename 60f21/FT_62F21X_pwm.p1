@@ -839,9 +839,13 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _set_time_mode_backup `uc  1 e ]
 "19 FT_62F21X_pwm.c
 [v _power_off_flag `uc  1 e ]
-"18 FT_62F21X_pwm.h
+"21 FT_62F21X_pwm.c
+[v _auto_power_off_timer_L `uc  1 e ]
+"24 FT_62F21X_pwm.c
+[v _auto_power_off_timer_H `ul  1 e ]
+"20 FT_62F21X_pwm.h
 [v _PWM1_RED `(v  0 ef ]
-"25 FT_62F21X_pwm.h
+"27 FT_62F21X_pwm.h
 [v _PWM_MODE_REFRESH `(v  0 ef ]
 "28 c:\program files (x86)\fmd\fmdide\data\include\SYSCFG.h
 [v __nop `(v  0 ef ]
@@ -1557,17 +1561,19 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;FT_62F21X_pwm.h: 12: extern unsigned char set_time_mode_backup;
 [; ;FT_62F21X_pwm.h: 13: extern unsigned char ft_user_set_mode;
 [; ;FT_62F21X_pwm.h: 14: extern unsigned char power_off_flag;
-[; ;FT_62F21X_pwm.h: 17: extern void PWM1_INITIAL(void);
-[; ;FT_62F21X_pwm.h: 18: extern void PWM1_RED(void);
-[; ;FT_62F21X_pwm.h: 19: extern void PWM1_GREEN(void);
-[; ;FT_62F21X_pwm.h: 20: extern void PWM1_BLUE(void);
-[; ;FT_62F21X_pwm.h: 21: extern void PWM1_WHITE(void);
-[; ;FT_62F21X_pwm.h: 22: extern void PWM1_RATE_CHANGE(void);
-[; ;FT_62F21X_pwm.h: 23: extern void PWM_MODE_CHANGE(void);
-[; ;FT_62F21X_pwm.h: 24: extern void JUMP_MODE_CHANGE(void);
-[; ;FT_62F21X_pwm.h: 25: extern void PWM_MODE_REFRESH(void);
-[; ;FT_62F21X_pwm.h: 26: extern void MIX_MODE_CHANGE(void);
-[; ;FT_62F21X_pwm.h: 27: extern void SET_MODE_REFRESH(void);
+[; ;FT_62F21X_pwm.h: 15: extern unsigned char auto_power_off_timer_L;
+[; ;FT_62F21X_pwm.h: 16: extern unsigned long auto_power_off_timer_H;
+[; ;FT_62F21X_pwm.h: 19: extern void PWM1_INITIAL(void);
+[; ;FT_62F21X_pwm.h: 20: extern void PWM1_RED(void);
+[; ;FT_62F21X_pwm.h: 21: extern void PWM1_GREEN(void);
+[; ;FT_62F21X_pwm.h: 22: extern void PWM1_BLUE(void);
+[; ;FT_62F21X_pwm.h: 23: extern void PWM1_WHITE(void);
+[; ;FT_62F21X_pwm.h: 24: extern void PWM1_RATE_CHANGE(void);
+[; ;FT_62F21X_pwm.h: 25: extern void PWM_MODE_CHANGE(void);
+[; ;FT_62F21X_pwm.h: 26: extern void JUMP_MODE_CHANGE(void);
+[; ;FT_62F21X_pwm.h: 27: extern void PWM_MODE_REFRESH(void);
+[; ;FT_62F21X_pwm.h: 28: extern void MIX_MODE_CHANGE(void);
+[; ;FT_62F21X_pwm.h: 29: extern void SET_MODE_REFRESH(void);
 [; ;FT_62F21X_pwm.c: 1: ;
 [; ;FT_62F21X_pwm.c: 3: extern void reset_led_status(void);
 "5 FT_62F21X_pwm.c
@@ -1610,1079 +1616,1179 @@ Version 3.2 HI-TECH Software Intermediate Code
 -> -> 0 `i `uc
 ]
 [; ;FT_62F21X_pwm.c: 19: unsigned char power_off_flag = 0;
-"27
+"21
+[i _auto_power_off_timer_L
+-> -> 0 `i `uc
+]
+[; ;FT_62F21X_pwm.c: 21: unsigned char auto_power_off_timer_L = 0;
+"24
+[i _auto_power_off_timer_H
+-> -> -> 0 `i `l `ul
+]
+[; ;FT_62F21X_pwm.c: 24: unsigned long auto_power_off_timer_H = 0;
+"33
 [v _PWM1_INITIAL `(v  1 ef ]
 {
-[; ;FT_62F21X_pwm.c: 26: void PWM1_INITIAL(void)
-[; ;FT_62F21X_pwm.c: 27: {
+[; ;FT_62F21X_pwm.c: 32: void PWM1_INITIAL(void)
+[; ;FT_62F21X_pwm.c: 33: {
 [e :U _PWM1_INITIAL ]
 [f ]
-[; ;FT_62F21X_pwm.c: 28: T2CON0=0B00000001;
-"28
-[e = _T2CON0 -> -> 1 `i `uc ]
-[; ;FT_62F21X_pwm.c: 34: T2CON1=0B00000000;
+[; ;FT_62F21X_pwm.c: 34: T2CON0=0B00000001;
 "34
-[e = _T2CON1 -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 39: TMR2H=0;
-"39
-[e = _TMR2H -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 40: TMR2L=100;
+[e = _T2CON0 -> -> 1 `i `uc ]
+[; ;FT_62F21X_pwm.c: 40: T2CON1=0B00000000;
 "40
-[e = _TMR2L -> -> 100 `i `uc ]
-[; ;FT_62F21X_pwm.c: 42: PR2H=0;
-"42
-[e = _PR2H -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 43: PR2L=100;
-"43
-[e = _PR2L -> -> 100 `i `uc ]
-[; ;FT_62F21X_pwm.c: 45: P1CDTH=0;
+[e = _T2CON1 -> -> 0 `i `uc ]
+[; ;FT_62F21X_pwm.c: 45: TMR2H=0;
 "45
-[e = _P1CDTH -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 46: P1DDTH=0;
+[e = _TMR2H -> -> 0 `i `uc ]
+[; ;FT_62F21X_pwm.c: 46: TMR2L=100;
 "46
-[e = _P1DDTH -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 47: P1CDTL=0;
-"47
-[e = _P1CDTL -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 48: P1DDTL=0;
+[e = _TMR2L -> -> 100 `i `uc ]
+[; ;FT_62F21X_pwm.c: 48: PR2H=0;
 "48
+[e = _PR2H -> -> 0 `i `uc ]
+[; ;FT_62F21X_pwm.c: 49: PR2L=100;
+"49
+[e = _PR2L -> -> 100 `i `uc ]
+[; ;FT_62F21X_pwm.c: 51: P1CDTH=0;
+"51
+[e = _P1CDTH -> -> 0 `i `uc ]
+[; ;FT_62F21X_pwm.c: 52: P1DDTH=0;
+"52
+[e = _P1DDTH -> -> 0 `i `uc ]
+[; ;FT_62F21X_pwm.c: 53: P1CDTL=0;
+"53
+[e = _P1CDTL -> -> 0 `i `uc ]
+[; ;FT_62F21X_pwm.c: 54: P1DDTL=0;
+"54
 [e = _P1DDTL -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 50: P1POL=0B00000000;
-"50
+[; ;FT_62F21X_pwm.c: 56: P1POL=0B00000000;
+"56
 [e = _P1POL -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 57: P1CON=0B00000000;
-"57
+[; ;FT_62F21X_pwm.c: 63: P1CON=0B00000000;
+"63
 [e = _P1CON -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 64: P1AUX=0B00000000;
-"64
+[; ;FT_62F21X_pwm.c: 70: P1AUX=0B00000000;
+"70
 [e = _P1AUX -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 72: PWM1_RED();
-"72
-[e ( _PWM1_RED ..  ]
-[; ;FT_62F21X_pwm.c: 73: pwm_colour_value = 0;
-"73
-[e = _pwm_colour_value -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 75: TMR2IF=0;
-"75
-[e = _TMR2IF -> -> 0 `i `b ]
-[; ;FT_62F21X_pwm.c: 76: TMR2IE=1;
-"76
-[e = _TMR2IE -> -> 1 `i `b ]
-[; ;FT_62F21X_pwm.c: 77: TMR2ON=1;
-"77
-[e = _TMR2ON -> -> 1 `i `b ]
-[; ;FT_62F21X_pwm.c: 78: PEIE=1;
+[; ;FT_62F21X_pwm.c: 78: PWM1_RED();
 "78
-[e = _PEIE -> -> 1 `i `b ]
-[; ;FT_62F21X_pwm.c: 79: GIE=1;
+[e ( _PWM1_RED ..  ]
+[; ;FT_62F21X_pwm.c: 79: pwm_colour_value = 0;
 "79
-[e = _GIE -> -> 1 `i `b ]
-[; ;FT_62F21X_pwm.c: 81: }
+[e = _pwm_colour_value -> -> 0 `i `uc ]
+[; ;FT_62F21X_pwm.c: 81: TMR2IF=0;
 "81
+[e = _TMR2IF -> -> 0 `i `b ]
+[; ;FT_62F21X_pwm.c: 82: TMR2IE=1;
+"82
+[e = _TMR2IE -> -> 1 `i `b ]
+[; ;FT_62F21X_pwm.c: 83: TMR2ON=1;
+"83
+[e = _TMR2ON -> -> 1 `i `b ]
+[; ;FT_62F21X_pwm.c: 84: PEIE=1;
+"84
+[e = _PEIE -> -> 1 `i `b ]
+[; ;FT_62F21X_pwm.c: 85: GIE=1;
+"85
+[e = _GIE -> -> 1 `i `b ]
+[; ;FT_62F21X_pwm.c: 87: }
+"87
 [e :UE 86 ]
 }
-"85
+"91
 [v _PWM1_RED `(v  1 ef ]
 {
-[; ;FT_62F21X_pwm.c: 84: void PWM1_RED(void)
-[; ;FT_62F21X_pwm.c: 85: {
+[; ;FT_62F21X_pwm.c: 90: void PWM1_RED(void)
+[; ;FT_62F21X_pwm.c: 91: {
 [e :U _PWM1_RED ]
 [f ]
-[; ;FT_62F21X_pwm.c: 87: P1CDTL=0;
-"87
+[; ;FT_62F21X_pwm.c: 93: P1CDTL=0;
+"93
 [e = _P1CDTL -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 88: P1DDTL=0;
-"88
+[; ;FT_62F21X_pwm.c: 94: P1DDTL=0;
+"94
 [e = _P1DDTL -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 90: P1OE=0B00000000;
-"90
+[; ;FT_62F21X_pwm.c: 96: P1OE=0B00000000;
+"96
 [e = _P1OE -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 98: P1BR1=0B00001000;
-"98
+[; ;FT_62F21X_pwm.c: 104: P1BR1=0B00001000;
+"104
 [e = _P1BR1 -> -> 8 `i `uc ]
-[; ;FT_62F21X_pwm.c: 115: }
-"115
+[; ;FT_62F21X_pwm.c: 121: }
+"121
 [e :UE 87 ]
 }
-"118
+"124
 [v _PWM1_GREEN `(v  1 ef ]
 {
-[; ;FT_62F21X_pwm.c: 117: void PWM1_GREEN(void)
-[; ;FT_62F21X_pwm.c: 118: {
+[; ;FT_62F21X_pwm.c: 123: void PWM1_GREEN(void)
+[; ;FT_62F21X_pwm.c: 124: {
 [e :U _PWM1_GREEN ]
 [f ]
-[; ;FT_62F21X_pwm.c: 120: P1CDTL=0;
-"120
+[; ;FT_62F21X_pwm.c: 126: P1CDTL=0;
+"126
 [e = _P1CDTL -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 121: P1DDTL=0;
-"121
+[; ;FT_62F21X_pwm.c: 127: P1DDTL=0;
+"127
 [e = _P1DDTL -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 123: P1OE=0B00100000;
-"123
+[; ;FT_62F21X_pwm.c: 129: P1OE=0B00100000;
+"129
 [e = _P1OE -> -> 32 `i `uc ]
-[; ;FT_62F21X_pwm.c: 131: P1BR1=0B00000000;
-"131
+[; ;FT_62F21X_pwm.c: 137: P1BR1=0B00000000;
+"137
 [e = _P1BR1 -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 148: }
-"148
+[; ;FT_62F21X_pwm.c: 154: }
+"154
 [e :UE 88 ]
 }
-"151
+"157
 [v _PWM1_BLUE `(v  1 ef ]
 {
-[; ;FT_62F21X_pwm.c: 150: void PWM1_BLUE(void)
-[; ;FT_62F21X_pwm.c: 151: {
+[; ;FT_62F21X_pwm.c: 156: void PWM1_BLUE(void)
+[; ;FT_62F21X_pwm.c: 157: {
 [e :U _PWM1_BLUE ]
 [f ]
-[; ;FT_62F21X_pwm.c: 152: P1CDTL=0;
-"152
+[; ;FT_62F21X_pwm.c: 158: P1CDTL=0;
+"158
 [e = _P1CDTL -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 153: P1DDTL=0;
-"153
+[; ;FT_62F21X_pwm.c: 159: P1DDTL=0;
+"159
 [e = _P1DDTL -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 155: P1OE=0B10000000;
-"155
+[; ;FT_62F21X_pwm.c: 161: P1OE=0B10000000;
+"161
 [e = _P1OE -> -> 128 `i `uc ]
-[; ;FT_62F21X_pwm.c: 163: P1BR1=0B00000000;
-"163
+[; ;FT_62F21X_pwm.c: 169: P1BR1=0B00000000;
+"169
 [e = _P1BR1 -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 167: }
-"167
+[; ;FT_62F21X_pwm.c: 173: }
+"173
 [e :UE 89 ]
 }
-"170
+"176
 [v _PWM1_WHITE `(v  1 ef ]
 {
-[; ;FT_62F21X_pwm.c: 169: void PWM1_WHITE(void)
-[; ;FT_62F21X_pwm.c: 170: {
+[; ;FT_62F21X_pwm.c: 175: void PWM1_WHITE(void)
+[; ;FT_62F21X_pwm.c: 176: {
 [e :U _PWM1_WHITE ]
 [f ]
-[; ;FT_62F21X_pwm.c: 171: P1CDTL=0;
-"171
+[; ;FT_62F21X_pwm.c: 177: P1CDTL=0;
+"177
 [e = _P1CDTL -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 172: P1DDTL=0;
-"172
+[; ;FT_62F21X_pwm.c: 178: P1DDTL=0;
+"178
 [e = _P1DDTL -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 174: P1OE=0B00000000;
-"174
+[; ;FT_62F21X_pwm.c: 180: P1OE=0B00000000;
+"180
 [e = _P1OE -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 182: P1BR1=0B00000100;
-"182
+[; ;FT_62F21X_pwm.c: 188: P1BR1=0B00000100;
+"188
 [e = _P1BR1 -> -> 4 `i `uc ]
-[; ;FT_62F21X_pwm.c: 186: }
-"186
+[; ;FT_62F21X_pwm.c: 192: }
+"192
 [e :UE 90 ]
 }
-"189
+"195
 [v _PWM1_RATE_CHANGE `(v  1 ef ]
 {
-[; ;FT_62F21X_pwm.c: 188: void PWM1_RATE_CHANGE(void)
-[; ;FT_62F21X_pwm.c: 189: {
+[; ;FT_62F21X_pwm.c: 194: void PWM1_RATE_CHANGE(void)
+[; ;FT_62F21X_pwm.c: 195: {
 [e :U _PWM1_RATE_CHANGE ]
 [f ]
-"190
-[v _pwm_value `uc  1 a ]
-[; ;FT_62F21X_pwm.c: 190: unsigned char pwm_value;
-[; ;FT_62F21X_pwm.c: 192: if(pwm_rate_value >= 200)
-"192
-[e $ ! >= -> _pwm_rate_value `i -> 200 `i 92  ]
-[; ;FT_62F21X_pwm.c: 193: {
-"193
-{
-[; ;FT_62F21X_pwm.c: 194: pwm_rate_value = 0;
-"194
-[e = _pwm_rate_value -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 195: pwm_colour_value++;
-"195
-[e ++ _pwm_colour_value -> -> 1 `i `uc ]
-[; ;FT_62F21X_pwm.c: 196: pwm_colour_value = pwm_colour_value%4;
 "196
-[e = _pwm_colour_value -> % -> _pwm_colour_value `i -> 4 `i `uc ]
-[; ;FT_62F21X_pwm.c: 197: switch(pwm_colour_value)
-"197
-[e $U 94  ]
-[; ;FT_62F21X_pwm.c: 198: {
+[v _pwm_value `uc  1 a ]
+[; ;FT_62F21X_pwm.c: 196: unsigned char pwm_value;
+[; ;FT_62F21X_pwm.c: 198: if(pwm_rate_value >= 200)
 "198
-{
-[; ;FT_62F21X_pwm.c: 199: case 0:
+[e $ ! >= -> _pwm_rate_value `i -> 200 `i 92  ]
+[; ;FT_62F21X_pwm.c: 199: {
 "199
-[e :U 95 ]
-[; ;FT_62F21X_pwm.c: 200: PWM1_RED();
+{
+[; ;FT_62F21X_pwm.c: 200: pwm_rate_value = 0;
 "200
-[e ( _PWM1_RED ..  ]
-[; ;FT_62F21X_pwm.c: 201: break;
+[e = _pwm_rate_value -> -> 0 `i `uc ]
+[; ;FT_62F21X_pwm.c: 201: pwm_colour_value++;
 "201
-[e $U 93  ]
-[; ;FT_62F21X_pwm.c: 203: case 1:
+[e ++ _pwm_colour_value -> -> 1 `i `uc ]
+[; ;FT_62F21X_pwm.c: 202: pwm_colour_value = pwm_colour_value%4;
+"202
+[e = _pwm_colour_value -> % -> _pwm_colour_value `i -> 4 `i `uc ]
+[; ;FT_62F21X_pwm.c: 203: switch(pwm_colour_value)
 "203
-[e :U 96 ]
-[; ;FT_62F21X_pwm.c: 204: PWM1_GREEN();
+[e $U 94  ]
+[; ;FT_62F21X_pwm.c: 204: {
 "204
-[e ( _PWM1_GREEN ..  ]
-[; ;FT_62F21X_pwm.c: 205: break;
+{
+[; ;FT_62F21X_pwm.c: 205: case 0:
 "205
-[e $U 93  ]
-[; ;FT_62F21X_pwm.c: 207: case 2:
+[e :U 95 ]
+[; ;FT_62F21X_pwm.c: 206: PWM1_RED();
+"206
+[e ( _PWM1_RED ..  ]
+[; ;FT_62F21X_pwm.c: 207: break;
 "207
-[e :U 97 ]
-[; ;FT_62F21X_pwm.c: 208: PWM1_BLUE();
-"208
-[e ( _PWM1_BLUE ..  ]
-[; ;FT_62F21X_pwm.c: 209: break;
+[e $U 93  ]
+[; ;FT_62F21X_pwm.c: 209: case 1:
 "209
-[e $U 93  ]
-[; ;FT_62F21X_pwm.c: 211: case 3:
+[e :U 96 ]
+[; ;FT_62F21X_pwm.c: 210: PWM1_GREEN();
+"210
+[e ( _PWM1_GREEN ..  ]
+[; ;FT_62F21X_pwm.c: 211: break;
 "211
-[e :U 98 ]
-[; ;FT_62F21X_pwm.c: 212: PWM1_WHITE();
-"212
-[e ( _PWM1_WHITE ..  ]
-[; ;FT_62F21X_pwm.c: 213: break;
+[e $U 93  ]
+[; ;FT_62F21X_pwm.c: 213: case 2:
 "213
-[e $U 93  ]
-[; ;FT_62F21X_pwm.c: 215: default:
+[e :U 97 ]
+[; ;FT_62F21X_pwm.c: 214: PWM1_BLUE();
+"214
+[e ( _PWM1_BLUE ..  ]
+[; ;FT_62F21X_pwm.c: 215: break;
 "215
-[e :U 99 ]
-[; ;FT_62F21X_pwm.c: 217: break;
+[e $U 93  ]
+[; ;FT_62F21X_pwm.c: 217: case 3:
 "217
-[e $U 93  ]
+[e :U 98 ]
+[; ;FT_62F21X_pwm.c: 218: PWM1_WHITE();
 "218
-}
-[; ;FT_62F21X_pwm.c: 218: }
+[e ( _PWM1_WHITE ..  ]
+[; ;FT_62F21X_pwm.c: 219: break;
+"219
 [e $U 93  ]
-"197
+[; ;FT_62F21X_pwm.c: 221: default:
+"221
+[e :U 99 ]
+[; ;FT_62F21X_pwm.c: 223: break;
+"223
+[e $U 93  ]
+"224
+}
+[; ;FT_62F21X_pwm.c: 224: }
+[e $U 93  ]
+"203
 [e :U 94 ]
 [e [\ _pwm_colour_value , $ -> -> 0 `i `uc 95
  , $ -> -> 1 `i `uc 96
  , $ -> -> 2 `i `uc 97
  , $ -> -> 3 `i `uc 98
  99 ]
-"218
+"224
 [e :U 93 ]
-"219
+"225
 }
 [e :U 92 ]
-[; ;FT_62F21X_pwm.c: 219: }
-[; ;FT_62F21X_pwm.c: 220: if(pwm_rate_value <=100)
-"220
-[e $ ! <= -> _pwm_rate_value `i -> 100 `i 100  ]
-[; ;FT_62F21X_pwm.c: 221: {
-"221
-{
-[; ;FT_62F21X_pwm.c: 222: pwm_value = pwm_rate_value;
-"222
-[e = _pwm_value _pwm_rate_value ]
-"223
-}
-[; ;FT_62F21X_pwm.c: 223: }
-[e $U 101  ]
-"224
-[e :U 100 ]
-[; ;FT_62F21X_pwm.c: 224: else
-[; ;FT_62F21X_pwm.c: 225: {
-"225
-{
-[; ;FT_62F21X_pwm.c: 226: pwm_value = 200 - pwm_rate_value;
+[; ;FT_62F21X_pwm.c: 225: }
+[; ;FT_62F21X_pwm.c: 226: if(pwm_rate_value <=100)
 "226
-[e = _pwm_value -> - -> 200 `i -> _pwm_rate_value `i `uc ]
+[e $ ! <= -> _pwm_rate_value `i -> 100 `i 100  ]
+[; ;FT_62F21X_pwm.c: 227: {
 "227
+{
+[; ;FT_62F21X_pwm.c: 228: pwm_value = pwm_rate_value;
+"228
+[e = _pwm_value _pwm_rate_value ]
+"229
+}
+[; ;FT_62F21X_pwm.c: 229: }
+[e $U 101  ]
+"230
+[e :U 100 ]
+[; ;FT_62F21X_pwm.c: 230: else
+[; ;FT_62F21X_pwm.c: 231: {
+"231
+{
+[; ;FT_62F21X_pwm.c: 232: pwm_value = 200 - pwm_rate_value;
+"232
+[e = _pwm_value -> - -> 200 `i -> _pwm_rate_value `i `uc ]
+"233
 }
 [e :U 101 ]
-[; ;FT_62F21X_pwm.c: 227: }
-[; ;FT_62F21X_pwm.c: 229: switch(pwm_colour_value)
-"229
-[e $U 103  ]
-[; ;FT_62F21X_pwm.c: 230: {
-"230
-{
-[; ;FT_62F21X_pwm.c: 231: case 0:
-"231
-[e :U 104 ]
-[; ;FT_62F21X_pwm.c: 232: P1CDTL = pwm_value;
-"232
-[e = _P1CDTL _pwm_value ]
-[; ;FT_62F21X_pwm.c: 233: break;
-"233
-[e $U 102  ]
-[; ;FT_62F21X_pwm.c: 235: case 1:
+[; ;FT_62F21X_pwm.c: 233: }
+[; ;FT_62F21X_pwm.c: 235: switch(pwm_colour_value)
 "235
-[e :U 105 ]
-[; ;FT_62F21X_pwm.c: 236: P1DDTL = pwm_value;
+[e $U 103  ]
+[; ;FT_62F21X_pwm.c: 236: {
 "236
-[e = _P1DDTL _pwm_value ]
-[; ;FT_62F21X_pwm.c: 237: break;
+{
+[; ;FT_62F21X_pwm.c: 237: case 0:
 "237
-[e $U 102  ]
-[; ;FT_62F21X_pwm.c: 239: case 2:
-"239
-[e :U 106 ]
-[; ;FT_62F21X_pwm.c: 240: P1CDTL = pwm_value;
-"240
+[e :U 104 ]
+[; ;FT_62F21X_pwm.c: 238: P1CDTL = pwm_value;
+"238
 [e = _P1CDTL _pwm_value ]
-[; ;FT_62F21X_pwm.c: 241: break;
+[; ;FT_62F21X_pwm.c: 239: break;
+"239
+[e $U 102  ]
+[; ;FT_62F21X_pwm.c: 241: case 1:
 "241
-[e $U 102  ]
-[; ;FT_62F21X_pwm.c: 243: case 3:
-"243
-[e :U 107 ]
-[; ;FT_62F21X_pwm.c: 244: P1DDTL = pwm_value;
-"244
+[e :U 105 ]
+[; ;FT_62F21X_pwm.c: 242: P1DDTL = pwm_value;
+"242
 [e = _P1DDTL _pwm_value ]
-[; ;FT_62F21X_pwm.c: 245: break;
+[; ;FT_62F21X_pwm.c: 243: break;
+"243
+[e $U 102  ]
+[; ;FT_62F21X_pwm.c: 245: case 2:
 "245
-[e $U 102  ]
-[; ;FT_62F21X_pwm.c: 247: default:
+[e :U 106 ]
+[; ;FT_62F21X_pwm.c: 246: P1CDTL = pwm_value;
+"246
+[e = _P1CDTL _pwm_value ]
+[; ;FT_62F21X_pwm.c: 247: break;
 "247
-[e :U 108 ]
-[; ;FT_62F21X_pwm.c: 249: break;
+[e $U 102  ]
+[; ;FT_62F21X_pwm.c: 249: case 3:
 "249
-[e $U 102  ]
+[e :U 107 ]
+[; ;FT_62F21X_pwm.c: 250: P1DDTL = pwm_value;
 "250
-}
-[; ;FT_62F21X_pwm.c: 250: }
+[e = _P1DDTL _pwm_value ]
+[; ;FT_62F21X_pwm.c: 251: break;
+"251
 [e $U 102  ]
-"229
+[; ;FT_62F21X_pwm.c: 253: default:
+"253
+[e :U 108 ]
+[; ;FT_62F21X_pwm.c: 255: break;
+"255
+[e $U 102  ]
+"256
+}
+[; ;FT_62F21X_pwm.c: 256: }
+[e $U 102  ]
+"235
 [e :U 103 ]
 [e [\ _pwm_colour_value , $ -> -> 0 `i `uc 104
  , $ -> -> 1 `i `uc 105
  , $ -> -> 2 `i `uc 106
  , $ -> -> 3 `i `uc 107
  108 ]
-"250
+"256
 [e :U 102 ]
-[; ;FT_62F21X_pwm.c: 252: }
-"252
+[; ;FT_62F21X_pwm.c: 258: }
+"258
 [e :UE 91 ]
 }
-"255
+"261
 [v _JUMP_MODE_CHANGE `(v  1 ef ]
 {
-[; ;FT_62F21X_pwm.c: 254: void JUMP_MODE_CHANGE(void)
-[; ;FT_62F21X_pwm.c: 255: {
+[; ;FT_62F21X_pwm.c: 260: void JUMP_MODE_CHANGE(void)
+[; ;FT_62F21X_pwm.c: 261: {
 [e :U _JUMP_MODE_CHANGE ]
 [f ]
-[; ;FT_62F21X_pwm.c: 256: pwm_colour_value++;
-"256
-[e ++ _pwm_colour_value -> -> 1 `i `uc ]
-[; ;FT_62F21X_pwm.c: 257: pwm_colour_value = pwm_colour_value%4;
-"257
-[e = _pwm_colour_value -> % -> _pwm_colour_value `i -> 4 `i `uc ]
-[; ;FT_62F21X_pwm.c: 258: switch(pwm_colour_value)
-"258
-[e $U 111  ]
-[; ;FT_62F21X_pwm.c: 259: {
-"259
-{
-[; ;FT_62F21X_pwm.c: 260: case 0:
-"260
-[e :U 112 ]
-[; ;FT_62F21X_pwm.c: 262: P1OE=0B00000000;
+[; ;FT_62F21X_pwm.c: 262: pwm_colour_value++;
 "262
-[e = _P1OE -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 263: P1BR1=0B00001000;
+[e ++ _pwm_colour_value -> -> 1 `i `uc ]
+[; ;FT_62F21X_pwm.c: 263: pwm_colour_value = pwm_colour_value%4;
 "263
-[e = _P1BR1 -> -> 8 `i `uc ]
-[; ;FT_62F21X_pwm.c: 265: break;
+[e = _pwm_colour_value -> % -> _pwm_colour_value `i -> 4 `i `uc ]
+[; ;FT_62F21X_pwm.c: 264: switch(pwm_colour_value)
+"264
+[e $U 111  ]
+[; ;FT_62F21X_pwm.c: 265: {
 "265
-[e $U 110  ]
-[; ;FT_62F21X_pwm.c: 267: case 1:
-"267
-[e :U 113 ]
-[; ;FT_62F21X_pwm.c: 269: P1OE=0B00100000;
+{
+[; ;FT_62F21X_pwm.c: 266: case 0:
+"266
+[e :U 112 ]
+[; ;FT_62F21X_pwm.c: 268: P1OE=0B00000000;
+"268
+[e = _P1OE -> -> 0 `i `uc ]
+[; ;FT_62F21X_pwm.c: 269: P1BR1=0B00001000;
 "269
-[e = _P1OE -> -> 32 `i `uc ]
-[; ;FT_62F21X_pwm.c: 270: P1BR1=0B00000000;
-"270
-[e = _P1BR1 -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 272: break;
-"272
+[e = _P1BR1 -> -> 8 `i `uc ]
+[; ;FT_62F21X_pwm.c: 271: break;
+"271
 [e $U 110  ]
-[; ;FT_62F21X_pwm.c: 274: case 2:
-"274
-[e :U 114 ]
-[; ;FT_62F21X_pwm.c: 275: P1OE=0B10000000;
+[; ;FT_62F21X_pwm.c: 273: case 1:
+"273
+[e :U 113 ]
+[; ;FT_62F21X_pwm.c: 275: P1OE=0B00100000;
 "275
-[e = _P1OE -> -> 128 `i `uc ]
+[e = _P1OE -> -> 32 `i `uc ]
 [; ;FT_62F21X_pwm.c: 276: P1BR1=0B00000000;
 "276
 [e = _P1BR1 -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 277: break;
-"277
+[; ;FT_62F21X_pwm.c: 278: break;
+"278
 [e $U 110  ]
-[; ;FT_62F21X_pwm.c: 279: case 3:
-"279
-[e :U 115 ]
-[; ;FT_62F21X_pwm.c: 280: P1OE=0B00000000;
+[; ;FT_62F21X_pwm.c: 280: case 2:
 "280
-[e = _P1OE -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 281: P1BR1=0B00000100;
+[e :U 114 ]
+[; ;FT_62F21X_pwm.c: 281: P1OE=0B10000000;
 "281
-[e = _P1BR1 -> -> 4 `i `uc ]
-[; ;FT_62F21X_pwm.c: 282: break;
+[e = _P1OE -> -> 128 `i `uc ]
+[; ;FT_62F21X_pwm.c: 282: P1BR1=0B00000000;
 "282
+[e = _P1BR1 -> -> 0 `i `uc ]
+[; ;FT_62F21X_pwm.c: 283: break;
+"283
 [e $U 110  ]
-[; ;FT_62F21X_pwm.c: 284: default:
-"284
-[e :U 116 ]
-[; ;FT_62F21X_pwm.c: 286: break;
+[; ;FT_62F21X_pwm.c: 285: case 3:
+"285
+[e :U 115 ]
+[; ;FT_62F21X_pwm.c: 286: P1OE=0B00000000;
 "286
-[e $U 110  ]
+[e = _P1OE -> -> 0 `i `uc ]
+[; ;FT_62F21X_pwm.c: 287: P1BR1=0B00000100;
 "287
-}
-[; ;FT_62F21X_pwm.c: 287: }
+[e = _P1BR1 -> -> 4 `i `uc ]
+[; ;FT_62F21X_pwm.c: 288: break;
+"288
 [e $U 110  ]
-"258
+[; ;FT_62F21X_pwm.c: 290: default:
+"290
+[e :U 116 ]
+[; ;FT_62F21X_pwm.c: 292: break;
+"292
+[e $U 110  ]
+"293
+}
+[; ;FT_62F21X_pwm.c: 293: }
+[e $U 110  ]
+"264
 [e :U 111 ]
 [e [\ _pwm_colour_value , $ -> -> 0 `i `uc 112
  , $ -> -> 1 `i `uc 113
  , $ -> -> 2 `i `uc 114
  , $ -> -> 3 `i `uc 115
  116 ]
-"287
+"293
 [e :U 110 ]
-[; ;FT_62F21X_pwm.c: 288: }
-"288
+[; ;FT_62F21X_pwm.c: 294: }
+"294
 [e :UE 109 ]
 }
-"291
+"297
 [v _PWM_MODE_CHANGE `(v  1 ef ]
 {
-[; ;FT_62F21X_pwm.c: 290: void PWM_MODE_CHANGE(void)
-[; ;FT_62F21X_pwm.c: 291: {
+[; ;FT_62F21X_pwm.c: 296: void PWM_MODE_CHANGE(void)
+[; ;FT_62F21X_pwm.c: 297: {
 [e :U _PWM_MODE_CHANGE ]
 [f ]
-[; ;FT_62F21X_pwm.c: 292: ft_user_pwm_mode++;
-"292
+[; ;FT_62F21X_pwm.c: 298: ft_user_pwm_mode++;
+"298
 [e ++ _ft_user_pwm_mode -> -> 1 `i `uc ]
-[; ;FT_62F21X_pwm.c: 293: ft_user_pwm_mode = ft_user_pwm_mode%6;
-"293
-[e = _ft_user_pwm_mode -> % -> _ft_user_pwm_mode `i -> 6 `i `uc ]
-[; ;FT_62F21X_pwm.c: 294: PWM_MODE_REFRESH();
-"294
-[e ( _PWM_MODE_REFRESH ..  ]
-[; ;FT_62F21X_pwm.c: 296: }
-"296
-[e :UE 117 ]
-}
+[; ;FT_62F21X_pwm.c: 299: if(ft_user_pwm_mode == 6)
 "299
-[v _MIX_MODE_CHANGE `(v  1 ef ]
-{
-[; ;FT_62F21X_pwm.c: 298: void MIX_MODE_CHANGE(void)
-[; ;FT_62F21X_pwm.c: 299: {
-[e :U _MIX_MODE_CHANGE ]
-[f ]
-[; ;FT_62F21X_pwm.c: 300: pwm_colour_value++;
+[e $ ! == -> _ft_user_pwm_mode `i -> 6 `i 118  ]
+[; ;FT_62F21X_pwm.c: 300: {
 "300
-[e ++ _pwm_colour_value -> -> 1 `i `uc ]
-[; ;FT_62F21X_pwm.c: 301: pwm_colour_value = pwm_colour_value%6;
+{
+[; ;FT_62F21X_pwm.c: 301: ft_user_pwm_mode = 0;
 "301
-[e = _pwm_colour_value -> % -> _pwm_colour_value `i -> 6 `i `uc ]
-[; ;FT_62F21X_pwm.c: 303: switch(pwm_colour_value)
+[e = _ft_user_pwm_mode -> -> 0 `i `uc ]
+"302
+}
+[e :U 118 ]
+[; ;FT_62F21X_pwm.c: 302: }
+[; ;FT_62F21X_pwm.c: 303: if(ft_user_pwm_mode > 6)
 "303
-[e $U 120  ]
+[e $ ! > -> _ft_user_pwm_mode `i -> 6 `i 119  ]
 [; ;FT_62F21X_pwm.c: 304: {
 "304
 {
-[; ;FT_62F21X_pwm.c: 305: case 0:
+[; ;FT_62F21X_pwm.c: 305: ft_user_pwm_mode = 1;
 "305
-[e :U 121 ]
-[; ;FT_62F21X_pwm.c: 306: P1OE=0B00100000;
+[e = _ft_user_pwm_mode -> -> 1 `i `uc ]
 "306
-[e = _P1OE -> -> 32 `i `uc ]
-[; ;FT_62F21X_pwm.c: 307: P1BR1=0B00001000;
-"307
-[e = _P1BR1 -> -> 8 `i `uc ]
-[; ;FT_62F21X_pwm.c: 308: break;
-"308
-[e $U 119  ]
-[; ;FT_62F21X_pwm.c: 310: case 1:
-"310
-[e :U 122 ]
-[; ;FT_62F21X_pwm.c: 311: P1OE=0B10000000;
-"311
-[e = _P1OE -> -> 128 `i `uc ]
-[; ;FT_62F21X_pwm.c: 312: P1BR1=0B00001000;
-"312
-[e = _P1BR1 -> -> 8 `i `uc ]
-[; ;FT_62F21X_pwm.c: 314: break;
-"314
-[e $U 119  ]
-[; ;FT_62F21X_pwm.c: 316: case 2:
-"316
-[e :U 123 ]
-[; ;FT_62F21X_pwm.c: 317: P1OE=0B00000000;
-"317
-[e = _P1OE -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 318: P1BR1=0B00001100;
-"318
-[e = _P1BR1 -> -> 12 `i `uc ]
-[; ;FT_62F21X_pwm.c: 320: break;
-"320
-[e $U 119  ]
-[; ;FT_62F21X_pwm.c: 322: case 3:
-"322
-[e :U 124 ]
-[; ;FT_62F21X_pwm.c: 323: P1OE=0B10100000;
-"323
-[e = _P1OE -> -> 160 `i `uc ]
-[; ;FT_62F21X_pwm.c: 324: P1BR1=0B00000000;
-"324
-[e = _P1BR1 -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 325: break;
-"325
-[e $U 119  ]
-[; ;FT_62F21X_pwm.c: 327: case 4:
-"327
-[e :U 125 ]
-[; ;FT_62F21X_pwm.c: 328: P1OE=0B00100000;
-"328
-[e = _P1OE -> -> 32 `i `uc ]
-[; ;FT_62F21X_pwm.c: 329: P1BR1=0B00000100;
-"329
-[e = _P1BR1 -> -> 4 `i `uc ]
-[; ;FT_62F21X_pwm.c: 330: break;
-"330
-[e $U 119  ]
-[; ;FT_62F21X_pwm.c: 332: case 5:
-"332
-[e :U 126 ]
-[; ;FT_62F21X_pwm.c: 333: P1OE=0B10000000;
-"333
-[e = _P1OE -> -> 128 `i `uc ]
-[; ;FT_62F21X_pwm.c: 334: P1BR1=0B00000100;
-"334
-[e = _P1BR1 -> -> 4 `i `uc ]
-[; ;FT_62F21X_pwm.c: 335: break;
-"335
-[e $U 119  ]
-[; ;FT_62F21X_pwm.c: 337: default:
-"337
-[e :U 127 ]
-[; ;FT_62F21X_pwm.c: 339: break;
-"339
-[e $U 119  ]
-"340
 }
-[; ;FT_62F21X_pwm.c: 340: }
-[e $U 119  ]
-"303
-[e :U 120 ]
-[e [\ _pwm_colour_value , $ -> -> 0 `i `uc 121
- , $ -> -> 1 `i `uc 122
- , $ -> -> 2 `i `uc 123
- , $ -> -> 3 `i `uc 124
- , $ -> -> 4 `i `uc 125
- , $ -> -> 5 `i `uc 126
- 127 ]
-"340
 [e :U 119 ]
-[; ;FT_62F21X_pwm.c: 341: }
-"341
-[e :UE 118 ]
+[; ;FT_62F21X_pwm.c: 306: }
+[; ;FT_62F21X_pwm.c: 307: PWM_MODE_REFRESH();
+"307
+[e ( _PWM_MODE_REFRESH ..  ]
+[; ;FT_62F21X_pwm.c: 309: }
+"309
+[e :UE 117 ]
 }
-"351
+"312
+[v _MIX_MODE_CHANGE `(v  1 ef ]
+{
+[; ;FT_62F21X_pwm.c: 311: void MIX_MODE_CHANGE(void)
+[; ;FT_62F21X_pwm.c: 312: {
+[e :U _MIX_MODE_CHANGE ]
+[f ]
+[; ;FT_62F21X_pwm.c: 313: pwm_colour_value++;
+"313
+[e ++ _pwm_colour_value -> -> 1 `i `uc ]
+[; ;FT_62F21X_pwm.c: 314: pwm_colour_value = pwm_colour_value%6;
+"314
+[e = _pwm_colour_value -> % -> _pwm_colour_value `i -> 6 `i `uc ]
+[; ;FT_62F21X_pwm.c: 316: switch(pwm_colour_value)
+"316
+[e $U 122  ]
+[; ;FT_62F21X_pwm.c: 317: {
+"317
+{
+[; ;FT_62F21X_pwm.c: 318: case 0:
+"318
+[e :U 123 ]
+[; ;FT_62F21X_pwm.c: 319: P1OE=0B00100000;
+"319
+[e = _P1OE -> -> 32 `i `uc ]
+[; ;FT_62F21X_pwm.c: 320: P1BR1=0B00001000;
+"320
+[e = _P1BR1 -> -> 8 `i `uc ]
+[; ;FT_62F21X_pwm.c: 321: break;
+"321
+[e $U 121  ]
+[; ;FT_62F21X_pwm.c: 323: case 1:
+"323
+[e :U 124 ]
+[; ;FT_62F21X_pwm.c: 324: P1OE=0B10000000;
+"324
+[e = _P1OE -> -> 128 `i `uc ]
+[; ;FT_62F21X_pwm.c: 325: P1BR1=0B00001000;
+"325
+[e = _P1BR1 -> -> 8 `i `uc ]
+[; ;FT_62F21X_pwm.c: 327: break;
+"327
+[e $U 121  ]
+[; ;FT_62F21X_pwm.c: 329: case 2:
+"329
+[e :U 125 ]
+[; ;FT_62F21X_pwm.c: 330: P1OE=0B00000000;
+"330
+[e = _P1OE -> -> 0 `i `uc ]
+[; ;FT_62F21X_pwm.c: 331: P1BR1=0B00001100;
+"331
+[e = _P1BR1 -> -> 12 `i `uc ]
+[; ;FT_62F21X_pwm.c: 333: break;
+"333
+[e $U 121  ]
+[; ;FT_62F21X_pwm.c: 335: case 3:
+"335
+[e :U 126 ]
+[; ;FT_62F21X_pwm.c: 336: P1OE=0B10100000;
+"336
+[e = _P1OE -> -> 160 `i `uc ]
+[; ;FT_62F21X_pwm.c: 337: P1BR1=0B00000000;
+"337
+[e = _P1BR1 -> -> 0 `i `uc ]
+[; ;FT_62F21X_pwm.c: 338: break;
+"338
+[e $U 121  ]
+[; ;FT_62F21X_pwm.c: 340: case 4:
+"340
+[e :U 127 ]
+[; ;FT_62F21X_pwm.c: 341: P1OE=0B00100000;
+"341
+[e = _P1OE -> -> 32 `i `uc ]
+[; ;FT_62F21X_pwm.c: 342: P1BR1=0B00000100;
+"342
+[e = _P1BR1 -> -> 4 `i `uc ]
+[; ;FT_62F21X_pwm.c: 343: break;
+"343
+[e $U 121  ]
+[; ;FT_62F21X_pwm.c: 345: case 5:
+"345
+[e :U 128 ]
+[; ;FT_62F21X_pwm.c: 346: P1OE=0B10000000;
+"346
+[e = _P1OE -> -> 128 `i `uc ]
+[; ;FT_62F21X_pwm.c: 347: P1BR1=0B00000100;
+"347
+[e = _P1BR1 -> -> 4 `i `uc ]
+[; ;FT_62F21X_pwm.c: 348: break;
+"348
+[e $U 121  ]
+[; ;FT_62F21X_pwm.c: 350: default:
+"350
+[e :U 129 ]
+[; ;FT_62F21X_pwm.c: 352: break;
+"352
+[e $U 121  ]
+"353
+}
+[; ;FT_62F21X_pwm.c: 353: }
+[e $U 121  ]
+"316
+[e :U 122 ]
+[e [\ _pwm_colour_value , $ -> -> 0 `i `uc 123
+ , $ -> -> 1 `i `uc 124
+ , $ -> -> 2 `i `uc 125
+ , $ -> -> 3 `i `uc 126
+ , $ -> -> 4 `i `uc 127
+ , $ -> -> 5 `i `uc 128
+ 129 ]
+"353
+[e :U 121 ]
+[; ;FT_62F21X_pwm.c: 354: }
+"354
+[e :UE 120 ]
+}
+"364
 [v _DelayUs `(v  1 ef1`uc ]
 {
-[; ;FT_62F21X_pwm.c: 350: void DelayUs(unsigned char Time)
-[; ;FT_62F21X_pwm.c: 351: {
+[; ;FT_62F21X_pwm.c: 363: void DelayUs(unsigned char Time)
+[; ;FT_62F21X_pwm.c: 364: {
 [e :U _DelayUs ]
 [v _Time `uc  1 r1 ]
 [f ]
-"352
+"365
 [v _a `uc  1 a ]
-[; ;FT_62F21X_pwm.c: 352: unsigned char a;
-[; ;FT_62F21X_pwm.c: 353: for(a=0;a<Time;a++)
-"353
+[; ;FT_62F21X_pwm.c: 365: unsigned char a;
+[; ;FT_62F21X_pwm.c: 366: for(a=0;a<Time;a++)
+"366
 {
 [e = _a -> -> 0 `i `uc ]
-[e $U 132  ]
-"354
-[e :U 129 ]
-[; ;FT_62F21X_pwm.c: 354: {
+[e $U 134  ]
+"367
+[e :U 131 ]
+[; ;FT_62F21X_pwm.c: 367: {
 {
-[; ;FT_62F21X_pwm.c: 355: _nop();
-"355
+[; ;FT_62F21X_pwm.c: 368: _nop();
+"368
 [e ( __nop ..  ]
-"356
+"369
 }
-"353
+"366
 [e ++ _a -> -> 1 `i `uc ]
+[e :U 134 ]
+[e $ < -> _a `i -> _Time `i 131  ]
 [e :U 132 ]
-[e $ < -> _a `i -> _Time `i 129  ]
-[e :U 130 ]
-"356
+"369
 }
-[; ;FT_62F21X_pwm.c: 356: }
-[; ;FT_62F21X_pwm.c: 357: }
-"357
-[e :UE 128 ]
+[; ;FT_62F21X_pwm.c: 369: }
+[; ;FT_62F21X_pwm.c: 370: }
+"370
+[e :UE 130 ]
 }
-"365
+"378
 [v _DelayMs `(v  1 ef1`uc ]
 {
-[; ;FT_62F21X_pwm.c: 364: void DelayMs(unsigned char Time)
-[; ;FT_62F21X_pwm.c: 365: {
+[; ;FT_62F21X_pwm.c: 377: void DelayMs(unsigned char Time)
+[; ;FT_62F21X_pwm.c: 378: {
 [e :U _DelayMs ]
 [v _Time `uc  1 r1 ]
 [f ]
-"366
+"379
 [v _a `uc  1 a ]
 [v _b `uc  1 a ]
-[; ;FT_62F21X_pwm.c: 366: unsigned char a,b;
-[; ;FT_62F21X_pwm.c: 367: for(a=0;a<Time;a++)
-"367
+[; ;FT_62F21X_pwm.c: 379: unsigned char a,b;
+[; ;FT_62F21X_pwm.c: 380: for(a=0;a<Time;a++)
+"380
 {
 [e = _a -> -> 0 `i `uc ]
-[e $U 137  ]
-"368
-[e :U 134 ]
-[; ;FT_62F21X_pwm.c: 368: {
+[e $U 139  ]
+"381
+[e :U 136 ]
+[; ;FT_62F21X_pwm.c: 381: {
 {
-[; ;FT_62F21X_pwm.c: 369: for(b=0;b<5;b++)
-"369
+[; ;FT_62F21X_pwm.c: 382: for(b=0;b<5;b++)
+"382
 {
 [e = _b -> -> 0 `i `uc ]
-[e $ < -> _b `i -> 5 `i 138  ]
-[e $U 139  ]
-"370
-[e :U 138 ]
-[; ;FT_62F21X_pwm.c: 370: {
+[e $ < -> _b `i -> 5 `i 140  ]
+[e $U 141  ]
+"383
+[e :U 140 ]
+[; ;FT_62F21X_pwm.c: 383: {
 {
-[; ;FT_62F21X_pwm.c: 371: DelayUs(98);
-"371
+[; ;FT_62F21X_pwm.c: 384: DelayUs(98);
+"384
 [e ( _DelayUs (1 -> -> 98 `i `uc ]
-"372
+"385
 }
-"369
+"382
 [e ++ _b -> -> 1 `i `uc ]
-[e $ < -> _b `i -> 5 `i 138  ]
-[e :U 139 ]
-"372
+[e $ < -> _b `i -> 5 `i 140  ]
+[e :U 141 ]
+"385
 }
-"373
+"386
 }
-"367
+"380
 [e ++ _a -> -> 1 `i `uc ]
+[e :U 139 ]
+[e $ < -> _a `i -> _Time `i 136  ]
 [e :U 137 ]
-[e $ < -> _a `i -> _Time `i 134  ]
-[e :U 135 ]
-"373
+"386
 }
-[; ;FT_62F21X_pwm.c: 372: }
-[; ;FT_62F21X_pwm.c: 373: }
-[; ;FT_62F21X_pwm.c: 374: }
-"374
-[e :UE 133 ]
+[; ;FT_62F21X_pwm.c: 385: }
+[; ;FT_62F21X_pwm.c: 386: }
+[; ;FT_62F21X_pwm.c: 387: }
+"387
+[e :UE 135 ]
 }
-"397
+"410
 [v _PWM_MODE_REFRESH `(v  1 ef ]
 {
-[; ;FT_62F21X_pwm.c: 396: void PWM_MODE_REFRESH(void)
-[; ;FT_62F21X_pwm.c: 397: {
+[; ;FT_62F21X_pwm.c: 409: void PWM_MODE_REFRESH(void)
+[; ;FT_62F21X_pwm.c: 410: {
 [e :U _PWM_MODE_REFRESH ]
 [f ]
-[; ;FT_62F21X_pwm.c: 398: reset_led_status();
-"398
+[; ;FT_62F21X_pwm.c: 411: reset_led_status();
+"411
 [e ( _reset_led_status ..  ]
-[; ;FT_62F21X_pwm.c: 400: jump_led_rate = 100;
-"400
-[e = _jump_led_rate -> -> 100 `i `uc ]
-[; ;FT_62F21X_pwm.c: 401: if(ft_user_pwm_mode != 0)
-"401
-[e $ ! != -> _ft_user_pwm_mode `i -> 0 `i 142  ]
-[; ;FT_62F21X_pwm.c: 402: {
-"402
-{
-[; ;FT_62F21X_pwm.c: 403: P1CDTL=jump_led_rate;
-"403
-[e = _P1CDTL _jump_led_rate ]
-[; ;FT_62F21X_pwm.c: 404: P1DDTL=jump_led_rate;
-"404
-[e = _P1DDTL _jump_led_rate ]
-"405
-}
-[e :U 142 ]
-[; ;FT_62F21X_pwm.c: 405: }
-[; ;FT_62F21X_pwm.c: 407: if(power_off_flag == 1)
-"407
-[e $ ! == -> _power_off_flag `i -> 1 `i 143  ]
-[; ;FT_62F21X_pwm.c: 408: {
-"408
-{
-[; ;FT_62F21X_pwm.c: 409: return;
-"409
-[e $UE 141  ]
-"410
-}
-[e :U 143 ]
-[; ;FT_62F21X_pwm.c: 410: }
-[; ;FT_62F21X_pwm.c: 412: switch(ft_user_pwm_mode)
-"412
-[e $U 145  ]
-[; ;FT_62F21X_pwm.c: 413: {
+[; ;FT_62F21X_pwm.c: 413: if(ft_user_pwm_mode != 0)
 "413
-{
-[; ;FT_62F21X_pwm.c: 414: case 0x00:
+[e $ ! != -> _ft_user_pwm_mode `i -> 0 `i 144  ]
+[; ;FT_62F21X_pwm.c: 414: {
 "414
-[e :U 146 ]
-[; ;FT_62F21X_pwm.c: 415: pwm_rate_value = 0;
+{
+[; ;FT_62F21X_pwm.c: 415: P1CDTL=jump_led_rate;
 "415
-[e = _pwm_rate_value -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 416: pwm_colour_value = 0;
+[e = _P1CDTL _jump_led_rate ]
+[; ;FT_62F21X_pwm.c: 416: P1DDTL=jump_led_rate;
 "416
-[e = _pwm_colour_value -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 417: PWM1_RED();
+[e = _P1DDTL _jump_led_rate ]
 "417
-[e ( _PWM1_RED ..  ]
-[; ;FT_62F21X_pwm.c: 419: break;
+}
+[; ;FT_62F21X_pwm.c: 417: }
+[e $U 145  ]
+"418
+[e :U 144 ]
+[; ;FT_62F21X_pwm.c: 418: else
+[; ;FT_62F21X_pwm.c: 419: {
 "419
-[e $U 144  ]
-[; ;FT_62F21X_pwm.c: 421: case 0x01:
+{
+[; ;FT_62F21X_pwm.c: 420: P1CDTL=0;
+"420
+[e = _P1CDTL -> -> 0 `i `uc ]
+[; ;FT_62F21X_pwm.c: 421: P1DDTL=0;
 "421
-[e :U 147 ]
-[; ;FT_62F21X_pwm.c: 423: P1OE=0B00000000;
-"423
-[e = _P1OE -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 424: P1BR1=0B00001000;
+[e = _P1DDTL -> -> 0 `i `uc ]
+"422
+}
+[e :U 145 ]
+[; ;FT_62F21X_pwm.c: 422: }
+[; ;FT_62F21X_pwm.c: 424: if(power_off_flag == 1)
 "424
-[e = _P1BR1 -> -> 8 `i `uc ]
-[; ;FT_62F21X_pwm.c: 426: break;
+[e $ ! == -> _power_off_flag `i -> 1 `i 146  ]
+[; ;FT_62F21X_pwm.c: 425: {
+"425
+{
+[; ;FT_62F21X_pwm.c: 426: return;
 "426
-[e $U 144  ]
-[; ;FT_62F21X_pwm.c: 428: case 0x02:
-"428
-[e :U 148 ]
-[; ;FT_62F21X_pwm.c: 430: P1OE=0B00100000;
+[e $UE 143  ]
+"427
+}
+[e :U 146 ]
+[; ;FT_62F21X_pwm.c: 427: }
+[; ;FT_62F21X_pwm.c: 429: switch(ft_user_pwm_mode)
+"429
+[e $U 148  ]
+[; ;FT_62F21X_pwm.c: 430: {
 "430
-[e = _P1OE -> -> 32 `i `uc ]
-[; ;FT_62F21X_pwm.c: 431: P1BR1=0B00000000;
+{
+[; ;FT_62F21X_pwm.c: 431: case 0x00:
 "431
-[e = _P1BR1 -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 433: break;
-"433
-[e $U 144  ]
-[; ;FT_62F21X_pwm.c: 435: case 0x03:
-"435
 [e :U 149 ]
-[; ;FT_62F21X_pwm.c: 436: P1OE=0B10000000;
+[; ;FT_62F21X_pwm.c: 432: pwm_rate_value = 0;
+"432
+[e = _pwm_rate_value -> -> 0 `i `uc ]
+[; ;FT_62F21X_pwm.c: 433: pwm_colour_value = 0;
+"433
+[e = _pwm_colour_value -> -> 0 `i `uc ]
+[; ;FT_62F21X_pwm.c: 434: PWM1_RED();
+"434
+[e ( _PWM1_RED ..  ]
+[; ;FT_62F21X_pwm.c: 436: break;
 "436
-[e = _P1OE -> -> 128 `i `uc ]
-[; ;FT_62F21X_pwm.c: 437: P1BR1=0B00000000;
-"437
-[e = _P1BR1 -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 438: break;
+[e $U 147  ]
+[; ;FT_62F21X_pwm.c: 438: case 0x01:
 "438
-[e $U 144  ]
-[; ;FT_62F21X_pwm.c: 440: case 0x04:
-"440
 [e :U 150 ]
-[; ;FT_62F21X_pwm.c: 441: P1OE=0B00000000;
-"441
+[; ;FT_62F21X_pwm.c: 440: P1OE=0B00000000;
+"440
 [e = _P1OE -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 442: P1BR1=0B00000100;
-"442
-[e = _P1BR1 -> -> 4 `i `uc ]
+[; ;FT_62F21X_pwm.c: 441: P1BR1=0B00001000;
+"441
+[e = _P1BR1 -> -> 8 `i `uc ]
 [; ;FT_62F21X_pwm.c: 443: break;
 "443
-[e $U 144  ]
-[; ;FT_62F21X_pwm.c: 445: case 0x05:
+[e $U 147  ]
+[; ;FT_62F21X_pwm.c: 445: case 0x02:
 "445
 [e :U 151 ]
-[; ;FT_62F21X_pwm.c: 446: pwm_colour_value = 0;
-"446
-[e = _pwm_colour_value -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 448: P1OE=0B00000000;
+[; ;FT_62F21X_pwm.c: 447: P1OE=0B00100000;
+"447
+[e = _P1OE -> -> 32 `i `uc ]
+[; ;FT_62F21X_pwm.c: 448: P1BR1=0B00000000;
 "448
-[e = _P1OE -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 449: P1BR1=0B00001000;
-"449
-[e = _P1BR1 -> -> 8 `i `uc ]
-[; ;FT_62F21X_pwm.c: 451: break;
-"451
-[e $U 144  ]
-[; ;FT_62F21X_pwm.c: 453: case 0x06:
-"453
+[e = _P1BR1 -> -> 0 `i `uc ]
+[; ;FT_62F21X_pwm.c: 450: break;
+"450
+[e $U 147  ]
+[; ;FT_62F21X_pwm.c: 452: case 0x03:
+"452
 [e :U 152 ]
-[; ;FT_62F21X_pwm.c: 455: P1OE=0B00100000;
-"455
-[e = _P1OE -> -> 32 `i `uc ]
-[; ;FT_62F21X_pwm.c: 456: P1BR1=0B00001000;
-"456
-[e = _P1BR1 -> -> 8 `i `uc ]
-[; ;FT_62F21X_pwm.c: 458: break;
-"458
-[e $U 144  ]
-[; ;FT_62F21X_pwm.c: 460: case 0x07:
-"460
-[e :U 153 ]
-[; ;FT_62F21X_pwm.c: 462: P1OE=0B10000000;
-"462
+[; ;FT_62F21X_pwm.c: 453: P1OE=0B10000000;
+"453
 [e = _P1OE -> -> 128 `i `uc ]
-[; ;FT_62F21X_pwm.c: 463: P1BR1=0B00001000;
-"463
-[e = _P1BR1 -> -> 8 `i `uc ]
-[; ;FT_62F21X_pwm.c: 466: break;
-"466
-[e $U 144  ]
-[; ;FT_62F21X_pwm.c: 468: case 0x08:
-"468
-[e :U 154 ]
-[; ;FT_62F21X_pwm.c: 469: P1OE=0B00000000;
-"469
+[; ;FT_62F21X_pwm.c: 454: P1BR1=0B00000000;
+"454
+[e = _P1BR1 -> -> 0 `i `uc ]
+[; ;FT_62F21X_pwm.c: 455: break;
+"455
+[e $U 147  ]
+[; ;FT_62F21X_pwm.c: 457: case 0x04:
+"457
+[e :U 153 ]
+[; ;FT_62F21X_pwm.c: 458: P1OE=0B00000000;
+"458
 [e = _P1OE -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 470: P1BR1=0B00001100;
-"470
-[e = _P1BR1 -> -> 12 `i `uc ]
-[; ;FT_62F21X_pwm.c: 471: break;
-"471
-[e $U 144  ]
-[; ;FT_62F21X_pwm.c: 473: case 0x09:
-"473
-[e :U 155 ]
-[; ;FT_62F21X_pwm.c: 474: P1OE=0B10100000;
-"474
-[e = _P1OE -> -> 160 `i `uc ]
-[; ;FT_62F21X_pwm.c: 475: P1BR1=0B00001000;
-"475
-[e = _P1BR1 -> -> 8 `i `uc ]
-[; ;FT_62F21X_pwm.c: 476: break;
-"476
-[e $U 144  ]
-[; ;FT_62F21X_pwm.c: 478: case 0x0A:
-"478
-[e :U 156 ]
-[; ;FT_62F21X_pwm.c: 479: pwm_colour_value = 0;
-"479
+[; ;FT_62F21X_pwm.c: 459: P1BR1=0B00000100;
+"459
+[e = _P1BR1 -> -> 4 `i `uc ]
+[; ;FT_62F21X_pwm.c: 460: break;
+"460
+[e $U 147  ]
+[; ;FT_62F21X_pwm.c: 462: case 0x05:
+"462
+[e :U 154 ]
+[; ;FT_62F21X_pwm.c: 463: pwm_colour_value = 0;
+"463
 [e = _pwm_colour_value -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 480: P1OE=0B00100000;
-"480
+[; ;FT_62F21X_pwm.c: 465: P1OE=0B00000000;
+"465
+[e = _P1OE -> -> 0 `i `uc ]
+[; ;FT_62F21X_pwm.c: 466: P1BR1=0B00001000;
+"466
+[e = _P1BR1 -> -> 8 `i `uc ]
+[; ;FT_62F21X_pwm.c: 468: break;
+"468
+[e $U 147  ]
+[; ;FT_62F21X_pwm.c: 470: case 0x06:
+"470
+[e :U 155 ]
+[; ;FT_62F21X_pwm.c: 472: P1OE=0B00100000;
+"472
 [e = _P1OE -> -> 32 `i `uc ]
-[; ;FT_62F21X_pwm.c: 481: P1BR1=0B00001000;
-"481
+[; ;FT_62F21X_pwm.c: 473: P1BR1=0B00001000;
+"473
+[e = _P1BR1 -> -> 8 `i `uc ]
+[; ;FT_62F21X_pwm.c: 475: break;
+"475
+[e $U 147  ]
+[; ;FT_62F21X_pwm.c: 477: case 0x07:
+"477
+[e :U 156 ]
+[; ;FT_62F21X_pwm.c: 479: P1OE=0B10000000;
+"479
+[e = _P1OE -> -> 128 `i `uc ]
+[; ;FT_62F21X_pwm.c: 480: P1BR1=0B00001000;
+"480
 [e = _P1BR1 -> -> 8 `i `uc ]
 [; ;FT_62F21X_pwm.c: 483: break;
 "483
-[e $U 144  ]
-[; ;FT_62F21X_pwm.c: 484: default:
-"484
+[e $U 147  ]
+[; ;FT_62F21X_pwm.c: 485: case 0x08:
+"485
 [e :U 157 ]
-[; ;FT_62F21X_pwm.c: 486: break;
+[; ;FT_62F21X_pwm.c: 486: P1OE=0B00000000;
 "486
-[e $U 144  ]
+[e = _P1OE -> -> 0 `i `uc ]
+[; ;FT_62F21X_pwm.c: 487: P1BR1=0B00001100;
 "487
-}
-[; ;FT_62F21X_pwm.c: 487: }
-[e $U 144  ]
-"412
-[e :U 145 ]
-[e [\ _ft_user_pwm_mode , $ -> -> 0 `i `uc 146
- , $ -> -> 1 `i `uc 147
- , $ -> -> 2 `i `uc 148
- , $ -> -> 3 `i `uc 149
- , $ -> -> 4 `i `uc 150
- , $ -> -> 5 `i `uc 151
- , $ -> -> 6 `i `uc 152
- , $ -> -> 7 `i `uc 153
- , $ -> -> 8 `i `uc 154
- , $ -> -> 9 `i `uc 155
- , $ -> -> 10 `i `uc 156
- 157 ]
-"487
-[e :U 144 ]
-[; ;FT_62F21X_pwm.c: 489: }
-"489
-[e :UE 141 ]
-}
+[e = _P1BR1 -> -> 12 `i `uc ]
+[; ;FT_62F21X_pwm.c: 488: break;
+"488
+[e $U 147  ]
+[; ;FT_62F21X_pwm.c: 490: case 0x09:
+"490
+[e :U 158 ]
+[; ;FT_62F21X_pwm.c: 491: P1OE=0B10100000;
+"491
+[e = _P1OE -> -> 160 `i `uc ]
+[; ;FT_62F21X_pwm.c: 492: P1BR1=0B00001000;
 "492
+[e = _P1BR1 -> -> 8 `i `uc ]
+[; ;FT_62F21X_pwm.c: 493: break;
+"493
+[e $U 147  ]
+[; ;FT_62F21X_pwm.c: 495: case 0x0A:
+"495
+[e :U 159 ]
+[; ;FT_62F21X_pwm.c: 496: pwm_colour_value = 0;
+"496
+[e = _pwm_colour_value -> -> 0 `i `uc ]
+[; ;FT_62F21X_pwm.c: 497: P1OE=0B00100000;
+"497
+[e = _P1OE -> -> 32 `i `uc ]
+[; ;FT_62F21X_pwm.c: 498: P1BR1=0B00001000;
+"498
+[e = _P1BR1 -> -> 8 `i `uc ]
+[; ;FT_62F21X_pwm.c: 500: break;
+"500
+[e $U 147  ]
+[; ;FT_62F21X_pwm.c: 501: default:
+"501
+[e :U 160 ]
+[; ;FT_62F21X_pwm.c: 503: break;
+"503
+[e $U 147  ]
+"504
+}
+[; ;FT_62F21X_pwm.c: 504: }
+[e $U 147  ]
+"429
+[e :U 148 ]
+[e [\ _ft_user_pwm_mode , $ -> -> 0 `i `uc 149
+ , $ -> -> 1 `i `uc 150
+ , $ -> -> 2 `i `uc 151
+ , $ -> -> 3 `i `uc 152
+ , $ -> -> 4 `i `uc 153
+ , $ -> -> 5 `i `uc 154
+ , $ -> -> 6 `i `uc 155
+ , $ -> -> 7 `i `uc 156
+ , $ -> -> 8 `i `uc 157
+ , $ -> -> 9 `i `uc 158
+ , $ -> -> 10 `i `uc 159
+ 160 ]
+"504
+[e :U 147 ]
+[; ;FT_62F21X_pwm.c: 506: }
+"506
+[e :UE 143 ]
+}
+"509
 [v _SET_MODE_REFRESH `(v  1 ef ]
 {
-[; ;FT_62F21X_pwm.c: 491: void SET_MODE_REFRESH(void)
-[; ;FT_62F21X_pwm.c: 492: {
+[; ;FT_62F21X_pwm.c: 508: void SET_MODE_REFRESH(void)
+[; ;FT_62F21X_pwm.c: 509: {
 [e :U _SET_MODE_REFRESH ]
 [f ]
-[; ;FT_62F21X_pwm.c: 494: switch(ft_user_set_mode)
-"494
-[e $U 160  ]
-[; ;FT_62F21X_pwm.c: 495: {
-"495
-{
-[; ;FT_62F21X_pwm.c: 496: case 0x0B:
-"496
-[e :U 161 ]
-[; ;FT_62F21X_pwm.c: 497: if(jump_led_rate > 20)
-"497
-[e $ ! > -> _jump_led_rate `i -> 20 `i 162  ]
-[; ;FT_62F21X_pwm.c: 498: {
-"498
-{
-[; ;FT_62F21X_pwm.c: 499: jump_led_rate = jump_led_rate - 20;
-"499
-[e = _jump_led_rate -> - -> _jump_led_rate `i -> 20 `i `uc ]
-"500
-}
-[e :U 162 ]
-[; ;FT_62F21X_pwm.c: 500: }
-[; ;FT_62F21X_pwm.c: 501: if(ft_user_pwm_mode != 0)
-"501
-[e $ ! != -> _ft_user_pwm_mode `i -> 0 `i 163  ]
-[; ;FT_62F21X_pwm.c: 502: {
-"502
-{
-[; ;FT_62F21X_pwm.c: 503: P1CDTL=jump_led_rate;
-"503
-[e = _P1CDTL _jump_led_rate ]
-[; ;FT_62F21X_pwm.c: 504: P1DDTL=jump_led_rate;
-"504
-[e = _P1DDTL _jump_led_rate ]
-"505
-}
-[e :U 163 ]
-[; ;FT_62F21X_pwm.c: 505: }
-[; ;FT_62F21X_pwm.c: 506: break;
-"506
-[e $U 159  ]
-[; ;FT_62F21X_pwm.c: 509: case 0x0C:
-"509
-[e :U 164 ]
-[; ;FT_62F21X_pwm.c: 510: if(jump_led_rate < 100)
+[; ;FT_62F21X_pwm.c: 510: if(power_off_flag == 1)
 "510
-[e $ ! < -> _jump_led_rate `i -> 100 `i 165  ]
+[e $ ! == -> _power_off_flag `i -> 1 `i 162  ]
 [; ;FT_62F21X_pwm.c: 511: {
 "511
 {
-[; ;FT_62F21X_pwm.c: 512: jump_led_rate = jump_led_rate + 20;
+[; ;FT_62F21X_pwm.c: 512: if(ft_user_set_mode != 0x11)
 "512
-[e = _jump_led_rate -> + -> _jump_led_rate `i -> 20 `i `uc ]
+[e $ ! != -> _ft_user_set_mode `i -> 17 `i 163  ]
+[; ;FT_62F21X_pwm.c: 513: {
 "513
-}
-[e :U 165 ]
-[; ;FT_62F21X_pwm.c: 513: }
-[; ;FT_62F21X_pwm.c: 514: if(ft_user_pwm_mode != 0)
+{
+[; ;FT_62F21X_pwm.c: 514: return;
 "514
-[e $ ! != -> _ft_user_pwm_mode `i -> 0 `i 166  ]
-[; ;FT_62F21X_pwm.c: 515: {
+[e $UE 161  ]
 "515
-{
-[; ;FT_62F21X_pwm.c: 516: P1CDTL=jump_led_rate;
-"516
-[e = _P1CDTL _jump_led_rate ]
-[; ;FT_62F21X_pwm.c: 517: P1DDTL=jump_led_rate;
-"517
-[e = _P1DDTL _jump_led_rate ]
-"518
 }
-[e :U 166 ]
-[; ;FT_62F21X_pwm.c: 518: }
-[; ;FT_62F21X_pwm.c: 519: break;
+[e :U 163 ]
+"516
+}
+[e :U 162 ]
+[; ;FT_62F21X_pwm.c: 515: }
+[; ;FT_62F21X_pwm.c: 516: }
+[; ;FT_62F21X_pwm.c: 518: switch(ft_user_set_mode)
+"518
+[e $U 165  ]
+[; ;FT_62F21X_pwm.c: 519: {
 "519
-[e $U 159  ]
-[; ;FT_62F21X_pwm.c: 521: case 0x0D:
-"521
-[e :U 167 ]
-"522
-[e :U 168 ]
-"523
-[e :U 169 ]
-"524
-[e :U 170 ]
-[; ;FT_62F21X_pwm.c: 522: case 0x0E:
-[; ;FT_62F21X_pwm.c: 523: case 0x0F:
-[; ;FT_62F21X_pwm.c: 524: case 0x10:
-[; ;FT_62F21X_pwm.c: 525: P1OE=0B10100000;
-"525
-[e = _P1OE -> -> 160 `i `uc ]
-[; ;FT_62F21X_pwm.c: 526: P1BR1=0B00001100;
-"526
-[e = _P1BR1 -> -> 12 `i `uc ]
-[; ;FT_62F21X_pwm.c: 527: DelayMs(50);
-"527
-[e ( _DelayMs (1 -> -> 50 `i `uc ]
-[; ;FT_62F21X_pwm.c: 528: if(set_time_mode_backup != 0xff)
-"528
-[e $ ! != -> _set_time_mode_backup `i -> 255 `i 171  ]
-[; ;FT_62F21X_pwm.c: 529: {
-"529
 {
-[; ;FT_62F21X_pwm.c: 530: ft_user_pwm_mode = set_time_mode_backup;
+[; ;FT_62F21X_pwm.c: 520: case 0x0B:
+"520
+[e :U 166 ]
+[; ;FT_62F21X_pwm.c: 521: if(jump_led_rate > 20)
+"521
+[e $ ! > -> _jump_led_rate `i -> 20 `i 167  ]
+[; ;FT_62F21X_pwm.c: 522: {
+"522
+{
+[; ;FT_62F21X_pwm.c: 523: jump_led_rate = jump_led_rate - 20;
+"523
+[e = _jump_led_rate -> - -> _jump_led_rate `i -> 20 `i `uc ]
+"524
+}
+[e :U 167 ]
+[; ;FT_62F21X_pwm.c: 524: }
+[; ;FT_62F21X_pwm.c: 525: if(ft_user_pwm_mode != 0)
+"525
+[e $ ! != -> _ft_user_pwm_mode `i -> 0 `i 168  ]
+[; ;FT_62F21X_pwm.c: 526: {
+"526
+{
+[; ;FT_62F21X_pwm.c: 527: P1CDTL=jump_led_rate;
+"527
+[e = _P1CDTL _jump_led_rate ]
+[; ;FT_62F21X_pwm.c: 528: P1DDTL=jump_led_rate;
+"528
+[e = _P1DDTL _jump_led_rate ]
+"529
+}
+[e :U 168 ]
+[; ;FT_62F21X_pwm.c: 529: }
+[; ;FT_62F21X_pwm.c: 530: break;
 "530
-[e = _ft_user_pwm_mode _set_time_mode_backup ]
-[; ;FT_62F21X_pwm.c: 531: PWM_MODE_REFRESH();
-"531
-[e ( _PWM_MODE_REFRESH ..  ]
-"532
+[e $U 164  ]
+[; ;FT_62F21X_pwm.c: 533: case 0x0C:
+"533
+[e :U 169 ]
+[; ;FT_62F21X_pwm.c: 534: if(jump_led_rate < 100)
+"534
+[e $ ! < -> _jump_led_rate `i -> 100 `i 170  ]
+[; ;FT_62F21X_pwm.c: 535: {
+"535
+{
+[; ;FT_62F21X_pwm.c: 536: jump_led_rate = jump_led_rate + 20;
+"536
+[e = _jump_led_rate -> + -> _jump_led_rate `i -> 20 `i `uc ]
+"537
+}
+[e :U 170 ]
+[; ;FT_62F21X_pwm.c: 537: }
+[; ;FT_62F21X_pwm.c: 538: if(ft_user_pwm_mode != 0)
+"538
+[e $ ! != -> _ft_user_pwm_mode `i -> 0 `i 171  ]
+[; ;FT_62F21X_pwm.c: 539: {
+"539
+{
+[; ;FT_62F21X_pwm.c: 540: P1CDTL=jump_led_rate;
+"540
+[e = _P1CDTL _jump_led_rate ]
+[; ;FT_62F21X_pwm.c: 541: P1DDTL=jump_led_rate;
+"541
+[e = _P1DDTL _jump_led_rate ]
+"542
 }
 [e :U 171 ]
-[; ;FT_62F21X_pwm.c: 532: }
-[; ;FT_62F21X_pwm.c: 533: break;
-"533
-[e $U 159  ]
-[; ;FT_62F21X_pwm.c: 535: case 0x11:
-"535
-[e :U 172 ]
-[; ;FT_62F21X_pwm.c: 536: if(power_off_mode_backup != 0xff)
-"536
-[e $ ! != -> _power_off_mode_backup `i -> 255 `i 173  ]
-[; ;FT_62F21X_pwm.c: 537: {
-"537
-{
-[; ;FT_62F21X_pwm.c: 538: ft_user_pwm_mode = power_off_mode_backup;
-"538
-[e = _ft_user_pwm_mode _power_off_mode_backup ]
-[; ;FT_62F21X_pwm.c: 539: PWM_MODE_REFRESH();
-"539
-[e ( _PWM_MODE_REFRESH ..  ]
-"540
-}
-[e :U 173 ]
-[; ;FT_62F21X_pwm.c: 540: }
-[; ;FT_62F21X_pwm.c: 541: power_off_mode_backup = 0xff;
-"541
-[e = _power_off_mode_backup -> -> 255 `i `uc ]
-[; ;FT_62F21X_pwm.c: 542: power_off_flag = 0;
-"542
-[e = _power_off_flag -> -> 0 `i `uc ]
+[; ;FT_62F21X_pwm.c: 542: }
 [; ;FT_62F21X_pwm.c: 543: break;
 "543
-[e $U 159  ]
-[; ;FT_62F21X_pwm.c: 545: case 0x12:
+[e $U 164  ]
+[; ;FT_62F21X_pwm.c: 545: case 0x0D:
 "545
-[e :U 174 ]
-[; ;FT_62F21X_pwm.c: 546: P1OE=0B00000000;
+[e :U 172 ]
 "546
-[e = _P1OE -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 547: P1BR1=0B00000000;
+[e :U 173 ]
 "547
-[e = _P1BR1 -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 548: power_off_flag = 1;
+[e :U 174 ]
 "548
-[e = _power_off_flag -> -> 1 `i `uc ]
-[; ;FT_62F21X_pwm.c: 549: break;
-"549
-[e $U 159  ]
-[; ;FT_62F21X_pwm.c: 552: default:
-"552
 [e :U 175 ]
-[; ;FT_62F21X_pwm.c: 554: break;
+[; ;FT_62F21X_pwm.c: 546: case 0x0E:
+[; ;FT_62F21X_pwm.c: 547: case 0x0F:
+[; ;FT_62F21X_pwm.c: 548: case 0x10:
+[; ;FT_62F21X_pwm.c: 549: auto_power_off_timer_H = (ft_user_set_mode - 0x0C);
+"549
+[e = _auto_power_off_timer_H -> -> - -> _ft_user_set_mode `i -> 12 `i `l `ul ]
+[; ;FT_62F21X_pwm.c: 550: auto_power_off_timer_H = auto_power_off_timer_H*180000;
+"550
+[e = _auto_power_off_timer_H * _auto_power_off_timer_H -> -> 180000 `l `ul ]
+[; ;FT_62F21X_pwm.c: 551: P1CDTL=100;
+"551
+[e = _P1CDTL -> -> 100 `i `uc ]
+[; ;FT_62F21X_pwm.c: 552: P1DDTL=100;
+"552
+[e = _P1DDTL -> -> 100 `i `uc ]
+[; ;FT_62F21X_pwm.c: 553: P1OE=0B10100000;
+"553
+[e = _P1OE -> -> 160 `i `uc ]
+[; ;FT_62F21X_pwm.c: 554: P1BR1=0B00001100;
 "554
-[e $U 159  ]
+[e = _P1BR1 -> -> 12 `i `uc ]
+[; ;FT_62F21X_pwm.c: 555: DelayMs(50);
 "555
-}
-[; ;FT_62F21X_pwm.c: 555: }
-[e $U 159  ]
-"494
-[e :U 160 ]
-[e [\ _ft_user_set_mode , $ -> -> 11 `i `uc 161
- , $ -> -> 12 `i `uc 164
- , $ -> -> 13 `i `uc 167
- , $ -> -> 14 `i `uc 168
- , $ -> -> 15 `i `uc 169
- , $ -> -> 16 `i `uc 170
- , $ -> -> 17 `i `uc 172
- , $ -> -> 18 `i `uc 174
- 175 ]
-"555
-[e :U 159 ]
-[; ;FT_62F21X_pwm.c: 557: }
+[e ( _DelayMs (1 -> -> 50 `i `uc ]
+[; ;FT_62F21X_pwm.c: 556: if(set_time_mode_backup != 0xff)
+"556
+[e $ ! != -> _set_time_mode_backup `i -> 255 `i 176  ]
+[; ;FT_62F21X_pwm.c: 557: {
 "557
-[e :UE 158 ]
+{
+[; ;FT_62F21X_pwm.c: 558: ft_user_pwm_mode = set_time_mode_backup;
+"558
+[e = _ft_user_pwm_mode _set_time_mode_backup ]
+[; ;FT_62F21X_pwm.c: 559: PWM_MODE_REFRESH();
+"559
+[e ( _PWM_MODE_REFRESH ..  ]
+"560
+}
+[e :U 176 ]
+[; ;FT_62F21X_pwm.c: 560: }
+[; ;FT_62F21X_pwm.c: 561: break;
+"561
+[e $U 164  ]
+[; ;FT_62F21X_pwm.c: 563: case 0x11:
+"563
+[e :U 177 ]
+[; ;FT_62F21X_pwm.c: 564: power_off_flag = 0;
+"564
+[e = _power_off_flag -> -> 0 `i `uc ]
+[; ;FT_62F21X_pwm.c: 566: if(power_off_mode_backup < 0x0B)
+"566
+[e $ ! < -> _power_off_mode_backup `i -> 11 `i 178  ]
+[; ;FT_62F21X_pwm.c: 567: {
+"567
+{
+[; ;FT_62F21X_pwm.c: 568: ft_user_pwm_mode = power_off_mode_backup;
+"568
+[e = _ft_user_pwm_mode _power_off_mode_backup ]
+[; ;FT_62F21X_pwm.c: 569: PWM_MODE_REFRESH();
+"569
+[e ( _PWM_MODE_REFRESH ..  ]
+"570
+}
+[; ;FT_62F21X_pwm.c: 570: }
+[e $U 179  ]
+"571
+[e :U 178 ]
+[; ;FT_62F21X_pwm.c: 571: else
+[; ;FT_62F21X_pwm.c: 572: {
+"572
+{
+[; ;FT_62F21X_pwm.c: 573: ft_user_pwm_mode = 0;
+"573
+[e = _ft_user_pwm_mode -> -> 0 `i `uc ]
+[; ;FT_62F21X_pwm.c: 574: PWM_MODE_REFRESH();
+"574
+[e ( _PWM_MODE_REFRESH ..  ]
+"575
+}
+[e :U 179 ]
+[; ;FT_62F21X_pwm.c: 575: }
+[; ;FT_62F21X_pwm.c: 576: power_off_mode_backup = 0xff;
+"576
+[e = _power_off_mode_backup -> -> 255 `i `uc ]
+[; ;FT_62F21X_pwm.c: 577: break;
+"577
+[e $U 164  ]
+[; ;FT_62F21X_pwm.c: 579: case 0x12:
+"579
+[e :U 180 ]
+[; ;FT_62F21X_pwm.c: 580: P1OE=0B00000000;
+"580
+[e = _P1OE -> -> 0 `i `uc ]
+[; ;FT_62F21X_pwm.c: 581: P1BR1=0B00000000;
+"581
+[e = _P1BR1 -> -> 0 `i `uc ]
+[; ;FT_62F21X_pwm.c: 582: power_off_flag = 1;
+"582
+[e = _power_off_flag -> -> 1 `i `uc ]
+[; ;FT_62F21X_pwm.c: 583: auto_power_off_timer_H = 0;
+"583
+[e = _auto_power_off_timer_H -> -> -> 0 `i `l `ul ]
+[; ;FT_62F21X_pwm.c: 584: break;
+"584
+[e $U 164  ]
+[; ;FT_62F21X_pwm.c: 587: default:
+"587
+[e :U 181 ]
+[; ;FT_62F21X_pwm.c: 589: break;
+"589
+[e $U 164  ]
+"590
+}
+[; ;FT_62F21X_pwm.c: 590: }
+[e $U 164  ]
+"518
+[e :U 165 ]
+[e [\ _ft_user_set_mode , $ -> -> 11 `i `uc 166
+ , $ -> -> 12 `i `uc 169
+ , $ -> -> 13 `i `uc 172
+ , $ -> -> 14 `i `uc 173
+ , $ -> -> 15 `i `uc 174
+ , $ -> -> 16 `i `uc 175
+ , $ -> -> 17 `i `uc 177
+ , $ -> -> 18 `i `uc 180
+ 181 ]
+"590
+[e :U 164 ]
+[; ;FT_62F21X_pwm.c: 592: }
+"592
+[e :UE 161 ]
 }

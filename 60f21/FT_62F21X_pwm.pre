@@ -953,6 +953,8 @@ extern unsigned char power_off_mode_backup;
 extern unsigned char set_time_mode_backup;
 extern unsigned char ft_user_set_mode;
 extern unsigned char power_off_flag;
+extern unsigned char auto_power_off_timer_L;
+extern unsigned long auto_power_off_timer_H;
 
 
 extern void PWM1_INITIAL(void);
@@ -983,12 +985,17 @@ unsigned char power_off_mode_backup = 0xff;
 unsigned char set_time_mode_backup = 0xff;
 unsigned char power_off_flag = 0;
 
-# 26
+unsigned char auto_power_off_timer_L = 0;
+
+
+unsigned long auto_power_off_timer_H = 0;
+
+# 32
 void PWM1_INITIAL(void)
 {
 T2CON0=0B00000001;
 
-# 34
+# 40
 T2CON1=0B00000000;
 
 
@@ -1007,13 +1014,13 @@ P1DDTL=0;
 
 P1POL=0B00000000;
 
-# 57
+# 63
 P1CON=0B00000000;
 
-# 64
+# 70
 P1AUX=0B00000000;
 
-# 72
+# 78
 PWM1_RED();
 pwm_colour_value = 0;
 
@@ -1034,10 +1041,10 @@ P1DDTL=0;
 
 P1OE=0B00000000;
 
-# 98
+# 104
 P1BR1=0B00001000;
 
-# 115
+# 121
 }
 
 void PWM1_GREEN(void)
@@ -1048,10 +1055,10 @@ P1DDTL=0;
 
 P1OE=0B00100000;
 
-# 131
+# 137
 P1BR1=0B00000000;
 
-# 148
+# 154
 }
 
 void PWM1_BLUE(void)
@@ -1061,7 +1068,7 @@ P1DDTL=0;
 
 P1OE=0B10000000;
 
-# 163
+# 169
 P1BR1=0B00000000;
 
 
@@ -1075,7 +1082,7 @@ P1DDTL=0;
 
 P1OE=0B00000000;
 
-# 182
+# 188
 P1BR1=0B00000100;
 
 
@@ -1187,7 +1194,14 @@ break;
 void PWM_MODE_CHANGE(void)
 {
 ft_user_pwm_mode++;
-ft_user_pwm_mode = ft_user_pwm_mode%6;
+if(ft_user_pwm_mode == 6)
+{
+ft_user_pwm_mode = 0;
+}
+if(ft_user_pwm_mode > 6)
+{
+ft_user_pwm_mode = 1;
+}
 PWM_MODE_REFRESH();
 
 }
@@ -1237,7 +1251,7 @@ break;
 }
 }
 
-# 350
+# 363
 void DelayUs(unsigned char Time)
 {
 unsigned char a;
@@ -1247,7 +1261,7 @@ _nop();
 }
 }
 
-# 364
+# 377
 void DelayMs(unsigned char Time)
 {
 unsigned char a,b;
@@ -1260,16 +1274,20 @@ DelayUs(98);
 }
 }
 
-# 396
+# 409
 void PWM_MODE_REFRESH(void)
 {
 reset_led_status();
 
-jump_led_rate = 100;
 if(ft_user_pwm_mode != 0)
 {
 P1CDTL=jump_led_rate;
 P1DDTL=jump_led_rate;
+}
+else
+{
+P1CDTL=0;
+P1DDTL=0;
 }
 
 if(power_off_flag == 1)
@@ -1358,6 +1376,13 @@ break;
 
 void SET_MODE_REFRESH(void)
 {
+if(power_off_flag == 1)
+{
+if(ft_user_set_mode != 0x11)
+{
+return;
+}
+}
 
 switch(ft_user_set_mode)
 {
@@ -1390,6 +1415,10 @@ case 0x0D:
 case 0x0E:
 case 0x0F:
 case 0x10:
+auto_power_off_timer_H = (ft_user_set_mode - 0x0C);
+auto_power_off_timer_H = auto_power_off_timer_H*180000;
+P1CDTL=100;
+P1DDTL=100;
 P1OE=0B10100000;
 P1BR1=0B00001100;
 DelayMs(50);
@@ -1401,19 +1430,26 @@ PWM_MODE_REFRESH();
 break;
 
 case 0x11:
-if(power_off_mode_backup != 0xff)
+power_off_flag = 0;
+
+if(power_off_mode_backup < 0x0B)
 {
 ft_user_pwm_mode = power_off_mode_backup;
 PWM_MODE_REFRESH();
 }
+else
+{
+ft_user_pwm_mode = 0;
+PWM_MODE_REFRESH();
+}
 power_off_mode_backup = 0xff;
-power_off_flag = 0;
 break;
 
 case 0x12:
 P1OE=0B00000000;
 P1BR1=0B00000000;
 power_off_flag = 1;
+auto_power_off_timer_H = 0;
 break;
 
 
