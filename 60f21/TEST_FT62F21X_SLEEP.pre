@@ -974,6 +974,7 @@ extern void JUMP_MODE_CHANGE(void);
 extern void PWM_MODE_REFRESH(void);
 extern void MIX_MODE_CHANGE(void);
 extern void SET_MODE_REFRESH(void);
+extern void DelayMs(unsigned char Time);
 
 # 20 "TEST_FT62F21X_SLEEP.C"
 ;
@@ -1114,7 +1115,7 @@ INTCON = 0;
 
 PORTA = 0B00000000;
 TRISA = 0B00010000;
-WPUA = 0B00000000;
+WPUA = 0B00010000;
 
 OPTION = 0B00001000;
 
@@ -1196,7 +1197,7 @@ SET_MODE_REFRESH();
 }
 }
 
-if(PORTA & 0B00010000)
+if(RA4)
 {
 key_release = 0;
 }
@@ -1204,8 +1205,20 @@ else
 {
 if(key_release == 0)
 {
+
+DelayMs(1);
+if(!RA4)
+{
+DelayMs(1);
+if(!RA4)
+{
 reset_led_status();
 PWM_MODE_CHANGE();
+}
+
+}
+
+# 252
 }
 key_release = 1;
 
@@ -1222,10 +1235,6 @@ for(i = 0;i < 19;i++)
 if(ir_key_value[i*2] == IRDataTimer[3])
 {
 temp_mode = ir_key_value[i*2 + 1];
-if(temp_mode == 0x12)
-{
-power_off_mode_backup = ft_user_pwm_mode;
-}
 if(temp_mode >= 0x0D && temp_mode <= 0x10)
 {
 set_time_mode_backup = ft_user_pwm_mode;

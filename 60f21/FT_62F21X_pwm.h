@@ -27,6 +27,7 @@ extern void JUMP_MODE_CHANGE(void);
 extern void PWM_MODE_REFRESH(void);
 extern void MIX_MODE_CHANGE(void);
 extern void SET_MODE_REFRESH(void);
+extern void DelayMs(unsigned char Time);
 
 #endif
 

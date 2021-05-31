@@ -138,7 +138,7 @@ void POWER_INITIAL (void)
 
 	PORTA = 0B00000000;				
 	TRISA = 0B00010000;				//PA输入输出 0-输出 1-输入  
-	WPUA = 0B00000000;     		//PA端口上拉控制 1-开上拉 0-关上拉
+	WPUA = 0B00010000;     		//PA端口上拉控制 1-开上拉 0-关上拉
 
 	OPTION = 0B00001000;			//Bit3=1 WDT MODE,PS=000=1:1 WDT RATE
 													//Bit7(PAPU)=0 由WPUA决定是否上拉
@@ -224,7 +224,7 @@ void main(void)
 			}
 		}
 		
-		if(PORTA & 0B00010000)
+		if(RA4)
 		{
 			key_release = 0;
 		}
@@ -232,8 +232,23 @@ void main(void)
 		{
 			if(key_release == 0)
 			{
-				reset_led_status();
-				PWM_MODE_CHANGE();
+			#if 1
+				DelayMs(1);
+				if(!RA4)
+				{
+					DelayMs(1);
+					if(!RA4)
+					{
+						reset_led_status();
+						PWM_MODE_CHANGE();
+					}
+
+				}
+			#else
+			reset_led_status();
+			PWM_MODE_CHANGE();
+
+			#endif
 			}
 			key_release = 1;
 			
@@ -250,10 +265,6 @@ void main(void)
 				if(ir_key_value[i*2] == IRDataTimer[3])
 				{
 					temp_mode = ir_key_value[i*2 + 1];					
-					if(temp_mode == 0x12)
-					{
-						power_off_mode_backup = ft_user_pwm_mode;
-					}
 					if(temp_mode >= 0x0D && temp_mode <= 0x10)
 					{
 						set_time_mode_backup = ft_user_pwm_mode;

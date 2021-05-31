@@ -872,10 +872,10 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _ft_user_set_mode `uc  0 e ]
 "29 FT_62F21X_pwm.h
 [v _SET_MODE_REFRESH `(v  0 ef ]
+"30 FT_62F21X_pwm.h
+[v _DelayMs `(v  0 ef1`uc ]
 "25 FT_62F21X_pwm.h
 [v _PWM_MODE_CHANGE `(v  0 ef ]
-"11 FT_62F21X_pwm.h
-[v _power_off_mode_backup `uc  0 e ]
 "12 FT_62F21X_pwm.h
 [v _set_time_mode_backup `uc  0 e ]
 "27 FT_62F21X_pwm.h
@@ -1604,6 +1604,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;FT_62F21X_pwm.h: 27: extern void PWM_MODE_REFRESH(void);
 [; ;FT_62F21X_pwm.h: 28: extern void MIX_MODE_CHANGE(void);
 [; ;FT_62F21X_pwm.h: 29: extern void SET_MODE_REFRESH(void);
+[; ;FT_62F21X_pwm.h: 30: extern void DelayMs(unsigned char Time);
 [; ;TEST_FT62F21X_SLEEP.C: 20: ;
 [; ;FT_62F21X_IR.h: 4: ;
 [; ;FT_62F21X_IR.h: 5: ;
@@ -1721,8 +1722,8 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;TEST_FT62F21X_SLEEP.C: 51: 0xF0,0x12,
 [; ;TEST_FT62F21X_SLEEP.C: 52: };
 "61
-[v F943 `(v  1 tf ]
-[v _ISR `IF943  1 e ]
+[v F945 `(v  1 tf ]
+[v _ISR `IF945  1 e ]
 {
 [; ;TEST_FT62F21X_SLEEP.C: 60: void interrupt ISR(void)
 [; ;TEST_FT62F21X_SLEEP.C: 61: {
@@ -1918,9 +1919,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;TEST_FT62F21X_SLEEP.C: 140: TRISA = 0B00010000;
 "140
 [e = _TRISA -> -> 16 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 141: WPUA = 0B00000000;
+[; ;TEST_FT62F21X_SLEEP.C: 141: WPUA = 0B00010000;
 "141
-[e = _WPUA -> -> 0 `i `uc ]
+[e = _WPUA -> -> 16 `i `uc ]
 [; ;TEST_FT62F21X_SLEEP.C: 143: OPTION = 0B00001000;
 "143
 [e = _OPTION -> -> 8 `i `uc ]
@@ -2141,9 +2142,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;TEST_FT62F21X_SLEEP.C: 223: }
 [; ;TEST_FT62F21X_SLEEP.C: 224: }
 [; ;TEST_FT62F21X_SLEEP.C: 225: }
-[; ;TEST_FT62F21X_SLEEP.C: 227: if(PORTA & 0B00010000)
+[; ;TEST_FT62F21X_SLEEP.C: 227: if(RA4)
 "227
-[e $ ! != & -> _PORTA `i -> 16 `i -> 0 `i 115  ]
+[e $ ! _RA4 115  ]
 [; ;TEST_FT62F21X_SLEEP.C: 228: {
 "228
 {
@@ -2166,147 +2167,160 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;TEST_FT62F21X_SLEEP.C: 234: {
 "234
 {
-[; ;TEST_FT62F21X_SLEEP.C: 235: reset_led_status();
-"235
-[e ( _reset_led_status ..  ]
-[; ;TEST_FT62F21X_SLEEP.C: 236: PWM_MODE_CHANGE();
+[; ;TEST_FT62F21X_SLEEP.C: 236: DelayMs(1);
 "236
-[e ( _PWM_MODE_CHANGE ..  ]
+[e ( _DelayMs (1 -> -> 1 `i `uc ]
+[; ;TEST_FT62F21X_SLEEP.C: 237: if(!RA4)
 "237
+[e $ ! ! _RA4 118  ]
+[; ;TEST_FT62F21X_SLEEP.C: 238: {
+"238
+{
+[; ;TEST_FT62F21X_SLEEP.C: 239: DelayMs(1);
+"239
+[e ( _DelayMs (1 -> -> 1 `i `uc ]
+[; ;TEST_FT62F21X_SLEEP.C: 240: if(!RA4)
+"240
+[e $ ! ! _RA4 119  ]
+[; ;TEST_FT62F21X_SLEEP.C: 241: {
+"241
+{
+[; ;TEST_FT62F21X_SLEEP.C: 242: reset_led_status();
+"242
+[e ( _reset_led_status ..  ]
+[; ;TEST_FT62F21X_SLEEP.C: 243: PWM_MODE_CHANGE();
+"243
+[e ( _PWM_MODE_CHANGE ..  ]
+"244
+}
+[e :U 119 ]
+"246
+}
+[e :U 118 ]
+"252
 }
 [e :U 117 ]
-[; ;TEST_FT62F21X_SLEEP.C: 237: }
-[; ;TEST_FT62F21X_SLEEP.C: 238: key_release = 1;
-"238
+[; ;TEST_FT62F21X_SLEEP.C: 244: }
+[; ;TEST_FT62F21X_SLEEP.C: 246: }
+[; ;TEST_FT62F21X_SLEEP.C: 252: }
+[; ;TEST_FT62F21X_SLEEP.C: 253: key_release = 1;
+"253
 [e = _key_release -> -> 1 `i `uc ]
-"240
+"255
 }
 [e :U 116 ]
-[; ;TEST_FT62F21X_SLEEP.C: 240: }
-[; ;TEST_FT62F21X_SLEEP.C: 242: if(ReceiveFinish)
-"242
-[e $ ! != -> _ReceiveFinish `i -> -> -> 0 `i `uc `i 118  ]
-[; ;TEST_FT62F21X_SLEEP.C: 243: {
-"243
-{
-"244
-[v _i `uc  1 a ]
-[; ;TEST_FT62F21X_SLEEP.C: 244: unsigned char i;
-[; ;TEST_FT62F21X_SLEEP.C: 246: ReceiveFinish = 0;
-"246
-[e = _ReceiveFinish -> -> 0 `i `uc ]
-[; ;TEST_FT62F21X_SLEEP.C: 248: for(i = 0;i < 19;i++)
-"248
-{
-[e = _i -> -> 0 `i `uc ]
-[e $ < -> _i `i -> 19 `i 119  ]
-[e $U 120  ]
-"249
-[e :U 119 ]
-[; ;TEST_FT62F21X_SLEEP.C: 249: {
-{
-[; ;TEST_FT62F21X_SLEEP.C: 250: if(ir_key_value[i*2] == IRDataTimer[3])
-"250
-[e $ ! == -> *U + &U _ir_key_value * -> -> * -> _i `i -> 2 `i `ui `ux -> -> # *U &U _ir_key_value `ui `ux `i -> *U + &U _IRDataTimer * -> -> -> 3 `i `ui `ux -> -> # *U &U _IRDataTimer `ui `ux `i 122  ]
-[; ;TEST_FT62F21X_SLEEP.C: 251: {
-"251
-{
-[; ;TEST_FT62F21X_SLEEP.C: 252: temp_mode = ir_key_value[i*2 + 1];
-"252
-[e = _temp_mode *U + &U _ir_key_value * -> -> + * -> _i `i -> 2 `i -> 1 `i `ui `ux -> -> # *U &U _ir_key_value `ui `ux ]
-[; ;TEST_FT62F21X_SLEEP.C: 253: if(temp_mode == 0x12)
-"253
-[e $ ! == -> _temp_mode `i -> 18 `i 123  ]
-[; ;TEST_FT62F21X_SLEEP.C: 254: {
-"254
-{
-[; ;TEST_FT62F21X_SLEEP.C: 255: power_off_mode_backup = ft_user_pwm_mode;
-"255
-[e = _power_off_mode_backup _ft_user_pwm_mode ]
-"256
-}
-[e :U 123 ]
-[; ;TEST_FT62F21X_SLEEP.C: 256: }
-[; ;TEST_FT62F21X_SLEEP.C: 257: if(temp_mode >= 0x0D && temp_mode <= 0x10)
+[; ;TEST_FT62F21X_SLEEP.C: 255: }
+[; ;TEST_FT62F21X_SLEEP.C: 257: if(ReceiveFinish)
 "257
-[e $ ! && >= -> _temp_mode `i -> 13 `i <= -> _temp_mode `i -> 16 `i 124  ]
+[e $ ! != -> _ReceiveFinish `i -> -> -> 0 `i `uc `i 120  ]
 [; ;TEST_FT62F21X_SLEEP.C: 258: {
 "258
 {
-[; ;TEST_FT62F21X_SLEEP.C: 259: set_time_mode_backup = ft_user_pwm_mode;
 "259
-[e = _set_time_mode_backup _ft_user_pwm_mode ]
-"260
-}
-[e :U 124 ]
-[; ;TEST_FT62F21X_SLEEP.C: 260: }
-[; ;TEST_FT62F21X_SLEEP.C: 261: if(temp_mode < 0x0B)
+[v _i `uc  1 a ]
+[; ;TEST_FT62F21X_SLEEP.C: 259: unsigned char i;
+[; ;TEST_FT62F21X_SLEEP.C: 261: ReceiveFinish = 0;
 "261
-[e $ ! < -> _temp_mode `i -> 11 `i 125  ]
-[; ;TEST_FT62F21X_SLEEP.C: 262: {
-"262
-{
-[; ;TEST_FT62F21X_SLEEP.C: 263: if(ft_user_pwm_mode != temp_mode)
+[e = _ReceiveFinish -> -> 0 `i `uc ]
+[; ;TEST_FT62F21X_SLEEP.C: 263: for(i = 0;i < 19;i++)
 "263
-[e $ ! != -> _ft_user_pwm_mode `i -> _temp_mode `i 126  ]
-[; ;TEST_FT62F21X_SLEEP.C: 264: {
+{
+[e = _i -> -> 0 `i `uc ]
+[e $ < -> _i `i -> 19 `i 121  ]
+[e $U 122  ]
 "264
+[e :U 121 ]
+[; ;TEST_FT62F21X_SLEEP.C: 264: {
 {
-[; ;TEST_FT62F21X_SLEEP.C: 265: ft_user_pwm_mode = temp_mode;
+[; ;TEST_FT62F21X_SLEEP.C: 265: if(ir_key_value[i*2] == IRDataTimer[3])
 "265
-[e = _ft_user_pwm_mode _temp_mode ]
-[; ;TEST_FT62F21X_SLEEP.C: 266: PWM_MODE_REFRESH();
+[e $ ! == -> *U + &U _ir_key_value * -> -> * -> _i `i -> 2 `i `ui `ux -> -> # *U &U _ir_key_value `ui `ux `i -> *U + &U _IRDataTimer * -> -> -> 3 `i `ui `ux -> -> # *U &U _IRDataTimer `ui `ux `i 124  ]
+[; ;TEST_FT62F21X_SLEEP.C: 266: {
 "266
-[e ( _PWM_MODE_REFRESH ..  ]
-"267
-}
-[e :U 126 ]
-"268
-}
-[; ;TEST_FT62F21X_SLEEP.C: 267: }
-[; ;TEST_FT62F21X_SLEEP.C: 268: }
-[e $U 127  ]
-"269
-[e :U 125 ]
-[; ;TEST_FT62F21X_SLEEP.C: 269: else
-[; ;TEST_FT62F21X_SLEEP.C: 270: {
-"270
 {
-[; ;TEST_FT62F21X_SLEEP.C: 271: ft_user_set_mode = temp_mode;
+[; ;TEST_FT62F21X_SLEEP.C: 267: temp_mode = ir_key_value[i*2 + 1];
+"267
+[e = _temp_mode *U + &U _ir_key_value * -> -> + * -> _i `i -> 2 `i -> 1 `i `ui `ux -> -> # *U &U _ir_key_value `ui `ux ]
+[; ;TEST_FT62F21X_SLEEP.C: 268: if(temp_mode >= 0x0D && temp_mode <= 0x10)
+"268
+[e $ ! && >= -> _temp_mode `i -> 13 `i <= -> _temp_mode `i -> 16 `i 125  ]
+[; ;TEST_FT62F21X_SLEEP.C: 269: {
+"269
+{
+[; ;TEST_FT62F21X_SLEEP.C: 270: set_time_mode_backup = ft_user_pwm_mode;
+"270
+[e = _set_time_mode_backup _ft_user_pwm_mode ]
 "271
-[e = _ft_user_set_mode _temp_mode ]
-[; ;TEST_FT62F21X_SLEEP.C: 272: SET_MODE_REFRESH();
+}
+[e :U 125 ]
+[; ;TEST_FT62F21X_SLEEP.C: 271: }
+[; ;TEST_FT62F21X_SLEEP.C: 272: if(temp_mode < 0x0B)
 "272
-[e ( _SET_MODE_REFRESH ..  ]
+[e $ ! < -> _temp_mode `i -> 11 `i 126  ]
+[; ;TEST_FT62F21X_SLEEP.C: 273: {
 "273
+{
+[; ;TEST_FT62F21X_SLEEP.C: 274: if(ft_user_pwm_mode != temp_mode)
+"274
+[e $ ! != -> _ft_user_pwm_mode `i -> _temp_mode `i 127  ]
+[; ;TEST_FT62F21X_SLEEP.C: 275: {
+"275
+{
+[; ;TEST_FT62F21X_SLEEP.C: 276: ft_user_pwm_mode = temp_mode;
+"276
+[e = _ft_user_pwm_mode _temp_mode ]
+[; ;TEST_FT62F21X_SLEEP.C: 277: PWM_MODE_REFRESH();
+"277
+[e ( _PWM_MODE_REFRESH ..  ]
+"278
 }
 [e :U 127 ]
-"274
+"279
 }
-[e :U 122 ]
-"275
+[; ;TEST_FT62F21X_SLEEP.C: 278: }
+[; ;TEST_FT62F21X_SLEEP.C: 279: }
+[e $U 128  ]
+"280
+[e :U 126 ]
+[; ;TEST_FT62F21X_SLEEP.C: 280: else
+[; ;TEST_FT62F21X_SLEEP.C: 281: {
+"281
+{
+[; ;TEST_FT62F21X_SLEEP.C: 282: ft_user_set_mode = temp_mode;
+"282
+[e = _ft_user_set_mode _temp_mode ]
+[; ;TEST_FT62F21X_SLEEP.C: 283: SET_MODE_REFRESH();
+"283
+[e ( _SET_MODE_REFRESH ..  ]
+"284
 }
-"248
+[e :U 128 ]
+"285
+}
+[e :U 124 ]
+"286
+}
+"263
 [e ++ _i -> -> 1 `i `uc ]
-[e $ < -> _i `i -> 19 `i 119  ]
+[e $ < -> _i `i -> 19 `i 121  ]
+[e :U 122 ]
+"286
+}
+"288
+}
 [e :U 120 ]
-"275
-}
-"277
-}
-[e :U 118 ]
-"278
+"289
 }
 [e :U 100 ]
 "168
 [e $U 101  ]
 [e :U 102 ]
-[; ;TEST_FT62F21X_SLEEP.C: 273: }
-[; ;TEST_FT62F21X_SLEEP.C: 274: }
-[; ;TEST_FT62F21X_SLEEP.C: 275: }
-[; ;TEST_FT62F21X_SLEEP.C: 277: }
-[; ;TEST_FT62F21X_SLEEP.C: 278: }
-[; ;TEST_FT62F21X_SLEEP.C: 279: }
-"279
+[; ;TEST_FT62F21X_SLEEP.C: 284: }
+[; ;TEST_FT62F21X_SLEEP.C: 285: }
+[; ;TEST_FT62F21X_SLEEP.C: 286: }
+[; ;TEST_FT62F21X_SLEEP.C: 288: }
+[; ;TEST_FT62F21X_SLEEP.C: 289: }
+[; ;TEST_FT62F21X_SLEEP.C: 290: }
+"290
 [e :UE 99 ]
 }

@@ -547,22 +547,137 @@ void SET_MODE_REFRESH(void)
 		case 0x0F:
 		case 0x10:
 			auto_power_off_timer_H = (ft_user_set_mode - 0x0C);
-		    auto_power_off_timer_H = auto_power_off_timer_H*180000;
+		    auto_power_off_timer_H = auto_power_off_timer_H*0x180000;// cuixu 0x180000
+			P1OE=0B00000000;
+			P1BR1=0B00000000;
+			DelayMs(50);
 			P1CDTL=100;
 			P1DDTL=100;
 			P1OE=0B10100000;
 			P1BR1=0B00001100;
 			DelayMs(50);
-			if(set_time_mode_backup != 0xff)
+			P1OE=0B00000000;
+			P1BR1=0B00000000;
+			DelayMs(50);
+			P1CDTL=100;
+			P1DDTL=100;
+			P1OE=0B10100000;
+			P1BR1=0B00001100;
+			DelayMs(50);
+			P1OE=0B00000000;
+			P1BR1=0B00000000;
+			DelayMs(50);
+			if(set_time_mode_backup == 0x00)
+			{
+				switch(pwm_colour_value)
+				{
+					case 0:
+						PWM1_RED();
+					break;
+					
+					case 1:
+						PWM1_GREEN();
+					break;
+					
+					case 2:
+						PWM1_BLUE();
+					break;
+					
+					case 3:
+						PWM1_WHITE();
+					break;
+				
+					default:
+				
+					break;
+				}
+
+			}
+			else if(set_time_mode_backup == 0x05)
+			{
+				switch(pwm_colour_value)
+				{
+					case 0:
+#ifndef DEBUG_MODE
+						P1OE=0B00000000;
+						P1BR1=0B00001000;
+#endif
+					break;
+					
+					case 1:
+#ifndef DEBUG_MODE			
+						P1OE=0B00100000;
+						P1BR1=0B00000000;
+#endif
+					break;
+					
+					case 2:
+						P1OE=0B10000000;
+						P1BR1=0B00000000;
+					break;
+					
+					case 3:
+						P1OE=0B00000000;
+						P1BR1=0B00000100;
+					break;
+			
+					default:
+			
+					break;
+				}
+			}
+			else if(set_time_mode_backup == 0x0A)
+			{
+				switch(pwm_colour_value)
+				{
+					case 0:
+						P1OE=0B00100000;
+						P1BR1=0B00001000;
+					break;
+				
+					case 1:
+						P1OE=0B10000000;
+						P1BR1=0B00001000;
+				
+					break;
+				
+					case 2:
+						P1OE=0B00000000;
+						P1BR1=0B00001100;
+				
+					break;
+				
+					case 3:
+						P1OE=0B10100000;
+						P1BR1=0B00000000;
+					break;
+				
+					case 4:
+						P1OE=0B00100000;
+						P1BR1=0B00000100;
+					break;
+				
+					case 5:
+						P1OE=0B10000000;
+						P1BR1=0B00000100;
+					break;
+				
+					default:
+				
+					break;
+				}
+			}
+			else if(set_time_mode_backup != 0xff)
 			{
 				ft_user_pwm_mode = set_time_mode_backup;
 				PWM_MODE_REFRESH();
 			}
+			power_off_mode_backup = ft_user_pwm_mode;
 		break;
 		
 		case 0x11:
 			power_off_flag = 0;
-			//jump_led_rate = 100;		//cuixu test
+			jump_led_rate = 100;		//cuixu test
 			if(power_off_mode_backup < 0x0B)
 			{
 				ft_user_pwm_mode = power_off_mode_backup;
@@ -581,6 +696,7 @@ void SET_MODE_REFRESH(void)
 			P1BR1=0B00000000;
 			power_off_flag = 1;
 			auto_power_off_timer_H = 0;
+			power_off_mode_backup = ft_user_pwm_mode;
 		break;
 
 		
