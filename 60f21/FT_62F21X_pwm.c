@@ -48,10 +48,10 @@ void PWM1_INITIAL(void)
     PR2H=0;							//周期=（PR2+1）*Tt2ck*TMR2预分频
     PR2L=PWM_PILSE_WIDTH;
 
-	P1CDTH=0;						//脉宽=P1xDT*Tt2ck*TMR2预分频
-	P1DDTH=0;
-    P1CDTL=0;
-    P1DDTL=0;
+	//P1CDTH=0;						//脉宽=P1xDT*Tt2ck*TMR2预分频
+	//P1DDTH=0;
+    //P1CDTL=0;
+    //P1DDTL=0;
  
     P1POL=0B00000000;		//P1A0高电平有效
     //BIT7: 0:P1C高电平有效;1:P1C低电平有效

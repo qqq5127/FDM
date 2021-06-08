@@ -181,14 +181,10 @@ _MSCON	set	27
 _P1AUX	set	30
 	global	_P1BR1
 _P1BR1	set	25
-	global	_P1CDTH
-_P1CDTH	set	26
 	global	_P1CDTL
 _P1CDTL	set	16
 	global	_P1CON
 _P1CON	set	22
-	global	_P1DDTH
-_P1DDTH	set	9
 	global	_P1DDTL
 _P1DDTL	set	8
 	global	_PORTA
@@ -747,7 +743,7 @@ _main:
 ; Regs used in _main: [wreg-fsr0h+status,2+status,0+pclath+cstack]
 	line	163
 	
-l5027:	
+l5042:	
 ;TEST_FT62F21X_SLEEP.C: 163: POWER_INITIAL();
 	fcall	_POWER_INITIAL
 	line	164
@@ -761,190 +757,190 @@ l5027:
 	fcall	_PWM1_INITIAL
 	line	170
 	
-l5029:	
+l5044:	
 # 170 "TEST_FT62F21X_SLEEP.C"
 clrwdt ;#
 psect	maintext
 	line	172
 	
-l5031:	
+l5046:	
 ;TEST_FT62F21X_SLEEP.C: 172: if(power_off_flag == 0)
 	bcf	status, 5	;RP0=0, select bank0
 	movf	(_power_off_flag),f
 	skipz
-	goto	u1391
-	goto	u1390
-u1391:
-	goto	l5071
-u1390:
+	goto	u1431
+	goto	u1430
+u1431:
+	goto	l5086
+u1430:
 	line	174
 	
-l5033:	
+l5048:	
 ;TEST_FT62F21X_SLEEP.C: 173: {
 ;TEST_FT62F21X_SLEEP.C: 174: if(ft_user_pwm_mode == 0)
 	movf	(_ft_user_pwm_mode),f
 	skipz
-	goto	u1401
-	goto	u1400
-u1401:
-	goto	l5043
-u1400:
+	goto	u1441
+	goto	u1440
+u1441:
+	goto	l5058
+u1440:
 	line	176
 	
-l5035:	
+l5050:	
 ;TEST_FT62F21X_SLEEP.C: 175: {
 ;TEST_FT62F21X_SLEEP.C: 176: if(time_15ms_cnt > 150)
 	movlw	(097h)
 	subwf	(_time_15ms_cnt),w
 	skipc
-	goto	u1411
-	goto	u1410
-u1411:
-	goto	l5043
-u1410:
+	goto	u1451
+	goto	u1450
+u1451:
+	goto	l5058
+u1450:
 	line	178
 	
-l5037:	
+l5052:	
 ;TEST_FT62F21X_SLEEP.C: 177: {
 ;TEST_FT62F21X_SLEEP.C: 178: time_15ms_cnt = 0;
 	clrf	(_time_15ms_cnt)
 	line	179
 	
-l5039:	
+l5054:	
 ;TEST_FT62F21X_SLEEP.C: 179: pwm_rate_value++;
 	incf	(_pwm_rate_value),f
 	line	180
 	
-l5041:	
+l5056:	
 ;TEST_FT62F21X_SLEEP.C: 180: PWM1_RATE_CHANGE();
 	fcall	_PWM1_RATE_CHANGE
 	line	183
 	
-l5043:	
+l5058:	
 ;TEST_FT62F21X_SLEEP.C: 181: }
 ;TEST_FT62F21X_SLEEP.C: 182: }
 ;TEST_FT62F21X_SLEEP.C: 183: if(ft_user_pwm_mode == 5)
 	movf	(_ft_user_pwm_mode),w
 	xorlw	05h
 	skipz
-	goto	u1421
-	goto	u1420
-u1421:
-	goto	l5057
-u1420:
+	goto	u1461
+	goto	u1460
+u1461:
+	goto	l5072
+u1460:
 	line	185
 	
-l5045:	
+l5060:	
 ;TEST_FT62F21X_SLEEP.C: 184: {
 ;TEST_FT62F21X_SLEEP.C: 185: if(time_15ms_cnt>200)
 	movlw	(0C9h)
 	subwf	(_time_15ms_cnt),w
 	skipc
-	goto	u1431
-	goto	u1430
-u1431:
-	goto	l5057
-u1430:
+	goto	u1471
+	goto	u1470
+u1471:
+	goto	l5072
+u1470:
 	line	187
 	
-l5047:	
+l5062:	
 ;TEST_FT62F21X_SLEEP.C: 186: {
 ;TEST_FT62F21X_SLEEP.C: 187: time_2s_cnt++;
 	incf	(_time_2s_cnt),f
 	line	188
 	
-l5049:	
+l5064:	
 ;TEST_FT62F21X_SLEEP.C: 188: if(time_2s_cnt > 100)
 	movlw	(065h)
 	subwf	(_time_2s_cnt),w
 	skipc
-	goto	u1441
-	goto	u1440
-u1441:
-	goto	l5055
-u1440:
+	goto	u1481
+	goto	u1480
+u1481:
+	goto	l5070
+u1480:
 	line	190
 	
-l5051:	
+l5066:	
 ;TEST_FT62F21X_SLEEP.C: 189: {
 ;TEST_FT62F21X_SLEEP.C: 190: time_2s_cnt = 0;
 	clrf	(_time_2s_cnt)
 	line	191
 	
-l5053:	
+l5068:	
 ;TEST_FT62F21X_SLEEP.C: 191: JUMP_MODE_CHANGE();
 	fcall	_JUMP_MODE_CHANGE
 	line	193
 	
-l5055:	
+l5070:	
 ;TEST_FT62F21X_SLEEP.C: 192: }
 ;TEST_FT62F21X_SLEEP.C: 193: time_15ms_cnt = 0;
 	clrf	(_time_15ms_cnt)
 	line	197
 	
-l5057:	
+l5072:	
 ;TEST_FT62F21X_SLEEP.C: 195: }
 ;TEST_FT62F21X_SLEEP.C: 196: }
 ;TEST_FT62F21X_SLEEP.C: 197: if(ft_user_pwm_mode == 0x0A)
 	movf	(_ft_user_pwm_mode),w
 	xorlw	0Ah
 	skipz
-	goto	u1451
-	goto	u1450
-u1451:
-	goto	l5071
-u1450:
+	goto	u1491
+	goto	u1490
+u1491:
+	goto	l5086
+u1490:
 	line	199
 	
-l5059:	
+l5074:	
 ;TEST_FT62F21X_SLEEP.C: 198: {
 ;TEST_FT62F21X_SLEEP.C: 199: if(time_15ms_cnt>200)
 	movlw	(0C9h)
 	subwf	(_time_15ms_cnt),w
 	skipc
-	goto	u1461
-	goto	u1460
-u1461:
-	goto	l5071
-u1460:
+	goto	u1501
+	goto	u1500
+u1501:
+	goto	l5086
+u1500:
 	line	201
 	
-l5061:	
+l5076:	
 ;TEST_FT62F21X_SLEEP.C: 200: {
 ;TEST_FT62F21X_SLEEP.C: 201: time_2s_cnt++;
 	incf	(_time_2s_cnt),f
 	line	202
 	
-l5063:	
+l5078:	
 ;TEST_FT62F21X_SLEEP.C: 202: if(time_2s_cnt > 100)
 	movlw	(065h)
 	subwf	(_time_2s_cnt),w
 	skipc
-	goto	u1471
-	goto	u1470
-u1471:
-	goto	l5069
-u1470:
+	goto	u1511
+	goto	u1510
+u1511:
+	goto	l5084
+u1510:
 	line	204
 	
-l5065:	
+l5080:	
 ;TEST_FT62F21X_SLEEP.C: 203: {
 ;TEST_FT62F21X_SLEEP.C: 204: time_2s_cnt = 0;
 	clrf	(_time_2s_cnt)
 	line	205
 	
-l5067:	
+l5082:	
 ;TEST_FT62F21X_SLEEP.C: 205: MIX_MODE_CHANGE();
 	fcall	_MIX_MODE_CHANGE
 	line	207
 	
-l5069:	
+l5084:	
 ;TEST_FT62F21X_SLEEP.C: 206: }
 ;TEST_FT62F21X_SLEEP.C: 207: time_15ms_cnt = 0;
 	clrf	(_time_15ms_cnt)
 	line	213
 	
-l5071:	
+l5086:	
 ;TEST_FT62F21X_SLEEP.C: 209: }
 ;TEST_FT62F21X_SLEEP.C: 210: }
 ;TEST_FT62F21X_SLEEP.C: 211: }
@@ -954,33 +950,33 @@ l5071:
 	iorwf	(_auto_power_off_timer_H+1),w
 	iorwf	(_auto_power_off_timer_H),w
 	skipnz
-	goto	u1481
-	goto	u1480
-u1481:
-	goto	l5085
-u1480:
+	goto	u1521
+	goto	u1520
+u1521:
+	goto	l5100
+u1520:
 	line	215
 	
-l5073:	
+l5088:	
 ;TEST_FT62F21X_SLEEP.C: 214: {
 ;TEST_FT62F21X_SLEEP.C: 215: if(auto_power_off_timer_L > 100)
 	movlw	(065h)
 	subwf	(_auto_power_off_timer_L),w
 	skipc
-	goto	u1491
-	goto	u1490
-u1491:
-	goto	l5085
-u1490:
+	goto	u1531
+	goto	u1530
+u1531:
+	goto	l5100
+u1530:
 	line	217
 	
-l5075:	
+l5090:	
 ;TEST_FT62F21X_SLEEP.C: 216: {
 ;TEST_FT62F21X_SLEEP.C: 217: auto_power_off_timer_L = 0;
 	clrf	(_auto_power_off_timer_L)
 	line	218
 	
-l5077:	
+l5092:	
 ;TEST_FT62F21X_SLEEP.C: 218: auto_power_off_timer_H--;
 	movlw	01h
 	movwf	((??_main+0)+0)
@@ -995,139 +991,139 @@ l5077:
 	movf	1+(??_main+0)+0,w
 	skipc
 	incfsz	1+(??_main+0)+0,w
-	goto	u1505
-	goto	u1506
-u1505:
+	goto	u1545
+	goto	u1546
+u1545:
 	subwf	(_auto_power_off_timer_H+1),f
-u1506:
+u1546:
 	movf	2+(??_main+0)+0,w
 	skipc
 	incfsz	2+(??_main+0)+0,w
-	goto	u1507
-	goto	u1508
-u1507:
+	goto	u1547
+	goto	u1548
+u1547:
 	subwf	(_auto_power_off_timer_H+2),f
-u1508:
+u1548:
 	movf	3+(??_main+0)+0,w
 	skipc
 	incfsz	3+(??_main+0)+0,w
-	goto	u1509
-	goto	u1500
-u1509:
+	goto	u1549
+	goto	u1540
+u1549:
 	subwf	(_auto_power_off_timer_H+3),f
-u1500:
+u1540:
 
 	line	219
 	
-l5079:	
+l5094:	
 ;TEST_FT62F21X_SLEEP.C: 219: if(!auto_power_off_timer_H)
 	movf	(_auto_power_off_timer_H+3),w
 	iorwf	(_auto_power_off_timer_H+2),w
 	iorwf	(_auto_power_off_timer_H+1),w
 	iorwf	(_auto_power_off_timer_H),w
 	skipz
-	goto	u1511
-	goto	u1510
-u1511:
-	goto	l5085
-u1510:
+	goto	u1551
+	goto	u1550
+u1551:
+	goto	l5100
+u1550:
 	line	221
 	
-l5081:	
+l5096:	
 ;TEST_FT62F21X_SLEEP.C: 220: {
 ;TEST_FT62F21X_SLEEP.C: 221: ft_user_set_mode = 0x12;
 	movlw	(012h)
 	movwf	(_ft_user_set_mode)
 	line	222
 	
-l5083:	
+l5098:	
 ;TEST_FT62F21X_SLEEP.C: 222: SET_MODE_REFRESH();
 	fcall	_SET_MODE_REFRESH
 	line	227
 	
-l5085:	
+l5100:	
 ;TEST_FT62F21X_SLEEP.C: 223: }
 ;TEST_FT62F21X_SLEEP.C: 224: }
 ;TEST_FT62F21X_SLEEP.C: 225: }
 ;TEST_FT62F21X_SLEEP.C: 227: if(RA4)
 	btfss	(44/8),(44)&7
-	goto	u1521
-	goto	u1520
-u1521:
-	goto	l5089
-u1520:
+	goto	u1561
+	goto	u1560
+u1561:
+	goto	l5104
+u1560:
 	line	229
 	
-l5087:	
+l5102:	
 ;TEST_FT62F21X_SLEEP.C: 228: {
 ;TEST_FT62F21X_SLEEP.C: 229: key_release = 0;
 	clrf	(_key_release)
 	line	230
 ;TEST_FT62F21X_SLEEP.C: 230: }
-	goto	l5105
+	goto	l5120
 	line	233
 	
-l5089:	
+l5104:	
 ;TEST_FT62F21X_SLEEP.C: 231: else
 ;TEST_FT62F21X_SLEEP.C: 232: {
 ;TEST_FT62F21X_SLEEP.C: 233: if(key_release == 0)
 	movf	(_key_release),f
 	skipz
-	goto	u1531
-	goto	u1530
-u1531:
-	goto	l5103
-u1530:
+	goto	u1571
+	goto	u1570
+u1571:
+	goto	l5118
+u1570:
 	line	236
 	
-l5091:	
+l5106:	
 ;TEST_FT62F21X_SLEEP.C: 234: {
 ;TEST_FT62F21X_SLEEP.C: 236: DelayMs(1);
 	movlw	(01h)
 	fcall	_DelayMs
 	line	237
 	
-l5093:	
+l5108:	
 ;TEST_FT62F21X_SLEEP.C: 237: if(!RA4)
 	bcf	status, 5	;RP0=0, select bank0
 	btfsc	(44/8),(44)&7
-	goto	u1541
-	goto	u1540
-u1541:
-	goto	l5103
-u1540:
+	goto	u1581
+	goto	u1580
+u1581:
+	goto	l5118
+u1580:
 	line	239
 	
-l5095:	
+l5110:	
 ;TEST_FT62F21X_SLEEP.C: 238: {
 ;TEST_FT62F21X_SLEEP.C: 239: DelayMs(1);
 	movlw	(01h)
 	fcall	_DelayMs
 	line	240
 	
-l5097:	
+l5112:	
 ;TEST_FT62F21X_SLEEP.C: 240: if(!RA4)
 	bcf	status, 5	;RP0=0, select bank0
 	btfsc	(44/8),(44)&7
-	goto	u1551
-	goto	u1550
-u1551:
-	goto	l5103
-u1550:
+	goto	u1591
+	goto	u1590
+u1591:
+	goto	l5118
+u1590:
 	line	242
 	
-l5099:	
+l5114:	
 ;TEST_FT62F21X_SLEEP.C: 241: {
 ;TEST_FT62F21X_SLEEP.C: 242: reset_led_status();
 	fcall	_reset_led_status
 	line	243
 	
-l5101:	
+l5116:	
 ;TEST_FT62F21X_SLEEP.C: 243: PWM_MODE_CHANGE();
 	fcall	_PWM_MODE_CHANGE
 	line	253
 	
-l5103:	
+l5118:	
 ;TEST_FT62F21X_SLEEP.C: 244: }
 ;TEST_FT62F21X_SLEEP.C: 246: }
 ;TEST_FT62F21X_SLEEP.C: 252: }
@@ -1136,29 +1132,54 @@ l5103:
 	incf	(_key_release),f
 	line	257
 	
-l5105:	
+l5120:	
 ;TEST_FT62F21X_SLEEP.C: 255: }
 ;TEST_FT62F21X_SLEEP.C: 257: if(ReceiveFinish)
 	movf	(_ReceiveFinish),w
 	skipz
-	goto	u1560
-	goto	l5029
-u1560:
+	goto	u1600
+	goto	l5044
+u1600:
 	line	261
 	
-l5107:	
+l5122:	
 ;TEST_FT62F21X_SLEEP.C: 258: {
 ;TEST_FT62F21X_SLEEP.C: 259: unsigned char i;
 ;TEST_FT62F21X_SLEEP.C: 261: ReceiveFinish = 0;
 	clrf	(_ReceiveFinish)
-	line	263
-;TEST_FT62F21X_SLEEP.C: 263: for(i = 0;i < 19;i++)
-	clrf	(main@i)
-	line	265
+	line	262
 	
-l5113:	
-;TEST_FT62F21X_SLEEP.C: 264: {
-;TEST_FT62F21X_SLEEP.C: 265: if(ir_key_value[i*2] == IRDataTimer[3])
+l5124:	
+;TEST_FT62F21X_SLEEP.C: 262: if(IRDataTimer[0] != 0x00 || IRDataTimer[1] != 0xFF)
+	movf	(_IRDataTimer),f
+	skipz
+	goto	u1611
+	goto	u1610
+u1611:
+	goto	l5044
+u1610:
+	
+l5126:	
+	movf	0+(_IRDataTimer)+01h,w
+	xorlw	0FFh
+	skipnz
+	goto	u1621
+	goto	u1620
+u1621:
+	goto	l5128
+u1620:
+	goto	l5044
+	line	266
+	
+l5128:	
+;TEST_FT62F21X_SLEEP.C: 265: }
+;TEST_FT62F21X_SLEEP.C: 266: for(i = 0;i < 19;i++)
+	clrf	(main@i)
+	line	268
+	
+l5134:	
+;TEST_FT62F21X_SLEEP.C: 267: {
+;TEST_FT62F21X_SLEEP.C: 268: if(ir_key_value[i*2] == IRDataTimer[3])
 	clrc
 	rlf	(main@i),w
 	addlw	low((_ir_key_value-__stringbase))
@@ -1166,124 +1187,124 @@ l5113:
 	fcall	stringdir
 	xorwf	0+(_IRDataTimer)+03h,w
 	skipz
-	goto	u1571
-	goto	u1570
-u1571:
-	goto	l5133
-u1570:
-	line	267
+	goto	u1631
+	goto	u1630
+u1631:
+	goto	l5154
+u1630:
+	line	270
 	
-l5115:	
-;TEST_FT62F21X_SLEEP.C: 266: {
-;TEST_FT62F21X_SLEEP.C: 267: temp_mode = ir_key_value[i*2 + 1];
+l5136:	
+;TEST_FT62F21X_SLEEP.C: 269: {
+;TEST_FT62F21X_SLEEP.C: 270: temp_mode = ir_key_value[i*2 + 1];
 	clrc
 	rlf	(main@i),w
 	addlw	low((_ir_key_value-__stringbase)+01h)
 	movwf	fsr0
 	fcall	stringdir
 	movwf	(_temp_mode)
-	line	268
+	line	271
 	
-l5117:	
-;TEST_FT62F21X_SLEEP.C: 268: if(temp_mode >= 0x0D && temp_mode <= 0x10)
+l5138:	
+;TEST_FT62F21X_SLEEP.C: 271: if(temp_mode >= 0x0D && temp_mode <= 0x10)
 	movlw	(0Dh)
 	subwf	(_temp_mode),w
 	skipc
-	goto	u1581
-	goto	u1580
-u1581:
-	goto	l754
-u1580:
+	goto	u1641
+	goto	u1640
+u1641:
+	goto	l758
+u1640:
 	
-l5119:	
+l5140:	
 	movlw	(011h)
 	subwf	(_temp_mode),w
 	skipnc
-	goto	u1591
-	goto	u1590
-u1591:
-	goto	l754
-u1590:
-	line	270
+	goto	u1651
+	goto	u1650
+u1651:
+	goto	l758
+u1650:
+	line	273
 	
-l5121:	
-;TEST_FT62F21X_SLEEP.C: 269: {
-;TEST_FT62F21X_SLEEP.C: 270: set_time_mode_backup = ft_user_pwm_mode;
+l5142:	
+;TEST_FT62F21X_SLEEP.C: 272: {
+;TEST_FT62F21X_SLEEP.C: 273: set_time_mode_backup = ft_user_pwm_mode;
 	movf	(_ft_user_pwm_mode),w
 	movwf	(_set_time_mode_backup)
-	line	271
+	line	274
 	
-l754:	
-	line	272
-;TEST_FT62F21X_SLEEP.C: 271: }
-;TEST_FT62F21X_SLEEP.C: 272: if(temp_mode < 0x0B)
+l758:	
+	line	275
+;TEST_FT62F21X_SLEEP.C: 274: }
+;TEST_FT62F21X_SLEEP.C: 275: if(temp_mode < 0x0B)
 	movlw	(0Bh)
 	subwf	(_temp_mode),w
 	skipnc
-	goto	u1601
-	goto	u1600
-u1601:
-	goto	l5129
-u1600:
-	line	274
+	goto	u1661
+	goto	u1660
+u1661:
+	goto	l5150
+u1660:
+	line	277
 	
-l5123:	
-;TEST_FT62F21X_SLEEP.C: 273: {
-;TEST_FT62F21X_SLEEP.C: 274: if(ft_user_pwm_mode != temp_mode)
+l5144:	
+;TEST_FT62F21X_SLEEP.C: 276: {
+;TEST_FT62F21X_SLEEP.C: 277: if(ft_user_pwm_mode != temp_mode)
 	movf	(_ft_user_pwm_mode),w
 	xorwf	(_temp_mode),w
 	skipnz
-	goto	u1611
-	goto	u1610
-u1611:
-	goto	l5133
-u1610:
-	line	276
+	goto	u1671
+	goto	u1670
+u1671:
+	goto	l5154
+u1670:
+	line	279
 	
-l5125:	
-;TEST_FT62F21X_SLEEP.C: 275: {
-;TEST_FT62F21X_SLEEP.C: 276: ft_user_pwm_mode = temp_mode;
+l5146:	
+;TEST_FT62F21X_SLEEP.C: 278: {
+;TEST_FT62F21X_SLEEP.C: 279: ft_user_pwm_mode = temp_mode;
 	movf	(_temp_mode),w
 	movwf	(_ft_user_pwm_mode)
-	line	277
+	line	280
 	
-l5127:	
-;TEST_FT62F21X_SLEEP.C: 277: PWM_MODE_REFRESH();
+l5148:	
+;TEST_FT62F21X_SLEEP.C: 280: PWM_MODE_REFRESH();
 	fcall	_PWM_MODE_REFRESH
-	goto	l5133
-	line	282
+	goto	l5154
+	line	285
 	
-l5129:	
-;TEST_FT62F21X_SLEEP.C: 280: else
-;TEST_FT62F21X_SLEEP.C: 281: {
-;TEST_FT62F21X_SLEEP.C: 282: ft_user_set_mode = temp_mode;
+l5150:	
+;TEST_FT62F21X_SLEEP.C: 283: else
+;TEST_FT62F21X_SLEEP.C: 284: {
+;TEST_FT62F21X_SLEEP.C: 285: ft_user_set_mode = temp_mode;
 	movf	(_temp_mode),w
 	movwf	(_ft_user_set_mode)
-	line	283
+	line	286
 	
-l5131:	
-;TEST_FT62F21X_SLEEP.C: 283: SET_MODE_REFRESH();
+l5152:	
+;TEST_FT62F21X_SLEEP.C: 286: SET_MODE_REFRESH();
 	fcall	_SET_MODE_REFRESH
-	line	263
+	line	266
 	
-l5133:	
+l5154:	
 	incf	(main@i),f
 	
-l5135:	
+l5156:	
 	movlw	(013h)
 	subwf	(main@i),w
 	skipc
-	goto	u1621
-	goto	u1620
-u1621:
-	goto	l5113
-u1620:
-	goto	l5029
+	goto	u1681
+	goto	u1680
+u1681:
+	goto	l5134
+u1680:
+	goto	l5044
 	global	start
 	ljmp	start
 	opt stack 0
 psect	maintext
-	line	290
+	line	293
 GLOBAL	__end_of_main
 	__end_of_main:
 ;; =============== function _main ends ============
@@ -1340,61 +1361,61 @@ _SET_MODE_REFRESH:
 ; Regs used in _SET_MODE_REFRESH: [wreg-fsr0h+status,2+status,0+pclath+cstack]
 	line	510
 	
-l4863:	
+l4878:	
 ;FT_62F21X_pwm.c: 510: if(power_off_flag == 1)
 	decf	(_power_off_flag),w
 	skipz
-	goto	u1281
-	goto	u1280
-u1281:
-	goto	l5009
-u1280:
+	goto	u1321
+	goto	u1320
+u1321:
+	goto	l5024
+u1320:
 	line	512
 	
-l4865:	
+l4880:	
 ;FT_62F21X_pwm.c: 511: {
 ;FT_62F21X_pwm.c: 512: if(ft_user_set_mode != 0x11)
 	movf	(_ft_user_set_mode),w
 	xorlw	011h
 	skipnz
-	goto	u1291
-	goto	u1290
-u1291:
-	goto	l5009
-u1290:
-	goto	l1543
+	goto	u1331
+	goto	u1330
+u1331:
+	goto	l5024
+u1330:
+	goto	l1546
 	line	521
 	
-l4869:	
+l4884:	
 ;FT_62F21X_pwm.c: 521: if(jump_led_rate > 20)
 	movlw	(015h)
 	subwf	(_jump_led_rate),w
 	skipc
-	goto	u1301
-	goto	u1300
-u1301:
-	goto	l4873
-u1300:
+	goto	u1341
+	goto	u1340
+u1341:
+	goto	l4888
+u1340:
 	line	523
 	
-l4871:	
+l4886:	
 ;FT_62F21X_pwm.c: 522: {
 ;FT_62F21X_pwm.c: 523: jump_led_rate = jump_led_rate - 20;
 	movlw	(0ECh)
 	addwf	(_jump_led_rate),f
 	line	525
 	
-l4873:	
+l4888:	
 ;FT_62F21X_pwm.c: 524: }
 ;FT_62F21X_pwm.c: 525: if(ft_user_pwm_mode != 0)
 	movf	(_ft_user_pwm_mode),w
 	skipz
-	goto	u1310
-	goto	l1543
-u1310:
+	goto	u1350
+	goto	l1546
+u1350:
 	line	527
 	
-l4875:	
+l4890:	
 ;FT_62F21X_pwm.c: 526: {
 ;FT_62F21X_pwm.c: 527: P1CDTL=jump_led_rate;
 	movf	(_jump_led_rate),w
@@ -1403,43 +1424,43 @@ l4875:
 ;FT_62F21X_pwm.c: 528: P1DDTL=jump_led_rate;
 	movf	(_jump_led_rate),w
 	movwf	(8)	;volatile
-	goto	l1543
+	goto	l1546
 	line	534
 	
-l4877:	
+l4892:	
 ;FT_62F21X_pwm.c: 534: if(jump_led_rate < 100)
 	movlw	(064h)
 	subwf	(_jump_led_rate),w
 	skipnc
-	goto	u1321
-	goto	u1320
-u1321:
-	goto	l4881
-u1320:
+	goto	u1361
+	goto	u1360
+u1361:
+	goto	l4896
+u1360:
 	line	536
 	
-l4879:	
+l4894:	
 ;FT_62F21X_pwm.c: 535: {
 ;FT_62F21X_pwm.c: 536: jump_led_rate = jump_led_rate + 20;
 	movlw	(014h)
 	addwf	(_jump_led_rate),f
 	line	538
 	
-l4881:	
+l4896:	
 ;FT_62F21X_pwm.c: 537: }
 ;FT_62F21X_pwm.c: 538: if(ft_user_pwm_mode != 0)
 	movf	(_ft_user_pwm_mode),w
 	skipz
-	goto	u1330
-	goto	l1543
-u1330:
-	goto	l4875
+	goto	u1370
+	goto	l1546
+u1370:
+	goto	l4890
 	line	547
 	
-l1554:	
+l1557:	
 	line	549
 	
-l4885:	
+l4900:	
 ;FT_62F21X_pwm.c: 546: case 0x0E:
 ;FT_62F21X_pwm.c: 547: case 0x0F:
 ;FT_62F21X_pwm.c: 548: case 0x10:
@@ -1458,7 +1479,7 @@ l4885:
 	movwf	3+(_auto_power_off_timer_H)
 	line	550
 	
-l4887:	
+l4902:	
 ;FT_62F21X_pwm.c: 550: auto_power_off_timer_H = auto_power_off_timer_H*0x180000;
 	movlw	0
 	movwf	(?___lmul+3)
@@ -1490,19 +1511,19 @@ l4887:
 
 	line	551
 	
-l4889:	
+l4904:	
 ;FT_62F21X_pwm.c: 551: P1OE=0B00000000;
 	bsf	status, 5	;RP0=1, select bank1
 	clrf	(144)^080h	;volatile
 	line	552
 	
-l4891:	
+l4906:	
 ;FT_62F21X_pwm.c: 552: P1BR1=0B00000000;
 	bcf	status, 5	;RP0=0, select bank0
 	clrf	(25)	;volatile
 	line	553
 	
-l4893:	
+l4908:	
 ;FT_62F21X_pwm.c: 553: DelayMs(50);
 	movlw	(032h)
 	fcall	_DelayMs
@@ -1527,25 +1548,25 @@ l4893:
 	movwf	(25)	;volatile
 	line	558
 	
-l4895:	
+l4910:	
 ;FT_62F21X_pwm.c: 558: DelayMs(50);
 	movlw	(032h)
 	fcall	_DelayMs
 	line	559
 	
-l4897:	
+l4912:	
 ;FT_62F21X_pwm.c: 559: P1OE=0B00000000;
 	bsf	status, 5	;RP0=1, select bank1
 	clrf	(144)^080h	;volatile
 	line	560
 	
-l4899:	
+l4914:	
 ;FT_62F21X_pwm.c: 560: P1BR1=0B00000000;
 	bcf	status, 5	;RP0=0, select bank0
 	clrf	(25)	;volatile
 	line	561
 	
-l4901:	
+l4916:	
 ;FT_62F21X_pwm.c: 561: DelayMs(50);
 	movlw	(032h)
 	fcall	_DelayMs
@@ -1570,75 +1591,75 @@ l4901:
 	movwf	(25)	;volatile
 	line	566
 	
-l4903:	
+l4918:	
 ;FT_62F21X_pwm.c: 566: DelayMs(50);
 	movlw	(032h)
 	fcall	_DelayMs
 	line	567
 	
-l4905:	
+l4920:	
 ;FT_62F21X_pwm.c: 567: P1OE=0B00000000;
 	bsf	status, 5	;RP0=1, select bank1
 	clrf	(144)^080h	;volatile
 	line	568
 	
-l4907:	
+l4922:	
 ;FT_62F21X_pwm.c: 568: P1BR1=0B00000000;
 	bcf	status, 5	;RP0=0, select bank0
 	clrf	(25)	;volatile
 	line	569
 	
-l4909:	
+l4924:	
 ;FT_62F21X_pwm.c: 569: DelayMs(50);
 	movlw	(032h)
 	fcall	_DelayMs
 	line	570
 	
-l4911:	
+l4926:	
 ;FT_62F21X_pwm.c: 570: if(set_time_mode_backup == 0x00)
 	movf	(_set_time_mode_backup),f
 	skipz
-	goto	u1341
-	goto	u1340
-u1341:
-	goto	l4927
-u1340:
-	goto	l4925
+	goto	u1381
+	goto	u1380
+u1381:
+	goto	l4942
+u1380:
+	goto	l4940
 	line	575
 	
-l4915:	
+l4930:	
 ;FT_62F21X_pwm.c: 575: PWM1_RED();
 	fcall	_PWM1_RED
 	line	576
 ;FT_62F21X_pwm.c: 576: break;
-	goto	l4981
+	goto	l4996
 	line	579
 	
-l4917:	
+l4932:	
 ;FT_62F21X_pwm.c: 579: PWM1_GREEN();
 	fcall	_PWM1_GREEN
 	line	580
 ;FT_62F21X_pwm.c: 580: break;
-	goto	l4981
+	goto	l4996
 	line	583
 	
-l4919:	
+l4934:	
 ;FT_62F21X_pwm.c: 583: PWM1_BLUE();
 	fcall	_PWM1_BLUE
 	line	584
 ;FT_62F21X_pwm.c: 584: break;
-	goto	l4981
+	goto	l4996
 	line	587
 	
-l4921:	
+l4936:	
 ;FT_62F21X_pwm.c: 587: PWM1_WHITE();
 	fcall	_PWM1_WHITE
 	line	588
 ;FT_62F21X_pwm.c: 588: break;
-	goto	l4981
+	goto	l4996
 	line	572
 	
-l4925:	
+l4940:	
 	movf	(_pwm_colour_value),w
 	; Switch size 1, requested type "space"
 ; Number of cases is 4, Range of values is 0 to 3
@@ -1656,94 +1677,94 @@ l4925:
 	movlw	4
 	subwf	fsr,w
 skipnc
-goto l4981
-movlw high(S5297)
+goto l4996
+movlw high(S5318)
 movwf pclath
-	movlw low(S5297)
+	movlw low(S5318)
 	addwf fsr,w
 	movwf pc
 psect	swtext1,local,class=CONST,delta=2
 global __pswtext1
 __pswtext1:
-S5297:
-	ljmp	l4915
-	ljmp	l4917
-	ljmp	l4919
-	ljmp	l4921
+S5318:
+	ljmp	l4930
+	ljmp	l4932
+	ljmp	l4934
+	ljmp	l4936
 psect	text641
 
 	line	596
 	
-l4927:	
+l4942:	
 ;FT_62F21X_pwm.c: 596: else if(set_time_mode_backup == 0x05)
 	movf	(_set_time_mode_backup),w
 	xorlw	05h
 	skipz
-	goto	u1351
-	goto	u1350
-u1351:
-	goto	l4951
-u1350:
-	goto	l4949
+	goto	u1391
+	goto	u1390
+u1391:
+	goto	l4966
+u1390:
+	goto	l4964
 	line	602
 	
-l4931:	
+l4946:	
 ;FT_62F21X_pwm.c: 602: P1OE=0B00000000;
 	bsf	status, 5	;RP0=1, select bank1
 	clrf	(144)^080h	;volatile
 	line	603
 	
-l4933:	
+l4948:	
 ;FT_62F21X_pwm.c: 603: P1BR1=0B00001000;
 	movlw	(08h)
 	bcf	status, 5	;RP0=0, select bank0
 	movwf	(25)	;volatile
 	line	605
 ;FT_62F21X_pwm.c: 605: break;
-	goto	l4981
+	goto	l4996
 	line	609
 	
-l4935:	
+l4950:	
 ;FT_62F21X_pwm.c: 609: P1OE=0B00100000;
 	movlw	(020h)
 	bsf	status, 5	;RP0=1, select bank1
 	movwf	(144)^080h	;volatile
 	line	610
 	
-l4937:	
+l4952:	
 ;FT_62F21X_pwm.c: 610: P1BR1=0B00000000;
 	bcf	status, 5	;RP0=0, select bank0
 	clrf	(25)	;volatile
 	line	612
 ;FT_62F21X_pwm.c: 612: break;
-	goto	l4981
+	goto	l4996
 	line	615
 	
-l4939:	
+l4954:	
 ;FT_62F21X_pwm.c: 615: P1OE=0B10000000;
 	movlw	(080h)
 	bsf	status, 5	;RP0=1, select bank1
 	movwf	(144)^080h	;volatile
-	goto	l4937
+	goto	l4952
 	line	620
 	
-l4943:	
+l4958:	
 ;FT_62F21X_pwm.c: 620: P1OE=0B00000000;
 	bsf	status, 5	;RP0=1, select bank1
 	clrf	(144)^080h	;volatile
 	line	621
 	
-l4945:	
+l4960:	
 ;FT_62F21X_pwm.c: 621: P1BR1=0B00000100;
 	movlw	(04h)
 	bcf	status, 5	;RP0=0, select bank0
 	movwf	(25)	;volatile
 	line	622
 ;FT_62F21X_pwm.c: 622: break;
-	goto	l4981
+	goto	l4996
 	line	598
 	
-l4949:	
+l4964:	
 	movf	(_pwm_colour_value),w
 	; Switch size 1, requested type "space"
 ; Number of cases is 4, Range of values is 0 to 3
@@ -1761,38 +1782,38 @@ l4949:
 	movlw	4
 	subwf	fsr,w
 skipnc
-goto l4981
-movlw high(S5299)
+goto l4996
+movlw high(S5320)
 movwf pclath
-	movlw low(S5299)
+	movlw low(S5320)
 	addwf fsr,w
 	movwf pc
 psect	swtext2,local,class=CONST,delta=2
 global __pswtext2
 __pswtext2:
-S5299:
-	ljmp	l4931
-	ljmp	l4935
-	ljmp	l4939
-	ljmp	l4943
+S5320:
+	ljmp	l4946
+	ljmp	l4950
+	ljmp	l4954
+	ljmp	l4958
 psect	text641
 
 	line	629
 	
-l4951:	
+l4966:	
 ;FT_62F21X_pwm.c: 629: else if(set_time_mode_backup == 0x0A)
 	movf	(_set_time_mode_backup),w
 	xorlw	0Ah
 	skipz
-	goto	u1361
-	goto	u1360
-u1361:
-	goto	l4975
-u1360:
-	goto	l4973
+	goto	u1401
+	goto	u1400
+u1401:
+	goto	l4990
+u1400:
+	goto	l4988
 	line	634
 	
-l4955:	
+l4970:	
 ;FT_62F21X_pwm.c: 634: P1OE=0B00100000;
 	movlw	(020h)
 	bsf	status, 5	;RP0=1, select bank1
@@ -1804,10 +1825,10 @@ l4955:
 	movwf	(25)	;volatile
 	line	636
 ;FT_62F21X_pwm.c: 636: break;
-	goto	l4981
+	goto	l4996
 	line	639
 	
-l4957:	
+l4972:	
 ;FT_62F21X_pwm.c: 639: P1OE=0B10000000;
 	movlw	(080h)
 	bsf	status, 5	;RP0=1, select bank1
@@ -1819,34 +1840,34 @@ l4957:
 	movwf	(25)	;volatile
 	line	642
 ;FT_62F21X_pwm.c: 642: break;
-	goto	l4981
+	goto	l4996
 	line	645
 	
-l4959:	
+l4974:	
 ;FT_62F21X_pwm.c: 645: P1OE=0B00000000;
 	bsf	status, 5	;RP0=1, select bank1
 	clrf	(144)^080h	;volatile
 	line	646
 	
-l4961:	
+l4976:	
 ;FT_62F21X_pwm.c: 646: P1BR1=0B00001100;
 	movlw	(0Ch)
 	bcf	status, 5	;RP0=0, select bank0
 	movwf	(25)	;volatile
 	line	648
 ;FT_62F21X_pwm.c: 648: break;
-	goto	l4981
+	goto	l4996
 	line	651
 	
-l4963:	
+l4978:	
 ;FT_62F21X_pwm.c: 651: P1OE=0B10100000;
 	movlw	(0A0h)
 	bsf	status, 5	;RP0=1, select bank1
 	movwf	(144)^080h	;volatile
-	goto	l4937
+	goto	l4952
 	line	656
 	
-l4967:	
+l4982:	
 ;FT_62F21X_pwm.c: 656: P1OE=0B00100000;
 	movlw	(020h)
 	bsf	status, 5	;RP0=1, select bank1
@@ -1858,10 +1879,10 @@ l4967:
 	movwf	(25)	;volatile
 	line	658
 ;FT_62F21X_pwm.c: 658: break;
-	goto	l4981
+	goto	l4996
 	line	661
 	
-l4969:	
+l4984:	
 ;FT_62F21X_pwm.c: 661: P1OE=0B10000000;
 	movlw	(080h)
 	bsf	status, 5	;RP0=1, select bank1
@@ -1873,10 +1894,10 @@ l4969:
 	movwf	(25)	;volatile
 	line	663
 ;FT_62F21X_pwm.c: 663: break;
-	goto	l4981
+	goto	l4996
 	line	631
 	
-l4973:	
+l4988:	
 	movf	(_pwm_colour_value),w
 	; Switch size 1, requested type "space"
 ; Number of cases is 6, Range of values is 0 to 5
@@ -1894,39 +1915,39 @@ l4973:
 	movlw	6
 	subwf	fsr,w
 skipnc
-goto l4981
-movlw high(S5301)
+goto l4996
+movlw high(S5322)
 movwf pclath
-	movlw low(S5301)
+	movlw low(S5322)
 	addwf fsr,w
 	movwf pc
 psect	swtext3,local,class=CONST,delta=2
 global __pswtext3
 __pswtext3:
-S5301:
-	ljmp	l4955
-	ljmp	l4957
-	ljmp	l4959
-	ljmp	l4963
-	ljmp	l4967
-	ljmp	l4969
+S5322:
+	ljmp	l4970
+	ljmp	l4972
+	ljmp	l4974
+	ljmp	l4978
+	ljmp	l4982
+	ljmp	l4984
 psect	text641
 
 	line	670
 	
-l4975:	
+l4990:	
 ;FT_62F21X_pwm.c: 670: else if(set_time_mode_backup != 0xff)
 	movf	(_set_time_mode_backup),w
 	xorlw	0FFh
 	skipnz
-	goto	u1371
-	goto	u1370
-u1371:
-	goto	l4981
-u1370:
+	goto	u1411
+	goto	u1410
+u1411:
+	goto	l4996
+u1410:
 	line	672
 	
-l4977:	
+l4992:	
 ;FT_62F21X_pwm.c: 671: {
 ;FT_62F21X_pwm.c: 672: ft_user_pwm_mode = set_time_mode_backup;
 	movf	(_set_time_mode_backup),w
@@ -1934,12 +1955,12 @@ l4977:
 	movwf	(_ft_user_pwm_mode)
 	line	673
 	
-l4979:	
+l4994:	
 ;FT_62F21X_pwm.c: 673: PWM_MODE_REFRESH();
 	fcall	_PWM_MODE_REFRESH
 	line	675
 	
-l4981:	
+l4996:	
 ;FT_62F21X_pwm.c: 674: }
 ;FT_62F21X_pwm.c: 675: power_off_mode_backup = ft_user_pwm_mode;
 	bcf	status, 5	;RP0=0, select bank0
@@ -1947,66 +1968,66 @@ l4981:
 	movwf	(_power_off_mode_backup)
 	line	676
 ;FT_62F21X_pwm.c: 676: break;
-	goto	l1543
+	goto	l1546
 	line	679
 	
-l4983:	
+l4998:	
 ;FT_62F21X_pwm.c: 679: power_off_flag = 0;
 	clrf	(_power_off_flag)
 	line	680
 	
-l4985:	
+l5000:	
 ;FT_62F21X_pwm.c: 680: jump_led_rate = 100;
 	movlw	(064h)
 	movwf	(_jump_led_rate)
 	line	681
 	
-l4987:	
+l5002:	
 ;FT_62F21X_pwm.c: 681: if(power_off_mode_backup < 0x0B)
 	movlw	(0Bh)
 	subwf	(_power_off_mode_backup),w
 	skipnc
-	goto	u1381
-	goto	u1380
-u1381:
-	goto	l4993
-u1380:
+	goto	u1421
+	goto	u1420
+u1421:
+	goto	l5008
+u1420:
 	line	683
 	
-l4989:	
+l5004:	
 ;FT_62F21X_pwm.c: 682: {
 ;FT_62F21X_pwm.c: 683: ft_user_pwm_mode = power_off_mode_backup;
 	movf	(_power_off_mode_backup),w
 	movwf	(_ft_user_pwm_mode)
 	line	684
 	
-l4991:	
+l5006:	
 ;FT_62F21X_pwm.c: 684: PWM_MODE_REFRESH();
 	fcall	_PWM_MODE_REFRESH
 	line	685
 ;FT_62F21X_pwm.c: 685: }
-	goto	l4997
+	goto	l5012
 	line	688
 	
-l4993:	
+l5008:	
 ;FT_62F21X_pwm.c: 686: else
 ;FT_62F21X_pwm.c: 687: {
 ;FT_62F21X_pwm.c: 688: ft_user_pwm_mode = 0;
 	clrf	(_ft_user_pwm_mode)
-	goto	l4991
+	goto	l5006
 	line	691
 	
-l4997:	
+l5012:	
 ;FT_62F21X_pwm.c: 690: }
 ;FT_62F21X_pwm.c: 691: power_off_mode_backup = 0xff;
 	movlw	(0FFh)
 	movwf	(_power_off_mode_backup)
 	line	692
 ;FT_62F21X_pwm.c: 692: break;
-	goto	l1543
+	goto	l1546
 	line	695
 	
-l4999:	
+l5014:	
 ;FT_62F21X_pwm.c: 695: P1OE=0B00000000;
 	bsf	status, 5	;RP0=1, select bank1
 	clrf	(144)^080h	;volatile
@@ -2016,22 +2037,22 @@ l4999:
 	clrf	(25)	;volatile
 	line	697
 	
-l5001:	
+l5016:	
 ;FT_62F21X_pwm.c: 697: power_off_flag = 1;
 	clrf	(_power_off_flag)
 	incf	(_power_off_flag),f
 	line	698
 	
-l5003:	
+l5018:	
 ;FT_62F21X_pwm.c: 698: auto_power_off_timer_H = 0;
 	clrf	(_auto_power_off_timer_H)
 	clrf	(_auto_power_off_timer_H+1)
 	clrf	(_auto_power_off_timer_H+2)
 	clrf	(_auto_power_off_timer_H+3)
-	goto	l4981
+	goto	l4996
 	line	518
 	
-l5009:	
+l5024:	
 	movf	(_ft_user_set_mode),w
 	; Switch size 1, requested type "space"
 ; Number of cases is 8, Range of values is 11 to 18
@@ -2044,34 +2065,34 @@ l5009:
 
 	addlw	-11
 	skipc
-goto l1543
+goto l1546
 	movwf fsr
 	movlw	8
 	subwf	fsr,w
 skipnc
-goto l1543
-movlw high(S5303)
+goto l1546
+movlw high(S5324)
 movwf pclath
-	movlw low(S5303)
+	movlw low(S5324)
 	addwf fsr,w
 	movwf pc
 psect	swtext4,local,class=CONST,delta=2
 global __pswtext4
 __pswtext4:
-S5303:
-	ljmp	l4869
-	ljmp	l4877
-	ljmp	l1554
-	ljmp	l4885
-	ljmp	l4885
-	ljmp	l4885
-	ljmp	l4983
-	ljmp	l4999
+S5324:
+	ljmp	l4884
+	ljmp	l4892
+	ljmp	l1557
+	ljmp	l4900
+	ljmp	l4900
+	ljmp	l4900
+	ljmp	l4998
+	ljmp	l5014
 psect	text641
 
 	line	708
 	
-l1543:	
+l1546:	
 	return
 	opt stack 0
 GLOBAL	__end_of_SET_MODE_REFRESH
@@ -2124,56 +2145,56 @@ _PWM_MODE_CHANGE:
 ; Regs used in _PWM_MODE_CHANGE: [wreg-fsr0h+status,2+status,0+pclath+cstack]
 	line	298
 	
-l4395:	
+l4404:	
 ;FT_62F21X_pwm.c: 298: ft_user_pwm_mode++;
 	incf	(_ft_user_pwm_mode),f
 	line	299
 	
-l4397:	
+l4406:	
 ;FT_62F21X_pwm.c: 299: if(ft_user_pwm_mode == 6)
 	movf	(_ft_user_pwm_mode),w
 	xorlw	06h
 	skipz
-	goto	u881
-	goto	u880
-u881:
-	goto	l4401
-u880:
+	goto	u901
+	goto	u900
+u901:
+	goto	l4410
+u900:
 	line	301
 	
-l4399:	
+l4408:	
 ;FT_62F21X_pwm.c: 300: {
 ;FT_62F21X_pwm.c: 301: ft_user_pwm_mode = 0;
 	clrf	(_ft_user_pwm_mode)
 	line	303
 	
-l4401:	
+l4410:	
 ;FT_62F21X_pwm.c: 302: }
 ;FT_62F21X_pwm.c: 303: if(ft_user_pwm_mode > 6)
 	movlw	(07h)
 	subwf	(_ft_user_pwm_mode),w
 	skipc
-	goto	u891
-	goto	u890
-u891:
-	goto	l4405
-u890:
+	goto	u911
+	goto	u910
+u911:
+	goto	l4414
+u910:
 	line	305
 	
-l4403:	
+l4412:	
 ;FT_62F21X_pwm.c: 304: {
 ;FT_62F21X_pwm.c: 305: ft_user_pwm_mode = 1;
 	clrf	(_ft_user_pwm_mode)
 	incf	(_ft_user_pwm_mode),f
 	line	307
 	
-l4405:	
+l4414:	
 ;FT_62F21X_pwm.c: 306: }
 ;FT_62F21X_pwm.c: 307: PWM_MODE_REFRESH();
 	fcall	_PWM_MODE_REFRESH
 	line	309
 	
-l1492:	
+l1495:	
 	return
 	opt stack 0
 GLOBAL	__end_of_PWM_MODE_CHANGE
@@ -2231,55 +2252,55 @@ _DelayMs:
 	line	380
 	movwf	(DelayMs@Time)
 	
-l4377:	
+l4386:	
 ;FT_62F21X_pwm.c: 379: unsigned char a,b;
 ;FT_62F21X_pwm.c: 380: for(a=0;a<Time;a++)
 	clrf	(DelayMs@a)
-	goto	l4393
+	goto	l4402
 	line	382
 	
-l4379:	
+l4388:	
 ;FT_62F21X_pwm.c: 381: {
 ;FT_62F21X_pwm.c: 382: for(b=0;b<5;b++)
 	clrf	(DelayMs@b)
 	line	384
 	
-l4385:	
+l4394:	
 ;FT_62F21X_pwm.c: 383: {
 ;FT_62F21X_pwm.c: 384: DelayUs(98);
 	movlw	(062h)
 	fcall	_DelayUs
 	line	382
 	
-l4387:	
+l4396:	
 	incf	(DelayMs@b),f
 	
-l4389:	
+l4398:	
 	movlw	(05h)
 	subwf	(DelayMs@b),w
 	skipc
-	goto	u861
-	goto	u860
-u861:
-	goto	l4385
-u860:
+	goto	u881
+	goto	u880
+u881:
+	goto	l4394
+u880:
 	line	380
 	
-l4391:	
+l4400:	
 	incf	(DelayMs@a),f
 	
-l4393:	
+l4402:	
 	movf	(DelayMs@Time),w
 	subwf	(DelayMs@a),w
 	skipc
-	goto	u871
-	goto	u870
-u871:
-	goto	l4379
-u870:
+	goto	u891
+	goto	u890
+u891:
+	goto	l4388
+u890:
 	line	387
 	
-l1518:	
+l1521:	
 	return
 	opt stack 0
 GLOBAL	__end_of_DelayMs
@@ -2335,35 +2356,35 @@ _DelayUs:
 	line	366
 	movwf	(DelayUs@Time)
 	
-l4371:	
+l4380:	
 ;FT_62F21X_pwm.c: 365: unsigned char a;
 ;FT_62F21X_pwm.c: 366: for(a=0;a<Time;a++)
 	clrf	(DelayUs@a)
-	goto	l4375
+	goto	l4384
 	line	367
 	
-l1508:	
+l1511:	
 	line	368
 ;FT_62F21X_pwm.c: 367: {
 ;FT_62F21X_pwm.c: 368: _nop();
 	nop
 	line	366
 	
-l4373:	
+l4382:	
 	incf	(DelayUs@a),f
 	
-l4375:	
+l4384:	
 	movf	(DelayUs@Time),w
 	subwf	(DelayUs@a),w
 	skipc
-	goto	u851
-	goto	u850
-u851:
-	goto	l1508
-u850:
+	goto	u871
+	goto	u870
+u871:
+	goto	l1511
+u870:
 	line	370
 	
-l1510:	
+l1513:	
 	return
 	opt stack 0
 GLOBAL	__end_of_DelayUs
@@ -2419,21 +2440,21 @@ _PWM_MODE_REFRESH:
 ; Regs used in _PWM_MODE_REFRESH: [wreg-fsr0h+status,2+status,0+pclath+cstack]
 	line	411
 	
-l4309:	
+l4318:	
 ;FT_62F21X_pwm.c: 411: reset_led_status();
 	fcall	_reset_led_status
 	line	413
 	
-l4311:	
+l4320:	
 ;FT_62F21X_pwm.c: 413: if(ft_user_pwm_mode != 0)
 	movf	(_ft_user_pwm_mode),w
 	skipz
-	goto	u830
-	goto	l4315
-u830:
+	goto	u850
+	goto	l4324
+u850:
 	line	415
 	
-l4313:	
+l4322:	
 ;FT_62F21X_pwm.c: 414: {
 ;FT_62F21X_pwm.c: 415: P1CDTL=jump_led_rate;
 	movf	(_jump_led_rate),w
@@ -2444,10 +2465,10 @@ l4313:
 	movwf	(8)	;volatile
 	line	417
 ;FT_62F21X_pwm.c: 417: }
-	goto	l4317
+	goto	l4326
 	line	420
 	
-l4315:	
+l4324:	
 ;FT_62F21X_pwm.c: 418: else
 ;FT_62F21X_pwm.c: 419: {
 ;FT_62F21X_pwm.c: 420: P1CDTL=0;
@@ -2457,20 +2478,20 @@ l4315:
 	clrf	(8)	;volatile
 	line	424
 	
-l4317:	
+l4326:	
 ;FT_62F21X_pwm.c: 422: }
 ;FT_62F21X_pwm.c: 424: if(power_off_flag == 1)
 	decf	(_power_off_flag),w
 	skipz
-	goto	u841
-	goto	u840
-u841:
-	goto	l4363
-u840:
-	goto	l1524
+	goto	u861
+	goto	u860
+u861:
+	goto	l4372
+u860:
+	goto	l1527
 	line	432
 	
-l4321:	
+l4330:	
 ;FT_62F21X_pwm.c: 432: pwm_rate_value = 0;
 	clrf	(_pwm_rate_value)
 	line	433
@@ -2478,81 +2499,81 @@ l4321:
 	clrf	(_pwm_colour_value)
 	line	434
 	
-l4323:	
+l4332:	
 ;FT_62F21X_pwm.c: 434: PWM1_RED();
 	fcall	_PWM1_RED
 	line	436
 ;FT_62F21X_pwm.c: 436: break;
-	goto	l1524
+	goto	l1527
 	line	440
 	
-l4325:	
+l4334:	
 ;FT_62F21X_pwm.c: 440: P1OE=0B00000000;
 	bsf	status, 5	;RP0=1, select bank1
 	clrf	(144)^080h	;volatile
 	line	441
 	
-l4327:	
+l4336:	
 ;FT_62F21X_pwm.c: 441: P1BR1=0B00001000;
 	movlw	(08h)
 	bcf	status, 5	;RP0=0, select bank0
 	movwf	(25)	;volatile
 	line	443
 ;FT_62F21X_pwm.c: 443: break;
-	goto	l1524
+	goto	l1527
 	line	447
 	
-l4329:	
+l4338:	
 ;FT_62F21X_pwm.c: 447: P1OE=0B00100000;
 	movlw	(020h)
 	bsf	status, 5	;RP0=1, select bank1
 	movwf	(144)^080h	;volatile
 	line	448
 	
-l4331:	
+l4340:	
 ;FT_62F21X_pwm.c: 448: P1BR1=0B00000000;
 	bcf	status, 5	;RP0=0, select bank0
 	clrf	(25)	;volatile
 	line	450
 ;FT_62F21X_pwm.c: 450: break;
-	goto	l1524
+	goto	l1527
 	line	453
 	
-l4333:	
+l4342:	
 ;FT_62F21X_pwm.c: 453: P1OE=0B10000000;
 	movlw	(080h)
 	bsf	status, 5	;RP0=1, select bank1
 	movwf	(144)^080h	;volatile
-	goto	l4331
+	goto	l4340
 	line	458
 	
-l4337:	
+l4346:	
 ;FT_62F21X_pwm.c: 458: P1OE=0B00000000;
 	bsf	status, 5	;RP0=1, select bank1
 	clrf	(144)^080h	;volatile
 	line	459
 	
-l4339:	
+l4348:	
 ;FT_62F21X_pwm.c: 459: P1BR1=0B00000100;
 	movlw	(04h)
 	bcf	status, 5	;RP0=0, select bank0
 	movwf	(25)	;volatile
 	line	460
 ;FT_62F21X_pwm.c: 460: break;
-	goto	l1524
+	goto	l1527
 	line	463
 	
-l4341:	
+l4350:	
 ;FT_62F21X_pwm.c: 463: pwm_colour_value = 0;
 	clrf	(_pwm_colour_value)
 	line	465
 ;FT_62F21X_pwm.c: 465: P1OE=0B00000000;
 	bsf	status, 5	;RP0=1, select bank1
 	clrf	(144)^080h	;volatile
-	goto	l4327
+	goto	l4336
 	line	472
 	
-l4345:	
+l4354:	
 ;FT_62F21X_pwm.c: 472: P1OE=0B00100000;
 	movlw	(020h)
 	bsf	status, 5	;RP0=1, select bank1
@@ -2564,10 +2585,10 @@ l4345:
 	movwf	(25)	;volatile
 	line	475
 ;FT_62F21X_pwm.c: 475: break;
-	goto	l1524
+	goto	l1527
 	line	479
 	
-l4347:	
+l4356:	
 ;FT_62F21X_pwm.c: 479: P1OE=0B10000000;
 	movlw	(080h)
 	bsf	status, 5	;RP0=1, select bank1
@@ -2579,26 +2600,26 @@ l4347:
 	movwf	(25)	;volatile
 	line	483
 ;FT_62F21X_pwm.c: 483: break;
-	goto	l1524
+	goto	l1527
 	line	486
 	
-l4349:	
+l4358:	
 ;FT_62F21X_pwm.c: 486: P1OE=0B00000000;
 	bsf	status, 5	;RP0=1, select bank1
 	clrf	(144)^080h	;volatile
 	line	487
 	
-l4351:	
+l4360:	
 ;FT_62F21X_pwm.c: 487: P1BR1=0B00001100;
 	movlw	(0Ch)
 	bcf	status, 5	;RP0=0, select bank0
 	movwf	(25)	;volatile
 	line	488
 ;FT_62F21X_pwm.c: 488: break;
-	goto	l1524
+	goto	l1527
 	line	491
 	
-l4353:	
+l4362:	
 ;FT_62F21X_pwm.c: 491: P1OE=0B10100000;
 	movlw	(0A0h)
 	bsf	status, 5	;RP0=1, select bank1
@@ -2610,23 +2631,23 @@ l4353:
 	movwf	(25)	;volatile
 	line	493
 ;FT_62F21X_pwm.c: 493: break;
-	goto	l1524
+	goto	l1527
 	line	496
 	
-l4355:	
+l4364:	
 ;FT_62F21X_pwm.c: 496: pwm_colour_value = 0;
 	clrf	(_pwm_colour_value)
 	line	497
 	
-l4357:	
+l4366:	
 ;FT_62F21X_pwm.c: 497: P1OE=0B00100000;
 	movlw	(020h)
 	bsf	status, 5	;RP0=1, select bank1
 	movwf	(144)^080h	;volatile
-	goto	l4327
+	goto	l4336
 	line	429
 	
-l4363:	
+l4372:	
 	movf	(_ft_user_pwm_mode),w
 	; Switch size 1, requested type "space"
 ; Number of cases is 11, Range of values is 0 to 10
@@ -2644,32 +2665,32 @@ l4363:
 	movlw	11
 	subwf	fsr,w
 skipnc
-goto l1524
-movlw high(S5305)
+goto l1527
+movlw high(S5326)
 movwf pclath
-	movlw low(S5305)
+	movlw low(S5326)
 	addwf fsr,w
 	movwf pc
 psect	swtext5,local,class=CONST,delta=2
 global __pswtext5
 __pswtext5:
-S5305:
-	ljmp	l4321
-	ljmp	l4325
-	ljmp	l4329
-	ljmp	l4333
-	ljmp	l4337
-	ljmp	l4341
-	ljmp	l4345
-	ljmp	l4347
-	ljmp	l4349
-	ljmp	l4353
-	ljmp	l4355
+S5326:
+	ljmp	l4330
+	ljmp	l4334
+	ljmp	l4338
+	ljmp	l4342
+	ljmp	l4346
+	ljmp	l4350
+	ljmp	l4354
+	ljmp	l4356
+	ljmp	l4358
+	ljmp	l4362
+	ljmp	l4364
 psect	text645
 
 	line	506
 	
-l1524:	
+l1527:	
 	return
 	opt stack 0
 GLOBAL	__end_of_PWM_MODE_REFRESH
@@ -2722,12 +2743,12 @@ _MIX_MODE_CHANGE:
 ; Regs used in _MIX_MODE_CHANGE: [wreg-fsr0h+status,2+status,0+pclath+cstack]
 	line	313
 	
-l4281:	
+l4290:	
 ;FT_62F21X_pwm.c: 313: pwm_colour_value++;
 	incf	(_pwm_colour_value),f
 	line	314
 	
-l4283:	
+l4292:	
 ;FT_62F21X_pwm.c: 314: pwm_colour_value = pwm_colour_value%6;
 	movlw	(06h)
 	movwf	(?___lbmod)
@@ -2736,10 +2757,10 @@ l4283:
 	movwf	(_pwm_colour_value)
 	line	316
 ;FT_62F21X_pwm.c: 316: switch(pwm_colour_value)
-	goto	l4303
+	goto	l4312
 	line	319
 	
-l4285:	
+l4294:	
 ;FT_62F21X_pwm.c: 319: P1OE=0B00100000;
 	movlw	(020h)
 	bsf	status, 5	;RP0=1, select bank1
@@ -2751,10 +2772,10 @@ l4285:
 	movwf	(25)	;volatile
 	line	321
 ;FT_62F21X_pwm.c: 321: break;
-	goto	l1504
+	goto	l1507
 	line	324
 	
-l4287:	
+l4296:	
 ;FT_62F21X_pwm.c: 324: P1OE=0B10000000;
 	movlw	(080h)
 	bsf	status, 5	;RP0=1, select bank1
@@ -2766,42 +2787,42 @@ l4287:
 	movwf	(25)	;volatile
 	line	327
 ;FT_62F21X_pwm.c: 327: break;
-	goto	l1504
+	goto	l1507
 	line	330
 	
-l4289:	
+l4298:	
 ;FT_62F21X_pwm.c: 330: P1OE=0B00000000;
 	bsf	status, 5	;RP0=1, select bank1
 	clrf	(144)^080h	;volatile
 	line	331
 	
-l4291:	
+l4300:	
 ;FT_62F21X_pwm.c: 331: P1BR1=0B00001100;
 	movlw	(0Ch)
 	bcf	status, 5	;RP0=0, select bank0
 	movwf	(25)	;volatile
 	line	333
 ;FT_62F21X_pwm.c: 333: break;
-	goto	l1504
+	goto	l1507
 	line	336
 	
-l4293:	
+l4302:	
 ;FT_62F21X_pwm.c: 336: P1OE=0B10100000;
 	movlw	(0A0h)
 	bsf	status, 5	;RP0=1, select bank1
 	movwf	(144)^080h	;volatile
 	line	337
 	
-l4295:	
+l4304:	
 ;FT_62F21X_pwm.c: 337: P1BR1=0B00000000;
 	bcf	status, 5	;RP0=0, select bank0
 	clrf	(25)	;volatile
 	line	338
 ;FT_62F21X_pwm.c: 338: break;
-	goto	l1504
+	goto	l1507
 	line	341
 	
-l4297:	
+l4306:	
 ;FT_62F21X_pwm.c: 341: P1OE=0B00100000;
 	movlw	(020h)
 	bsf	status, 5	;RP0=1, select bank1
@@ -2813,10 +2834,10 @@ l4297:
 	movwf	(25)	;volatile
 	line	343
 ;FT_62F21X_pwm.c: 343: break;
-	goto	l1504
+	goto	l1507
 	line	346
 	
-l4299:	
+l4308:	
 ;FT_62F21X_pwm.c: 346: P1OE=0B10000000;
 	movlw	(080h)
 	bsf	status, 5	;RP0=1, select bank1
@@ -2828,10 +2849,10 @@ l4299:
 	movwf	(25)	;volatile
 	line	348
 ;FT_62F21X_pwm.c: 348: break;
-	goto	l1504
+	goto	l1507
 	line	316
 	
-l4303:	
+l4312:	
 	movf	(_pwm_colour_value),w
 	; Switch size 1, requested type "space"
 ; Number of cases is 6, Range of values is 0 to 5
@@ -2849,27 +2870,27 @@ l4303:
 	movlw	6
 	subwf	fsr,w
 skipnc
-goto l1504
-movlw high(S5307)
+goto l1507
+movlw high(S5328)
 movwf pclath
-	movlw low(S5307)
+	movlw low(S5328)
 	addwf fsr,w
 	movwf pc
 psect	swtext6,local,class=CONST,delta=2
 global __pswtext6
 __pswtext6:
-S5307:
-	ljmp	l4285
-	ljmp	l4287
-	ljmp	l4289
-	ljmp	l4293
-	ljmp	l4297
-	ljmp	l4299
+S5328:
+	ljmp	l4294
+	ljmp	l4296
+	ljmp	l4298
+	ljmp	l4302
+	ljmp	l4306
+	ljmp	l4308
 psect	text646
 
 	line	354
 	
-l1504:	
+l1507:	
 	return
 	opt stack 0
 GLOBAL	__end_of_MIX_MODE_CHANGE
@@ -2925,72 +2946,72 @@ _PWM1_RATE_CHANGE:
 ; Regs used in _PWM1_RATE_CHANGE: [wreg-fsr0h+status,2+status,0+pclath+cstack]
 	line	198
 	
-l4235:	
+l4244:	
 ;FT_62F21X_pwm.c: 196: unsigned char pwm_value;
 ;FT_62F21X_pwm.c: 198: if(pwm_rate_value >= 200)
 	movlw	(0C8h)
 	subwf	(_pwm_rate_value),w
 	skipc
-	goto	u811
-	goto	u810
-u811:
-	goto	l4255
-u810:
+	goto	u831
+	goto	u830
+u831:
+	goto	l4264
+u830:
 	line	200
 	
-l4237:	
+l4246:	
 ;FT_62F21X_pwm.c: 199: {
 ;FT_62F21X_pwm.c: 200: pwm_rate_value = 0;
 	clrf	(_pwm_rate_value)
 	line	201
 	
-l4239:	
+l4248:	
 ;FT_62F21X_pwm.c: 201: pwm_colour_value++;
 	incf	(_pwm_colour_value),f
 	line	202
 	
-l4241:	
+l4250:	
 ;FT_62F21X_pwm.c: 202: pwm_colour_value = pwm_colour_value%4;
 	movlw	(03h)
 	andwf	(_pwm_colour_value),f
 	line	203
 ;FT_62F21X_pwm.c: 203: switch(pwm_colour_value)
-	goto	l4253
+	goto	l4262
 	line	206
 	
-l4243:	
+l4252:	
 ;FT_62F21X_pwm.c: 206: PWM1_RED();
 	fcall	_PWM1_RED
 	line	207
 ;FT_62F21X_pwm.c: 207: break;
-	goto	l4255
+	goto	l4264
 	line	210
 	
-l4245:	
+l4254:	
 ;FT_62F21X_pwm.c: 210: PWM1_GREEN();
 	fcall	_PWM1_GREEN
 	line	211
 ;FT_62F21X_pwm.c: 211: break;
-	goto	l4255
+	goto	l4264
 	line	214
 	
-l4247:	
+l4256:	
 ;FT_62F21X_pwm.c: 214: PWM1_BLUE();
 	fcall	_PWM1_BLUE
 	line	215
 ;FT_62F21X_pwm.c: 215: break;
-	goto	l4255
+	goto	l4264
 	line	218
 	
-l4249:	
+l4258:	
 ;FT_62F21X_pwm.c: 218: PWM1_WHITE();
 	fcall	_PWM1_WHITE
 	line	219
 ;FT_62F21X_pwm.c: 219: break;
-	goto	l4255
+	goto	l4264
 	line	203
 	
-l4253:	
+l4262:	
 	movf	(_pwm_colour_value),w
 	; Switch size 1, requested type "space"
 ; Number of cases is 4, Range of values is 0 to 3
@@ -3008,76 +3029,76 @@ l4253:
 	movlw	4
 	subwf	fsr,w
 skipnc
-goto l4255
-movlw high(S5309)
+goto l4264
+movlw high(S5330)
 movwf pclath
-	movlw low(S5309)
+	movlw low(S5330)
 	addwf fsr,w
 	movwf pc
 psect	swtext7,local,class=CONST,delta=2
 global __pswtext7
 __pswtext7:
-S5309:
-	ljmp	l4243
-	ljmp	l4245
-	ljmp	l4247
-	ljmp	l4249
+S5330:
+	ljmp	l4252
+	ljmp	l4254
+	ljmp	l4256
+	ljmp	l4258
 psect	text647
 
 	line	226
 	
-l4255:	
+l4264:	
 ;FT_62F21X_pwm.c: 225: }
 ;FT_62F21X_pwm.c: 226: if(pwm_rate_value <=100)
 	movlw	(065h)
 	subwf	(_pwm_rate_value),w
 	skipnc
-	goto	u821
-	goto	u820
-u821:
-	goto	l4259
-u820:
+	goto	u841
+	goto	u840
+u841:
+	goto	l4268
+u840:
 	line	228
 	
-l4257:	
+l4266:	
 ;FT_62F21X_pwm.c: 227: {
 ;FT_62F21X_pwm.c: 228: pwm_value = pwm_rate_value;
 	movf	(_pwm_rate_value),w
 	movwf	(PWM1_RATE_CHANGE@pwm_value)
 	line	229
 ;FT_62F21X_pwm.c: 229: }
-	goto	l4271
+	goto	l4280
 	line	232
 	
-l4259:	
+l4268:	
 ;FT_62F21X_pwm.c: 230: else
 ;FT_62F21X_pwm.c: 231: {
 ;FT_62F21X_pwm.c: 232: pwm_value = 200 - pwm_rate_value;
 	movf	(_pwm_rate_value),w
 	sublw	0C8h
 	movwf	(PWM1_RATE_CHANGE@pwm_value)
-	goto	l4271
+	goto	l4280
 	line	238
 	
-l4261:	
+l4270:	
 ;FT_62F21X_pwm.c: 238: P1CDTL = pwm_value;
 	movf	(PWM1_RATE_CHANGE@pwm_value),w
 	movwf	(16)	;volatile
 	line	239
 ;FT_62F21X_pwm.c: 239: break;
-	goto	l1477
+	goto	l1480
 	line	242
 	
-l4263:	
+l4272:	
 ;FT_62F21X_pwm.c: 242: P1DDTL = pwm_value;
 	movf	(PWM1_RATE_CHANGE@pwm_value),w
 	movwf	(8)	;volatile
 	line	243
 ;FT_62F21X_pwm.c: 243: break;
-	goto	l1477
+	goto	l1480
 	line	235
 	
-l4271:	
+l4280:	
 	movf	(_pwm_colour_value),w
 	; Switch size 1, requested type "space"
 ; Number of cases is 4, Range of values is 0 to 3
@@ -3095,25 +3116,25 @@ l4271:
 	movlw	4
 	subwf	fsr,w
 skipnc
-goto l1477
-movlw high(S5311)
+goto l1480
+movlw high(S5332)
 movwf pclath
-	movlw low(S5311)
+	movlw low(S5332)
 	addwf fsr,w
 	movwf pc
 psect	swtext8,local,class=CONST,delta=2
 global __pswtext8
 __pswtext8:
-S5311:
-	ljmp	l4261
-	ljmp	l4263
-	ljmp	l4261
-	ljmp	l4263
+S5332:
+	ljmp	l4270
+	ljmp	l4272
+	ljmp	l4270
+	ljmp	l4272
 psect	text647
 
 	line	258
 	
-l1477:	
+l1480:	
 	return
 	opt stack 0
 GLOBAL	__end_of_PWM1_RATE_CHANGE
@@ -3166,20 +3187,20 @@ _PWM1_INITIAL:
 ; Regs used in _PWM1_INITIAL: [wreg+status,2+status,0+pclath+cstack]
 	line	34
 	
-l4211:	
+l4220:	
 ;FT_62F21X_pwm.c: 34: T2CON0=0B00000001;
 	movlw	(01h)
 	bcf	status, 5	;RP0=0, select bank0
 	movwf	(18)	;volatile
 	line	40
 	
-l4213:	
+l4222:	
 ;FT_62F21X_pwm.c: 40: T2CON1=0B00000000;
 	bsf	status, 5	;RP0=1, select bank1
 	clrf	(158)^080h	;volatile
 	line	45
 	
-l4215:	
+l4224:	
 ;FT_62F21X_pwm.c: 45: TMR2H=0;
 	bcf	status, 5	;RP0=0, select bank0
 	clrf	(19)	;volatile
@@ -3189,32 +3210,18 @@ l4215:
 	movwf	(17)	;volatile
 	line	48
 	
-l4217:	
+l4226:	
 ;FT_62F21X_pwm.c: 48: PR2H=0;
 	bsf	status, 5	;RP0=1, select bank1
 	clrf	(146)^080h	;volatile
 	line	49
 	
-l4219:	
+l4228:	
 ;FT_62F21X_pwm.c: 49: PR2L=100;
 	movlw	(064h)
 	movwf	(145)^080h	;volatile
-	line	51
-;FT_62F21X_pwm.c: 51: P1CDTH=0;
-	bcf	status, 5	;RP0=0, select bank0
-	clrf	(26)	;volatile
-	line	52
-;FT_62F21X_pwm.c: 52: P1DDTH=0;
-	clrf	(9)	;volatile
-	line	53
-;FT_62F21X_pwm.c: 53: P1CDTL=0;
-	clrf	(16)	;volatile
-	line	54
-;FT_62F21X_pwm.c: 54: P1DDTL=0;
-	clrf	(8)	;volatile
 	line	56
 ;FT_62F21X_pwm.c: 56: P1POL=0B00000000;
-	bsf	status, 5	;RP0=1, select bank1
 	clrf	(153)^080h	;volatile
 	line	63
 ;FT_62F21X_pwm.c: 63: P1CON=0B00000000;
@@ -3225,44 +3232,44 @@ l4219:
 	clrf	(30)	;volatile
 	line	78
 	
-l4221:	
+l4230:	
 ;FT_62F21X_pwm.c: 78: PWM1_RED();
 	fcall	_PWM1_RED
 	line	79
 	
-l4223:	
+l4232:	
 ;FT_62F21X_pwm.c: 79: pwm_colour_value = 0;
 	clrf	(_pwm_colour_value)
 	line	81
 	
-l4225:	
+l4234:	
 ;FT_62F21X_pwm.c: 81: TMR2IF=0;
 	bcf	(97/8),(97)&7
 	line	82
 	
-l4227:	
+l4236:	
 ;FT_62F21X_pwm.c: 82: TMR2IE=1;
 	bsf	status, 5	;RP0=1, select bank1
 	bsf	(1121/8)^080h,(1121)&7
 	line	83
 	
-l4229:	
+l4238:	
 ;FT_62F21X_pwm.c: 83: TMR2ON=1;
 	bcf	status, 5	;RP0=0, select bank0
 	bsf	(146/8),(146)&7
 	line	84
 	
-l4231:	
+l4240:	
 ;FT_62F21X_pwm.c: 84: PEIE=1;
 	bsf	(94/8),(94)&7
 	line	85
 	
-l4233:	
+l4242:	
 ;FT_62F21X_pwm.c: 85: GIE=1;
 	bsf	(95/8),(95)&7
 	line	87
 	
-l1445:	
+l1448:	
 	return
 	opt stack 0
 GLOBAL	__end_of_PWM1_INITIAL
@@ -3316,24 +3323,24 @@ ___lmul:
 ; Regs used in ___lmul: [wreg+status,2+status,0]
 	line	4
 	
-l4851:	
+l4866:	
 	clrf	(___lmul@product)
 	clrf	(___lmul@product+1)
 	clrf	(___lmul@product+2)
 	clrf	(___lmul@product+3)
 	line	6
 	
-l2902:	
+l2905:	
 	line	7
 	btfss	(___lmul@multiplier),(0)&7
-	goto	u1251
-	goto	u1250
-u1251:
-	goto	l4855
-u1250:
+	goto	u1291
+	goto	u1290
+u1291:
+	goto	l4870
+u1290:
 	line	8
 	
-l4853:	
+l4868:	
 	movf	(___lmul@multiplicand),w
 	addwf	(___lmul@product),f
 	movf	(___lmul@multiplicand+1),w
@@ -3341,29 +3348,29 @@ l4853:
 	skipnc
 	addlw	1
 	skipnz
-	goto	u1261
+	goto	u1301
 	addwf	(___lmul@product+1),f
-u1261:
+u1301:
 	movf	(___lmul@multiplicand+2),w
 	clrz
 	skipnc
 	addlw	1
 	skipnz
-	goto	u1262
+	goto	u1302
 	addwf	(___lmul@product+2),f
-u1262:
+u1302:
 	movf	(___lmul@multiplicand+3),w
 	clrz
 	skipnc
 	addlw	1
 	skipnz
-	goto	u1263
+	goto	u1303
 	addwf	(___lmul@product+3),f
-u1263:
+u1303:
 
 	line	9
 	
-l4855:	
+l4870:	
 	clrc
 	rlf	(___lmul@multiplicand),f
 	rlf	(___lmul@multiplicand+1),f
@@ -3371,7 +3378,7 @@ l4855:
 	rlf	(___lmul@multiplicand+3),f
 	line	10
 	
-l4857:	
+l4872:	
 	clrc
 	rrf	(___lmul@multiplier+3),f
 	rrf	(___lmul@multiplier+2),f
@@ -3383,14 +3390,14 @@ l4857:
 	iorwf	(___lmul@multiplier+1),w
 	iorwf	(___lmul@multiplier),w
 	skipz
-	goto	u1271
-	goto	u1270
-u1271:
-	goto	l2902
-u1270:
+	goto	u1311
+	goto	u1310
+u1311:
+	goto	l2905
+u1310:
 	line	12
 	
-l4859:	
+l4874:	
 	movf	(___lmul@product+3),w
 	movwf	(?___lmul+3)
 	movf	(___lmul@product+2),w
@@ -3402,7 +3409,7 @@ l4859:
 
 	line	13
 	
-l2905:	
+l2908:	
 	return
 	opt stack 0
 GLOBAL	__end_of___lmul
@@ -3460,66 +3467,66 @@ ___lbmod:
 	line	9
 	movwf	(___lbmod@dividend)
 	
-l4181:	
+l4190:	
 	movlw	(08h)
 	movwf	(___lbmod@counter)
 	line	10
 	
-l4183:	
+l4192:	
 	clrf	(___lbmod@rem)
 	line	12
 	
-l4185:	
+l4194:	
 	movf	(___lbmod@dividend),w
 	movwf	(??___lbmod+0)+0
 	movlw	07h
-u755:
+u775:
 	clrc
 	rrf	(??___lbmod+0)+0,f
 	addlw	-1
 	skipz
-	goto	u755
+	goto	u775
 	clrc
 	rlf	(___lbmod@rem),w
 	iorwf	0+(??___lbmod+0)+0,w
 	movwf	(___lbmod@rem)
 	line	13
 	
-l4187:	
+l4196:	
 	clrc
 	rlf	(___lbmod@dividend),f
 	line	14
 	
-l4189:	
+l4198:	
 	movf	(___lbmod@divisor),w
 	subwf	(___lbmod@rem),w
 	skipc
-	goto	u761
-	goto	u760
-u761:
-	goto	l4193
-u760:
+	goto	u781
+	goto	u780
+u781:
+	goto	l4202
+u780:
 	line	15
 	
-l4191:	
+l4200:	
 	movf	(___lbmod@divisor),w
 	subwf	(___lbmod@rem),f
 	line	16
 	
-l4193:	
+l4202:	
 	decfsz	(___lbmod@counter),f
-	goto	u771
-	goto	u770
-u771:
-	goto	l4185
-u770:
+	goto	u791
+	goto	u790
+u791:
+	goto	l4194
+u790:
 	line	17
 	
-l4195:	
+l4204:	
 	movf	(___lbmod@rem),w
 	line	18
 	
-l2866:	
+l2869:	
 	return
 	opt stack 0
 GLOBAL	__end_of___lbmod
@@ -3573,7 +3580,7 @@ _PWM1_WHITE:
 ; Regs used in _PWM1_WHITE: [wreg+status,2]
 	line	177
 	
-l4177:	
+l4186:	
 ;FT_62F21X_pwm.c: 177: P1CDTL=0;
 	bcf	status, 5	;RP0=0, select bank0
 	clrf	(16)	;volatile
@@ -3586,14 +3593,14 @@ l4177:
 	clrf	(144)^080h	;volatile
 	line	188
 	
-l4179:	
+l4188:	
 ;FT_62F21X_pwm.c: 188: P1BR1=0B00000100;
 	movlw	(04h)
 	bcf	status, 5	;RP0=0, select bank0
 	movwf	(25)	;volatile
 	line	192
 	
-l1457:	
+l1460:	
 	return
 	opt stack 0
 GLOBAL	__end_of_PWM1_WHITE
@@ -3647,7 +3654,7 @@ _PWM1_BLUE:
 ; Regs used in _PWM1_BLUE: [wreg+status,2]
 	line	158
 	
-l4171:	
+l4180:	
 ;FT_62F21X_pwm.c: 158: P1CDTL=0;
 	bcf	status, 5	;RP0=0, select bank0
 	clrf	(16)	;volatile
@@ -3656,20 +3663,20 @@ l4171:
 	clrf	(8)	;volatile
 	line	161
 	
-l4173:	
+l4182:	
 ;FT_62F21X_pwm.c: 161: P1OE=0B10000000;
 	movlw	(080h)
 	bsf	status, 5	;RP0=1, select bank1
 	movwf	(144)^080h	;volatile
 	line	169
 	
-l4175:	
+l4184:	
 ;FT_62F21X_pwm.c: 169: P1BR1=0B00000000;
 	bcf	status, 5	;RP0=0, select bank0
 	clrf	(25)	;volatile
 	line	173
 	
-l1454:	
+l1457:	
 	return
 	opt stack 0
 GLOBAL	__end_of_PWM1_BLUE
@@ -3723,7 +3730,7 @@ _PWM1_GREEN:
 ; Regs used in _PWM1_GREEN: [wreg+status,2]
 	line	126
 	
-l4165:	
+l4174:	
 ;FT_62F21X_pwm.c: 126: P1CDTL=0;
 	bcf	status, 5	;RP0=0, select bank0
 	clrf	(16)	;volatile
@@ -3732,20 +3739,20 @@ l4165:
 	clrf	(8)	;volatile
 	line	129
 	
-l4167:	
+l4176:	
 ;FT_62F21X_pwm.c: 129: P1OE=0B00100000;
 	movlw	(020h)
 	bsf	status, 5	;RP0=1, select bank1
 	movwf	(144)^080h	;volatile
 	line	137
 	
-l4169:	
+l4178:	
 ;FT_62F21X_pwm.c: 137: P1BR1=0B00000000;
 	bcf	status, 5	;RP0=0, select bank0
 	clrf	(25)	;volatile
 	line	154
 	
-l1451:	
+l1454:	
 	return
 	opt stack 0
 GLOBAL	__end_of_PWM1_GREEN
@@ -3801,7 +3808,7 @@ _PWM1_RED:
 ; Regs used in _PWM1_RED: [wreg+status,2]
 	line	93
 	
-l4161:	
+l4170:	
 ;FT_62F21X_pwm.c: 93: P1CDTL=0;
 	bcf	status, 5	;RP0=0, select bank0
 	clrf	(16)	;volatile
@@ -3814,14 +3821,14 @@ l4161:
 	clrf	(144)^080h	;volatile
 	line	104
 	
-l4163:	
+l4172:	
 ;FT_62F21X_pwm.c: 104: P1BR1=0B00001000;
 	movlw	(08h)
 	bcf	status, 5	;RP0=0, select bank0
 	movwf	(25)	;volatile
 	line	121
 	
-l1448:	
+l1451:	
 	return
 	opt stack 0
 GLOBAL	__end_of_PWM1_RED
@@ -3874,77 +3881,77 @@ _JUMP_MODE_CHANGE:
 ; Regs used in _JUMP_MODE_CHANGE: [wreg-fsr0h+status,2+status,0]
 	line	262
 	
-l4133:	
+l4142:	
 ;FT_62F21X_pwm.c: 262: pwm_colour_value++;
 	incf	(_pwm_colour_value),f
 	line	263
 	
-l4135:	
+l4144:	
 ;FT_62F21X_pwm.c: 263: pwm_colour_value = pwm_colour_value%4;
 	movlw	(03h)
 	andwf	(_pwm_colour_value),f
 	line	264
 ;FT_62F21X_pwm.c: 264: switch(pwm_colour_value)
-	goto	l4155
+	goto	l4164
 	line	268
 	
-l4137:	
+l4146:	
 ;FT_62F21X_pwm.c: 268: P1OE=0B00000000;
 	bsf	status, 5	;RP0=1, select bank1
 	clrf	(144)^080h	;volatile
 	line	269
 	
-l4139:	
+l4148:	
 ;FT_62F21X_pwm.c: 269: P1BR1=0B00001000;
 	movlw	(08h)
 	bcf	status, 5	;RP0=0, select bank0
 	movwf	(25)	;volatile
 	line	271
 ;FT_62F21X_pwm.c: 271: break;
-	goto	l1487
+	goto	l1490
 	line	275
 	
-l4141:	
+l4150:	
 ;FT_62F21X_pwm.c: 275: P1OE=0B00100000;
 	movlw	(020h)
 	bsf	status, 5	;RP0=1, select bank1
 	movwf	(144)^080h	;volatile
 	line	276
 	
-l4143:	
+l4152:	
 ;FT_62F21X_pwm.c: 276: P1BR1=0B00000000;
 	bcf	status, 5	;RP0=0, select bank0
 	clrf	(25)	;volatile
 	line	278
 ;FT_62F21X_pwm.c: 278: break;
-	goto	l1487
+	goto	l1490
 	line	281
 	
-l4145:	
+l4154:	
 ;FT_62F21X_pwm.c: 281: P1OE=0B10000000;
 	movlw	(080h)
 	bsf	status, 5	;RP0=1, select bank1
 	movwf	(144)^080h	;volatile
-	goto	l4143
+	goto	l4152
 	line	286
 	
-l4149:	
+l4158:	
 ;FT_62F21X_pwm.c: 286: P1OE=0B00000000;
 	bsf	status, 5	;RP0=1, select bank1
 	clrf	(144)^080h	;volatile
 	line	287
 	
-l4151:	
+l4160:	
 ;FT_62F21X_pwm.c: 287: P1BR1=0B00000100;
 	movlw	(04h)
 	bcf	status, 5	;RP0=0, select bank0
 	movwf	(25)	;volatile
 	line	288
 ;FT_62F21X_pwm.c: 288: break;
-	goto	l1487
+	goto	l1490
 	line	264
 	
-l4155:	
+l4164:	
 	movf	(_pwm_colour_value),w
 	; Switch size 1, requested type "space"
 ; Number of cases is 4, Range of values is 0 to 3
@@ -3962,25 +3969,25 @@ l4155:
 	movlw	4
 	subwf	fsr,w
 skipnc
-goto l1487
-movlw high(S5313)
+goto l1490
+movlw high(S5334)
 movwf pclath
-	movlw low(S5313)
+	movlw low(S5334)
 	addwf fsr,w
 	movwf pc
 psect	swtext9,local,class=CONST,delta=2
 global __pswtext9
 __pswtext9:
-S5313:
-	ljmp	l4137
-	ljmp	l4141
-	ljmp	l4145
-	ljmp	l4149
+S5334:
+	ljmp	l4146
+	ljmp	l4150
+	ljmp	l4154
+	ljmp	l4158
 psect	text655
 
 	line	294
 	
-l1487:	
+l1490:	
 	return
 	opt stack 0
 GLOBAL	__end_of_JUMP_MODE_CHANGE
@@ -4033,35 +4040,35 @@ _PA3_Level_Change_INITIAL:
 ; Regs used in _PA3_Level_Change_INITIAL: [wreg]
 	line	38
 	
-l4123:	
+l4132:	
 ;FT_62F21x_IR.c: 38: TRISA3 =1;
 	bsf	status, 5	;RP0=1, select bank1
 	bsf	(1067/8)^080h,(1067)&7
 	line	39
 	
-l4125:	
+l4134:	
 ;FT_62F21x_IR.c: 39: ReadAPin = PORTA;
 	bcf	status, 5	;RP0=0, select bank0
 	movf	(5),w	;volatile
 	line	40
 	
-l4127:	
+l4136:	
 ;FT_62F21x_IR.c: 40: PAIF =0;
 	bcf	(88/8),(88)&7
 	line	41
 	
-l4129:	
+l4138:	
 ;FT_62F21x_IR.c: 41: IOCA3 =1;
 	bsf	status, 5	;RP0=1, select bank1
 	bsf	(1203/8)^080h,(1203)&7
 	line	42
 	
-l4131:	
+l4140:	
 ;FT_62F21x_IR.c: 42: PAIE =1;
 	bsf	(91/8),(91)&7
 	line	43
 	
-l2266:	
+l2269:	
 	return
 	opt stack 0
 GLOBAL	__end_of_PA3_Level_Change_INITIAL
@@ -4114,7 +4121,7 @@ _TIMER0_INITIAL:
 ; Regs used in _TIMER0_INITIAL: [wreg]
 	line	20
 	
-l4119:	
+l4128:	
 ;FT_62F21x_IR.c: 20: OPTION = 0B00000011;
 	movlw	(03h)
 	bsf	status, 5	;RP0=1, select bank1
@@ -4126,12 +4133,12 @@ l4119:
 	movwf	(1)	;volatile
 	line	28
 	
-l4121:	
+l4130:	
 ;FT_62F21x_IR.c: 28: T0IF = 0;
 	bcf	(90/8),(90)&7
 	line	29
 	
-l2263:	
+l2266:	
 	return
 	opt stack 0
 GLOBAL	__end_of_TIMER0_INITIAL
@@ -4185,7 +4192,7 @@ _reset_led_status:
 ; Regs used in _reset_led_status: [status,2]
 	line	151
 	
-l4117:	
+l4126:	
 ;TEST_FT62F21X_SLEEP.C: 151: time_15ms_cnt = 0;
 	clrf	(_time_15ms_cnt)
 	line	152
@@ -4246,19 +4253,19 @@ _POWER_INITIAL:
 ; Regs used in _POWER_INITIAL: [wreg+status,2]
 	line	134
 	
-l4109:	
+l4118:	
 ;TEST_FT62F21X_SLEEP.C: 134: OSCCON = 0X00|0X70|0X00;
 	movlw	(070h)
 	bsf	status, 5	;RP0=1, select bank1
 	movwf	(143)^080h	;volatile
 	line	137
 	
-l4111:	
+l4120:	
 ;TEST_FT62F21X_SLEEP.C: 137: INTCON = 0;
 	clrf	(11)	;volatile
 	line	139
 	
-l4113:	
+l4122:	
 ;TEST_FT62F21X_SLEEP.C: 139: PORTA = 0B00000000;
 	bcf	status, 5	;RP0=0, select bank0
 	clrf	(5)	;volatile
@@ -4277,7 +4284,7 @@ l4113:
 	movwf	(129)^080h	;volatile
 	line	145
 	
-l4115:	
+l4124:	
 ;TEST_FT62F21X_SLEEP.C: 145: MSCON = 0B00000000;
 	bcf	status, 5	;RP0=0, select bank0
 	clrf	(27)	;volatile
@@ -4351,33 +4358,33 @@ interrupt_function:
 psect	text660
 	line	64
 	
-i1l4047:	
+i1l4056:	
 ;TEST_FT62F21X_SLEEP.C: 64: if(TMR2IE && TMR2IF)
 	bsf	status, 5	;RP0=1, select bank1
 	btfss	(1121/8)^080h,(1121)&7
-	goto	u63_21
-	goto	u63_20
-u63_21:
-	goto	i1l4055
-u63_20:
+	goto	u65_21
+	goto	u65_20
+u65_21:
+	goto	i1l4064
+u65_20:
 	
-i1l4049:	
+i1l4058:	
 	bcf	status, 5	;RP0=0, select bank0
 	btfss	(97/8),(97)&7
-	goto	u64_21
-	goto	u64_20
-u64_21:
-	goto	i1l4055
-u64_20:
+	goto	u66_21
+	goto	u66_20
+u66_21:
+	goto	i1l4064
+u66_20:
 	line	66
 	
-i1l4051:	
+i1l4060:	
 ;TEST_FT62F21X_SLEEP.C: 65: {
 ;TEST_FT62F21X_SLEEP.C: 66: TMR2IF = 0;
 	bcf	(97/8),(97)&7
 	line	67
 	
-i1l4053:	
+i1l4062:	
 ;TEST_FT62F21X_SLEEP.C: 67: time_15ms_cnt++;
 	incf	(_time_15ms_cnt),f
 	line	68
@@ -4385,26 +4392,26 @@ i1l4053:
 	incf	(_auto_power_off_timer_L),f
 	line	74
 	
-i1l4055:	
+i1l4064:	
 ;TEST_FT62F21X_SLEEP.C: 70: }
 ;TEST_FT62F21X_SLEEP.C: 74: if(T0IE && T0IF)
 	btfss	(93/8),(93)&7
-	goto	u65_21
-	goto	u65_20
-u65_21:
-	goto	i1l4071
-u65_20:
+	goto	u67_21
+	goto	u67_20
+u67_21:
+	goto	i1l4080
+u67_20:
 	
-i1l4057:	
+i1l4066:	
 	btfss	(90/8),(90)&7
-	goto	u66_21
-	goto	u66_20
-u66_21:
-	goto	i1l4071
-u66_20:
+	goto	u68_21
+	goto	u68_20
+u68_21:
+	goto	i1l4080
+u68_20:
 	line	76
 	
-i1l4059:	
+i1l4068:	
 ;TEST_FT62F21X_SLEEP.C: 75: {
 ;TEST_FT62F21X_SLEEP.C: 76: TMR0 = 140;
 	movlw	(08Ch)
@@ -4412,100 +4419,100 @@ i1l4059:
 	movwf	(1)	;volatile
 	line	78
 	
-i1l4061:	
+i1l4070:	
 ;TEST_FT62F21X_SLEEP.C: 78: T0IF = 0;
 	bcf	(90/8),(90)&7
 	line	79
 	
-i1l4063:	
+i1l4072:	
 ;TEST_FT62F21X_SLEEP.C: 79: IRbitTime++;
 	incf	(_IRbitTime),f
 	line	80
 	
-i1l4065:	
+i1l4074:	
 ;TEST_FT62F21X_SLEEP.C: 80: if(IRbitTime > 50)
 	movlw	(033h)
 	subwf	(_IRbitTime),w
 	skipc
-	goto	u67_21
-	goto	u67_20
-u67_21:
-	goto	i1l4071
-u67_20:
+	goto	u69_21
+	goto	u69_20
+u69_21:
+	goto	i1l4080
+u69_20:
 	line	82
 	
-i1l4067:	
+i1l4076:	
 ;TEST_FT62F21X_SLEEP.C: 81: {
 ;TEST_FT62F21X_SLEEP.C: 82: T0IE = 0;
 	bcf	(93/8),(93)&7
 	line	83
 	
-i1l4069:	
+i1l4078:	
 ;TEST_FT62F21X_SLEEP.C: 83: IRbitTime = 0;
 	clrf	(_IRbitTime)
 	line	88
 	
-i1l4071:	
+i1l4080:	
 ;TEST_FT62F21X_SLEEP.C: 84: }
 ;TEST_FT62F21X_SLEEP.C: 85: }
 ;TEST_FT62F21X_SLEEP.C: 88: if(PAIE && PAIF)
 	btfss	(91/8),(91)&7
-	goto	u68_21
-	goto	u68_20
-u68_21:
+	goto	u70_21
+	goto	u70_20
+u70_21:
 	goto	i1l723
-u68_20:
+u70_20:
 	
-i1l4073:	
+i1l4082:	
 	btfss	(88/8),(88)&7
-	goto	u69_21
-	goto	u69_20
-u69_21:
+	goto	u71_21
+	goto	u71_20
+u71_21:
 	goto	i1l723
-u69_20:
+u71_20:
 	line	90
 	
-i1l4075:	
+i1l4084:	
 ;TEST_FT62F21X_SLEEP.C: 89: {
 ;TEST_FT62F21X_SLEEP.C: 90: ReadAPin = PORTA;
 	bcf	status, 5	;RP0=0, select bank0
 	movf	(5),w	;volatile
 	line	91
 	
-i1l4077:	
+i1l4086:	
 ;TEST_FT62F21X_SLEEP.C: 91: PAIF = 0;
 	bcf	(88/8),(88)&7
 	line	92
 	
-i1l4079:	
+i1l4088:	
 ;TEST_FT62F21X_SLEEP.C: 92: if(RA3 == 0)
 	btfsc	(43/8),(43)&7
-	goto	u70_21
-	goto	u70_20
-u70_21:
+	goto	u72_21
+	goto	u72_20
+u72_21:
 	goto	i1l723
-u70_20:
+u72_20:
 	line	94
 	
-i1l4081:	
+i1l4090:	
 ;TEST_FT62F21X_SLEEP.C: 93: {
 ;TEST_FT62F21X_SLEEP.C: 94: T0IE = 1;
 	bsf	(93/8),(93)&7
 	line	95
 	
-i1l4083:	
+i1l4092:	
 ;TEST_FT62F21X_SLEEP.C: 95: if(IRbitTime > 21)
 	movlw	(016h)
 	subwf	(_IRbitTime),w
 	skipc
-	goto	u71_21
-	goto	u71_20
-u71_21:
-	goto	i1l4087
-u71_20:
+	goto	u73_21
+	goto	u73_20
+u73_21:
+	goto	i1l4096
+u73_20:
 	line	97
 	
-i1l4085:	
+i1l4094:	
 ;TEST_FT62F21X_SLEEP.C: 96: {
 ;TEST_FT62F21X_SLEEP.C: 97: IRDataTimer[0] = 0;
 	clrf	(_IRDataTimer)
@@ -4526,22 +4533,22 @@ i1l4085:
 	clrf	(_bitdata)
 	line	103
 ;TEST_FT62F21X_SLEEP.C: 103: }
-	goto	i1l4091
+	goto	i1l4100
 	line	104
 	
-i1l4087:	
+i1l4096:	
 ;TEST_FT62F21X_SLEEP.C: 104: else if(IRbitTime > 3)
 	movlw	(04h)
 	subwf	(_IRbitTime),w
 	skipc
-	goto	u72_21
-	goto	u72_20
-u72_21:
-	goto	i1l4091
-u72_20:
+	goto	u74_21
+	goto	u74_20
+u74_21:
+	goto	i1l4100
+u74_20:
 	line	106
 	
-i1l4089:	
+i1l4098:	
 ;TEST_FT62F21X_SLEEP.C: 105: {
 ;TEST_FT62F21X_SLEEP.C: 106: IRDataTimer[IRbitNum-1] |= bitdata;
 	movf	(_IRbitNum),w
@@ -4552,66 +4559,66 @@ i1l4089:
 	iorwf	indf,f
 	line	108
 	
-i1l4091:	
+i1l4100:	
 ;TEST_FT62F21X_SLEEP.C: 107: }
 ;TEST_FT62F21X_SLEEP.C: 108: IRbitTime = 0;
 	clrf	(_IRbitTime)
 	line	109
 	
-i1l4093:	
+i1l4102:	
 ;TEST_FT62F21X_SLEEP.C: 109: bitdata<<=1;
 	clrc
 	rlf	(_bitdata),f
 	line	110
 	
-i1l4095:	
+i1l4104:	
 ;TEST_FT62F21X_SLEEP.C: 110: if(bitdata == 0)
 	movf	(_bitdata),f
 	skipz
-	goto	u73_21
-	goto	u73_20
-u73_21:
-	goto	i1l4101
-u73_20:
+	goto	u75_21
+	goto	u75_20
+u75_21:
+	goto	i1l4110
+u75_20:
 	line	112
 	
-i1l4097:	
+i1l4106:	
 ;TEST_FT62F21X_SLEEP.C: 111: {
 ;TEST_FT62F21X_SLEEP.C: 112: bitdata = 0x01;
 	clrf	(_bitdata)
 	incf	(_bitdata),f
 	line	113
 	
-i1l4099:	
+i1l4108:	
 ;TEST_FT62F21X_SLEEP.C: 113: IRbitNum++;
 	incf	(_IRbitNum),f
 	line	115
 	
-i1l4101:	
+i1l4110:	
 ;TEST_FT62F21X_SLEEP.C: 114: }
 ;TEST_FT62F21X_SLEEP.C: 115: if(IRbitNum > 4)
 	movlw	(05h)
 	subwf	(_IRbitNum),w
 	skipc
-	goto	u74_21
-	goto	u74_20
-u74_21:
+	goto	u76_21
+	goto	u76_20
+u76_21:
 	goto	i1l723
-u74_20:
+u76_20:
 	line	117
 	
-i1l4103:	
+i1l4112:	
 ;TEST_FT62F21X_SLEEP.C: 116: {
 ;TEST_FT62F21X_SLEEP.C: 117: IRbitNum = 0;
 	clrf	(_IRbitNum)
 	line	118
 	
-i1l4105:	
+i1l4114:	
 ;TEST_FT62F21X_SLEEP.C: 118: T0IE = 0;
 	bcf	(93/8),(93)&7
 	line	119
 	
-i1l4107:	
+i1l4116:	
 ;TEST_FT62F21X_SLEEP.C: 119: ReceiveFinish = 1;
 	clrf	(_ReceiveFinish)
 	incf	(_ReceiveFinish),f

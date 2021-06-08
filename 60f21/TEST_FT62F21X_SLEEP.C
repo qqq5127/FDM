@@ -259,7 +259,10 @@ void main(void)
 			unchar i;
 			
 			ReceiveFinish = 0;
-
+			if(IRDataTimer[0] != 0x00 || IRDataTimer[1] != 0xFF)
+			{
+				continue;
+			}
 			for(i = 0;i < 19;i++)
 			{
 				if(ir_key_value[i*2] == IRDataTimer[3])

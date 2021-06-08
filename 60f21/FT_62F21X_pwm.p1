@@ -1652,18 +1652,6 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;FT_62F21X_pwm.c: 49: PR2L=100;
 "49
 [e = _PR2L -> -> 100 `i `uc ]
-[; ;FT_62F21X_pwm.c: 51: P1CDTH=0;
-"51
-[e = _P1CDTH -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 52: P1DDTH=0;
-"52
-[e = _P1DDTH -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 53: P1CDTL=0;
-"53
-[e = _P1CDTL -> -> 0 `i `uc ]
-[; ;FT_62F21X_pwm.c: 54: P1DDTL=0;
-"54
-[e = _P1DDTL -> -> 0 `i `uc ]
 [; ;FT_62F21X_pwm.c: 56: P1POL=0B00000000;
 "56
 [e = _P1POL -> -> 0 `i `uc ]
